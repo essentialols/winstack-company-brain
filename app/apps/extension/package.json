@@ -1,0 +1,9 @@
+{
+  "name": "@app-starter/extension",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Outside-In Brain Chrome extension (Manifest V3, plain JS, no build step)",
+  "scripts": {
+    "zip": "rm -f ../extension.zip && zip -r ../extension.zip . -x package.json README.md"
+  }
+}

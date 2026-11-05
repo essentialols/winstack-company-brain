@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Outside-In Brain</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div class="popup">
+  <div class="top">
+    <div class="brand">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      <span class="wordmark">Outside-In Brain</span>
+    </div>
+    <button type="button" id="settings" class="iconbtn" aria-label="Settings">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+    </button>
+  </div>
+
+  <!-- Loading -->
+  <div id="view-loading" class="center">
+    <p class="mono">Loading&#8230;</p>
+  </div>
+
+  <!-- Not configured / token rejected -->
+  <div id="view-connect" class="center" hidden>
+    <h1 class="h1">Connect your account</h1>
+    <p class="body" id="connect-msg">Create an extension key on the website, then paste it into Settings. It takes a minute, once.</p>
+    <div class="row">
+      <a id="connect-web" class="primary-link" href="#" target="_blank" rel="noopener">Get an extension key</a>
+      <button type="button" id="connect-options" class="pill">Open settings</button>
+    </div>
+  </div>
+
+  <!-- Form -->
+  <div id="view-form" class="form" hidden>
+    <div class="pagecard">
+      <div class="mono eyebrow" id="page-domain">This page</div>
+      <div class="pagetitle" id="page-title"></div>
+      <div class="tags">
+        <span class="tag" id="page-kind">Page</span>
+        <span class="tag ok" id="tag-captions" hidden>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          Captions found
+        </span>
+        <span class="tag ok" id="tag-selection" hidden>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+          Selection included
+        </span>
+        <span class="tag" id="tag-urlonly" hidden>Link only</span>
+      </div>
+    </div>
+
+    <div>
+      <div id="saveto-label" class="label">Save to</div>
+      <div role="group" aria-labelledby="saveto-label" class="chips" id="chips"></div>
+    </div>
+
+    <div>
+      <label for="note" class="label">Note (optional)</label>
+      <textarea id="note" rows="2" placeholder="Why did this catch your eye?"></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="button" id="save" class="primary">Save to brain</button>
+      <div class="mono hint" id="form-msg" role="status">Alt+Shift+S saves without opening this</div>
+    </div>
+  </div>
+
+  <!-- Saved -->
+  <div id="view-saved" class="center" hidden>
+    <div class="check">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+    </div>
+    <div role="status" class="savedtitle" id="saved-title">Saved</div>
+    <p class="body narrow" id="saved-sub">It goes into the next issue with everything else you save this week.</p>
+    <div class="row">
+      <a id="open-dashboard" class="pill" href="#" target="_blank" rel="noopener">Open dashboard</a>
+      <button type="button" id="undo" class="linkbtn">Undo</button>
+    </div>
+    <p class="mono hint" id="saved-msg" role="status"></p>
+  </div>
+
+  <div class="footer mono" id="footer"></div>
+</div>
+<script src="lib.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

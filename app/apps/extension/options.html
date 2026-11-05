@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Outside-In Brain settings</title>
+<link rel="stylesheet" href="popup.css">
+<style>
+  .page{max-width:36rem;margin:0 auto;padding:32px 20px 48px;font-family:var(--f-body)}
+  .field{display:flex;flex-direction:column;gap:6px;margin-top:20px}
+  input[type="text"],input[type="url"],input[type="password"]{min-height:44px;box-sizing:border-box;padding:8px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--fg);font-family:var(--f-mono);font-size:.9rem}
+  .help{margin:0;font-size:.95rem;line-height:1.5;color:var(--muted)}
+  .buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:24px;align-items:center}
+  .buttons .primary{width:auto;padding:0 22px;min-height:44px;font-size:.9rem}
+  #status{margin-top:16px;text-align:left;font-size:.8rem;min-height:1.2em}
+  #status.ok{color:var(--ok-fg)}
+  .lead{font-size:1.0625rem;line-height:1.6;margin:12px 0 0}
+</style>
+</head>
+<body>
+<main class="page">
+  <div class="brand">
+    <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+    <span class="wordmark">Outside-In Brain</span>
+  </div>
+  <h1 class="h1" style="margin-top:24px">Connect the extension</h1>
+  <p class="lead">Open the <a id="web-link" href="#" target="_blank" rel="noopener">extension page</a> on the website, create an extension key, and paste it here with the API URL shown there.</p>
+
+  <form id="form">
+    <div class="field">
+      <label class="label" for="apiKey">Extension key</label>
+      <input type="password" id="apiKey" autocomplete="off" spellcheck="false" placeholder="oib_&#8230;">
+    </div>
+    <div class="field">
+      <label class="label" for="apiBaseUrl">API base URL</label>
+      <input type="url" id="apiBaseUrl" spellcheck="false" placeholder="http://localhost:3001/api">
+      <p class="help">Ends in <code>/api</code>.</p>
+    </div>
+    <div class="field">
+      <label class="label" for="webAppUrl">Web app URL</label>
+      <input type="url" id="webAppUrl" spellcheck="false" placeholder="http://localhost:3000">
+      <p class="help">Used for the dashboard and the connect page.</p>
+    </div>
+    <div class="buttons">
+      <button type="submit" class="primary">Save</button>
+      <button type="button" id="test" class="pill">Test connection</button>
+    </div>
+    <p id="status" class="mono hint" role="status"></p>
+  </form>
+</main>
+<script src="lib.js"></script>
+<script src="options.js"></script>
+</body>
+</html>
