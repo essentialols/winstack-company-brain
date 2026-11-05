@@ -82,7 +82,7 @@ export default function IssuePage({ params }: PageProps) {
         </h1>
         <p className="oib-lead" style={{ marginBottom: '1.5rem' }}>
           {issueQuery.isError
-            ? ((issueQuery.error as ApiError).message ?? 'The issue could not be loaded.')
+            ? ((issueQuery.error as unknown as ApiError).message ?? 'The issue could not be loaded.')
             : 'This issue does not exist, or it belongs to a workspace you are not a member of.'}
         </p>
         <Link href="/dashboard" className="oib-primary">
