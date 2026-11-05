@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Winstack Reading List</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800&family=IBM+Plex+Mono:wght@500&family=Spectral:wght@400&display=swap">
+<style>
+:root{
+  --bg:#fff;--fg:#23211f;--muted:#6c6862;--rule:#e6e4e1;--accent:#c63f1d;--hover:#f5f4f3;
+  --serif:"Spectral",Georgia,"Times New Roman",serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--hover:#232120;color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--hover:#232120;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:400 1.0625rem/1.6 var(--serif)}
+main{max-width:42rem;margin:0 auto;padding:3rem 16px 4rem}
+.eyebrow{font:500 .72rem/1.5 var(--mono);letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 .85rem}
+h1{font:800 clamp(1.9rem,6vw,2.6rem)/1.1 var(--sans);letter-spacing:-.015em;margin:0 0 1rem;text-wrap:balance}
+.lead{font-size:1.15rem;line-height:1.55;margin:0 0 2rem}
+ol{list-style:none;margin:0;padding:0;border-top:1px solid var(--rule)}
+li{border-bottom:1px solid var(--rule)}
+a.page{display:grid;grid-template-columns:2.6rem minmax(0,1fr);gap:0 .5rem;padding:1rem .75rem;margin-inline:-.75rem;color:inherit;text-decoration:none;border-radius:8px}
+a.page:hover{background:var(--hover)}
+a.page:hover .name{color:var(--accent)}
+a.page:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font:800 1.25rem/1.4 var(--sans);color:var(--accent);font-variant-numeric:tabular-nums}
+.name{display:block;font:700 1.08rem/1.35 var(--sans)}
+.source{display:block;font:500 .72rem/1.5 var(--mono);color:var(--muted);margin-top:.2rem}
+.about{display:block;margin-top:.35rem;line-height:1.45}
+</style>
+</head>
+<body>
+<main>
+  <p class="eyebrow">Winstack · Company Brain Hackathon</p>
+  <h1>128 ideas to read before building a company brain</h1>
+  <p class="lead">Notes from five podcast episodes on company agents, cheap decision models, choosing models and running a company as loops. The number beside each page is its count of ideas.</p>
+  <ol>
+    <li><a class="page" href="pages/kai-company-brain.html"><span class="num">10</span><span><span class="name">Stripe's company agent, Kai</span><span class="source">How I AI · Stripe</span><span class="about">How Stripe gives 10,000+ employees AI that follows the way the company works.</span></span></a></li>
+    <li><a class="page" href="pages/companies-as-loops.html"><span class="num">36</span><span><span class="name">Building companies as loops</span><span class="source">Lenny's Podcast · Anish Acharya, a16z</span><span class="about">Work as cascading loops of agents, with people choosing the next hill.</span></span></a></li>
+    <li><a class="page" href="pages/how-to-use-jev.html"><span class="num">26</span><span><span class="name">Putting Jev to work on your own data</span><span class="source">How I AI · Claire Vo</span><span class="about">Six builds on a model that returns decisions instead of text.</span></span></a></li>
+    <li><a class="page" href="pages/jev-use-cases.html"><span class="num">27</span><span><span class="name">Jev use cases</span><span class="source">How I AI · John Lindquist and Claire Vo</span><span class="about">Demos of work that never justified a model call until now.</span></span></a></li>
+    <li><a class="page" href="pages/opus-vs-gpt6-sol.html"><span class="num">29</span><span><span class="name">A live model blind test</span><span class="source">How I AI · Claire Vo</span><span class="about">Scoring Opus 5.5, GPT-6 Sol and GPT-6 Luna on unlabeled outputs.</span></span></a></li>
+  </ol>
+</main>
+</body>
+</html>

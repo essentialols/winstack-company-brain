@@ -1,0 +1,931 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>How to Use Jev</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one 42rem reading column; takeaways are native details rows with a number gutter. */
+:root {
+  --bg: #ffffff;
+  --fg: #1c1a18;
+  --muted: #6b6762;
+  --line: #e4e3e1;
+  --box: #f4f4f3;
+  --box-line: #d9d8d6;
+  --accent: #d1401f;
+  --tint: #fdf0ec;
+  --tint-line: #f5cfc4;
+  --serif: "Spectral", Georgia, "Times New Roman", serif;
+  --sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #161514; --fg: #ece9e5; --muted: #a09b95; --line: #2f2d2b;
+    --box: #232220; --box-line: #3b3936; --accent: #ff7f5e;
+    --tint: #2c1d18; --tint-line: #57322a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #161514; --fg: #ece9e5; --muted: #a09b95; --line: #2f2d2b;
+  --box: #232220; --box-line: #3b3936; --accent: #ff7f5e;
+  --tint: #2c1d18; --tint-line: #57322a; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg); color: var(--fg);
+  font: 400 1.125rem/1.6 var(--serif);
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2.5rem 4rem;
+}
+body::before {
+  content: ""; position: fixed; inset: 0 0 auto;
+  height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg);
+}
+main { max-width: 42rem; margin-inline: auto; }
+a { color: var(--accent); text-underline-offset: 2px; }
+a:focus-visible, button:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 6px;
+}
+p { margin: 0; }
+strong { font-weight: 700; }
+
+.eyebrow {
+  font: 500 .75rem/1.5 var(--mono); letter-spacing: .08em;
+  text-transform: uppercase; color: var(--muted); margin-bottom: .75rem;
+}
+h1 {
+  font: 800 clamp(2rem, 6vw, 2.75rem)/1.1 var(--sans);
+  letter-spacing: -.02em; margin: 0 0 1.25rem; text-wrap: balance;
+}
+.lead { font-size: 1.25rem; line-height: 1.5; }
+.note { font: 400 .78rem/1.55 var(--mono); color: var(--muted); margin-top: 1rem; }
+
+.toolbar {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: var(--bg); border-block: 1px solid var(--line);
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .75rem;
+  padding-block: .6rem; margin-block: 2rem 1rem;
+}
+.toolbar button {
+  font: 600 .85rem/1 var(--sans); color: var(--fg);
+  background: var(--bg); border: 1px solid var(--box-line); border-radius: 6px;
+  padding: .5rem .75rem; cursor: pointer;
+}
+.toolbar button:hover:not(:disabled) { background: var(--box); }
+.toolbar button:disabled { color: var(--muted); cursor: default; opacity: .7; }
+#counter {
+  margin-left: auto; font: 400 .78rem/1 var(--mono); color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ideas { display: grid; gap: .35rem; }
+
+details > summary { list-style: none; cursor: pointer; }
+details > summary::-webkit-details-marker { display: none; }
+
+.idea > summary, .extra > summary {
+  display: grid; grid-template-columns: 1.75rem minmax(0, 1fr) 1.25rem; gap: 0 .5rem;
+  margin-inline: -.75rem; padding: .85rem .75rem;
+  border: 1px solid transparent; border-radius: 10px;
+}
+.idea[open] > summary, .extra[open] > summary {
+  background: var(--box); border-color: var(--box-line);
+}
+.num {
+  font: 800 1.25rem/1.45 var(--sans); color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.sum { display: grid; gap: .3rem; min-width: 0; }
+.sum-lead { display: block; font-weight: 700; font-size: 1.1875rem; line-height: 1.35; }
+.sum-text { display: block; }
+.hint { display: block; font: 400 .75rem/1.5 var(--mono); color: var(--muted); }
+.chev {
+  width: 1.25rem; height: 1.25rem; margin-top: .2rem; color: var(--muted);
+  transition: transform .15s ease, color .15s ease;
+}
+details[open] > summary .chev { transform: rotate(90deg); color: var(--accent); }
+
+.detail {
+  display: flex; flex-direction: column; gap: .9rem;
+  padding: 1rem 0 1.75rem 2.25rem;
+}
+.detail > * { min-width: 0; }
+h3 {
+  font: 700 1.25rem/1.25 var(--sans); letter-spacing: -.01em;
+  margin: 0; text-wrap: balance;
+}
+.watch { font: 400 .75rem/1.4 var(--mono); margin-top: -.5rem; }
+.detail ul, .detail ol { margin: 0; padding-left: 1.25rem; display: grid; gap: .3rem; }
+.detail li::marker { color: var(--accent); }
+
+blockquote {
+  margin: 0; padding: .1rem 0 .1rem 1rem;
+  border-left: 3px solid var(--accent); font-style: italic;
+}
+blockquote footer { font: 400 .78rem/1.5 var(--mono); color: var(--muted); margin-top: .35rem; }
+
+.tablewrap { overflow-x: auto; }
+table {
+  width: 100%; border-collapse: collapse;
+  font: 400 .875rem/1.4 var(--sans); font-variant-numeric: tabular-nums;
+}
+th {
+  font: 500 .7rem/1.3 var(--mono); letter-spacing: .05em; text-transform: uppercase;
+  color: var(--muted); text-align: left; vertical-align: bottom;
+}
+th, td { padding: .5rem .75rem .5rem 0; border-bottom: 1px solid var(--line); }
+td { vertical-align: top; }
+tr > :last-child { padding-right: 0; }
+td.term { font-weight: 600; white-space: nowrap; }
+.caption { font: 400 .75rem/1.5 var(--mono); color: var(--muted); margin-top: .4rem; }
+
+.todo {
+  background: var(--tint); border: 1px solid var(--tint-line); border-radius: 8px;
+  padding: .75rem .9rem;
+}
+.todo b {
+  display: block; font: 700 .8rem/1.4 var(--sans); color: var(--accent); margin-bottom: .2rem;
+}
+
+.extras { display: grid; gap: .35rem; margin-top: 2.5rem; border-top: 1px solid var(--line); padding-top: 1.25rem; }
+.extra > summary { grid-template-columns: minmax(0, 1fr) 1.25rem; }
+.extra-title { font: 700 1.125rem/1.4 var(--sans); }
+.extra-body { display: flex; flex-direction: column; gap: .9rem; padding: 1rem 0 1rem; }
+.extra-body td.term { white-space: normal; min-width: 7.5rem; }
+.linklist { margin: 0; padding-left: 1.25rem; display: grid; gap: .3rem; font-size: 1rem; }
+.linklist li::marker { color: var(--accent); }
+.label { font: 700 .85rem/1.4 var(--sans); margin-bottom: -.5rem; }
+
+@media (max-width: 34rem) {
+  body { font-size: 1.0625rem; padding-block: 1.5rem 3rem; }
+  .detail { padding-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+</style>
+
+<main>
+  <p class="eyebrow">How I AI · Claire Vo · Jev, TypeSafe AI's decision model</p>
+  <h1>26 ways to put Jev to work on your own data</h1>
+  <p class="lead">This solo episode is a fast tour of Jev, a new model that returns decisions instead of text. Host Claire Vo, who also builds ChatPRD, walks through six things she built with it. Her thesis: cheap, fast classification makes data work practical, especially when Jev is paired with smarter models.</p>
+  <p class="note">Timestamps open the video at that moment. "What to do with this" boxes are this summary's suggestions, not advice from the episode.</p>
+
+  <div class="toolbar" role="group" aria-label="Expand or collapse takeaways">
+    <button type="button" id="expand-all">Expand all</button>
+    <button type="button" id="collapse-all">Collapse all</button>
+    <span id="counter" aria-live="polite">0 of 26 expanded</span>
+  </div>
+
+  <div class="ideas">
+
+    <details class="idea">
+      <summary>
+        <span class="num">1</span>
+        <span class="sum">
+          <span class="sum-lead">Reach for Jev when you need a decision, not text.</span>
+          <span class="sum-text">Jev reads text and returns a value you defined in advance. It does not write. Use it wherever your code branches on a judgment call.</span>
+          <span class="hint">Details · comparison table · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>A smart if statement you can call at scale</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=169s">Watch at 2:49</a></p>
+        <p><strong>Text in, typed value out.</strong> Standard LLMs return generated strings. Jev selects from predefined values, such as this or that, yes or no, or 1 through 10. Claire calls it a decision model for that reason.</p>
+        <p><strong>Where it fits.</strong> She names three jobs: smart branching, data classification and real-time loops. Think of routing a good result to one person and a bad one to support.</p>
+        <p><strong>Where it doesn't.</strong> Chatbots and code generation still belong to standard LLMs. Jev takes text only, so an image needs a text description first.</p>
+        <div class="tablewrap"><table>
+          <thead><tr><th></th><th>Standard LLM</th><th>Jev</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Input</td><td>Text</td><td>Text; images only as descriptions</td></tr>
+            <tr><td class="term">Output</td><td>Generated text</td><td>Predefined typed value</td></tr>
+            <tr><td class="term">Price</td><td>Pennies to tens or hundreds of dollars per million output tokens</td><td>About 4¢ per million input tokens, no output charge</td></tr>
+            <tr><td class="term">Best at</td><td>Chat, code, anything generated</td><td>Decisions, classification, real time</td></tr>
+          </tbody>
+        </table></div>
+        <div class="todo"><b>What to do with this</b>List the judgment calls in one workflow that a person or a large LLM handles today. Test the highest-volume one first.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">2</span>
+        <span class="sum">
+          <span class="sum-lead">Rewrite each question as a choice, a score or a likelihood.</span>
+          <span class="sum-text">Those are the three things Jev returns. Claire's off-hand estimate is that they cover about 90% of software engineering.</span>
+          <span class="hint">Details · table · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Three return types, defined before you ask</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=328s">Watch at 5:28</a></p>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Type</th><th>Returns</th><th>Episode example</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Choice</td><td>One option from your list</td><td>What to wear on a date, from a list of outfits</td></tr>
+            <tr><td class="term">Score</td><td>A rating on a scale</td><td>Bug severity: cosmetic, broken or blocking</td></tr>
+            <tr><td class="term">Noul</td><td>A 0 to 1 likelihood that a statement is true</td><td>Whether Claire is a podcaster: about 99%</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>Define the answers first.</strong> Jev won't name a theme you never offered. If you need a label, supply the options or hand the results to another model.</p>
+        <p><strong>Start in the docs.</strong> Claire uses two sections the most: <a href="https://docs.typesafe.ai/primitives">primitives</a> and <a href="https://docs.typesafe.ai/patterns.md">patterns</a>. The docs also describe a confidence value for some question types.</p>
+        <div class="todo"><b>What to do with this</b>Write one recurring team judgment as one of the three types. If you can't define the options, it isn't ready for Jev.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">3</span>
+        <span class="sum">
+          <span class="sum-lead">Cluster with yes/no pairs, then let a cheap model name the clusters.</span>
+          <span class="sum-text">Jev says whether two items are related, and those links form groups. A cheap LLM labels each group. Claire used this to see where her engineering effort went.</span>
+          <span class="hint">Details · steps · table · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The effort audit that cost nine cents</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=459s">Watch at 7:39</a></p>
+        <p><strong>The question it answers.</strong> Boards and bosses keep asking what share of work goes to each initiative. Claire says she would have paid $100,000 for this three years ago.</p>
+        <ol>
+          <li>Pull every PR through the GitHub API.</li>
+          <li>Ask Jev whether pairs of PRs share a theme.</li>
+          <li>Group the related PRs into clusters.</li>
+          <li>Have Gemini Flash-Lite label each cluster.</li>
+          <li>Drop what doesn't belong, then chart the shares. She excluded docs PRs.</li>
+        </ol>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Repo</th><th>PRs</th><th>Pairs</th><th>Cost</th><th>Time</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Marketing site</td><td>112</td><td>Not stated</td><td>1.1¢</td><td>Not stated</td></tr>
+            <tr><td class="term">ChatPRD app</td><td>1,700</td><td>17,000</td><td>9¢</td><td>About 2 min</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>The result.</strong> Almost 30% of ChatPRD's PR effort went to platform, security and infrastructure. Recent months also show shares rising as investment shifts.</p>
+        <p><strong>The step she skips.</strong> 1,700 PRs make about 1.44 million possible pairs, so 17,000 is about 1.2% of them. Something narrowed the candidates first, and neither the episode nor the <a href="https://www.chatprd.ai/how-i-ai/workflows/jev-github-pr-analysis">workflow page</a> says how. The arithmetic here is this summary's.</p>
+        <div class="todo"><b>What to do with this</b>Run it on one repo. Read a sample from each cluster before sharing it, because Claire vouches for accuracy from knowing her roadmap and shows no measured score.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">4</span>
+        <span class="sum">
+          <span class="sum-lead">Run the same analysis on your own coding sessions.</span>
+          <span class="sum-text">Claude Code and Codex store sessions on your machine. You can categorize that history without a big repo. Claire's shows how much her work has changed this year.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>A cheap mirror on how you actually work</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=672s">Watch at 11:12</a></p>
+        <p><strong>The data is already there.</strong> She started a Codex thread to run the analysis over her local sessions. She suggests this for anyone who codes, and says it costs next to nothing.</p>
+        <p><strong>What she found.</strong> Measured by user turns, January was almost all engineering. By September engineering had dropped below 40%.</p>
+        <ul>
+          <li>Agent work grew a lot.</li>
+          <li>Publishing media grew too.</li>
+          <li>Client delivery appeared with a new business.</li>
+          <li>Family and personal tasks showed up too.</li>
+        </ul>
+        <p><strong>Try more than one measure.</strong> She compares user turns with session days. Both show the same drift from mostly coding to a more even split.</p>
+        <div class="todo"><b>What to do with this</b>Run it on your own logs. They can hold private content, so check what you send to the API first.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">5</span>
+        <span class="sum">
+          <span class="sum-lead">Triage with Jev first, then hand what's left to an LLM.</span>
+          <span class="sum-text">Jev is a fast filter. A smarter agent then spends its effort only where it matters. Claire's Gmail test is the simplest version of this.</span>
+          <span class="hint">Details · quote · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The filter-then-act pattern</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=780s">Watch at 13:00</a></p>
+        <p><strong>The Gmail test.</strong> Jev scored whether each email could be deleted, from its subject line and snippet. Clean tags came back, and another model worked through the groups. She kept the screen private.</p>
+        <blockquote>"Jev alone is okay. Jev with an LLM buddy is super powerful."<footer>— Claire Vo</footer></blockquote>
+        <p><strong>The general shape.</strong> Tag, categorize, cluster or filter a large corpus with Jev. Then run precise AI actions on the right cluster.</p>
+        <ul>
+          <li>Bugs: pull out the high-severity ones and triage them deeply.</li>
+          <li>Email: delete the obvious ones and work the rest with an agent.</li>
+        </ul>
+        <div class="todo"><b>What to do with this</b>Start with tags only. Review a sample before you let any score trigger a deletion or another action you can't undo.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">6</span>
+        <span class="sum">
+          <span class="sum-lead">Give each pipeline stage the cheapest model that can do it.</span>
+          <span class="sum-text">Claire spent thousands of dollars prototyping a product insights graph on frontier models. It started working once she split the job by type of thinking.</span>
+          <span class="hint">Details · two tables · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>A three-tier stack for product insights</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=870s">Watch at 14:30</a></p>
+        <p><strong>The problem.</strong> ChatPRD's graph looks for the gap between what customers ask for and what the team is building. Brute-forcing it with large models was expensive and struggled with nuance.</p>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Kind of work</th><th>Model</th></tr></thead>
+          <tbody>
+            <tr><td>Classification, clustering, mapping</td><td class="term">Jev</td></tr>
+            <tr><td>Analysis, strategy, insights, extraction</td><td class="term">Astra</td></tr>
+            <tr><td>Generation</td><td class="term">Sol or Luna</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>The flow.</strong> The pipeline extracts labels, and Jev assigns everything to them. Astra then reads across the groups and pulls out more insights.</p>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Measure</th><th>Figure</th></tr></thead>
+          <tbody>
+            <tr><td>Signals pulled in: PRs, support tickets, Granola conversations, Linear tickets</td><td>About 1,100</td></tr>
+            <tr><td>Classifications and pairwise groupings</td><td>Over 200,000</td></tr>
+            <tr><td>Cost on the Jev side</td><td>About $4</td></tr>
+            <tr><td>Cost on the Astra side</td><td>Much more; no figure given</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>Read the $4 carefully.</strong> It covers Jev only, so it isn't the cost of the feature. She says the change improved the feature's margin, and gives no number.</p>
+        <div class="todo"><b>What to do with this</b>Map your most expensive LLM workflow by stage. Move one classify-or-route stage to a decision model and compare the total bill.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">7</span>
+        <span class="sum">
+          <span class="sum-lead">Turn audience comments into a signal you can query.</span>
+          <span class="sum-text">Claire read her YouTube comments daily but had never analyzed them. Jev sorted about 4,500 by sentiment and flagged episode ideas, and a dashboard came out of it.</span>
+          <span class="hint">Details · steps · table · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>From comment pile to request board</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1097s">Watch at 18:17</a></p>
+        <ol>
+          <li>Enable the YouTube Data API v3 in the Google console.</li>
+          <li>Pull all the comments.</li>
+          <li>Have Jev sort each one by sentiment.</li>
+          <li>Have Jev flag whether it contains an episode idea.</li>
+          <li>Ask the agent to analyze the results and build a dashboard.</li>
+        </ol>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Measure</th><th>Figure</th></tr></thead>
+          <tbody>
+            <tr><td>Comments analyzed</td><td>About 4,500</td></tr>
+            <tr><td>Positive</td><td>About half</td></tr>
+            <tr><td>Comments with episode ideas</td><td>58</td></tr>
+            <tr><td>Ryan's three-step AI coding workflow episode</td><td>61% positive</td></tr>
+            <tr><td>Claude Code for product managers episode</td><td>80% positive</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>What the dashboard shows.</strong> It has sentiment overall and by episode, the comments themselves, and an audience request board. Requests included open-weight models and a Grok versus Muse comparison for personal use.</p>
+        <div class="todo"><b>What to do with this</b>Use the same recipe on support tickets, reviews or survey answers. Start with one flag you would actually act on.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">8</span>
+        <span class="sum">
+          <span class="sum-lead">Batch, score and promote to get instant search.</span>
+          <span class="sum-text">Jev doesn't scan thousands of items instantly just by being in the middle. Claire's live comment search needs some architecture, and she says so plainly.</span>
+          <span class="hint">Details · steps · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The architecture behind the fast demo</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1260s">Watch at 21:00</a></p>
+        <p><strong>What it does.</strong> Type a topic like screen share or slop. Matching comments come back quickly from the full set of about 4,400.</p>
+        <ol>
+          <li>Split the corpus into batches.</li>
+          <li>Score each batch against the query.</li>
+          <li>Push the high scores up as they arrive.</li>
+        </ol>
+        <p><strong>Why she shows it live.</strong> She is pushing back on 30-second viral demos that hide how the effect is built. Seeing the real latency is part of the lesson.</p>
+        <div class="todo"><b>What to do with this</b>Time a single batch before you design the interface. That number sets how many items you can search while someone waits.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">9</span>
+        <span class="sum">
+          <span class="sum-lead">Put a decision inside a real-time loop.</span>
+          <span class="sum-text">Jev is fast enough to run on every spoken phrase. Claire's afternoon demo turns her voice into a background color and a matching quote.</span>
+          <span class="hint">Details · steps · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Voice to color in an afternoon</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1334s">Watch at 22:14</a></p>
+        <ol>
+          <li>OpenAI's Realtime voice API takes in speech.</li>
+          <li>Jev scores a list of hex colors against each phrase.</li>
+          <li>The top-scoring color wins.</li>
+          <li>Jev picks from a set list of filters for the quote API.</li>
+          <li>Returned quotes are scored against her sentiment and shown on screen.</li>
+        </ol>
+        <p><strong>Where the lag lives.</strong> The color picks looked immediate, and the quote API added visible delay. She ran it locally and expects caching would speed it up.</p>
+        <p><strong>Other examples she mentions.</strong> Playing video games, playing Tetris and live search all rest on the same quick decision.</p>
+        <div class="todo"><b>What to do with this</b>Find a feature you shelved because LLM latency killed it. Test one choice per event and see if it holds up.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">10</span>
+        <span class="sum">
+          <span class="sum-lead">Budget at list price, not the launch deal.</span>
+          <span class="sum-text">Claire reports spending under $10 across all of this. Much of it was subsidized by free access through Vercel's AI Gateway, so plan on the list price.</span>
+          <span class="hint">Details · table · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Do the arithmetic before you trust the headline</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=61s">Watch at 1:01</a></p>
+        <p><strong>The price.</strong> <a href="https://typesafe.ai">TypeSafe's site</a> lists $42 per billion input tokens, which Claire rounds to 4¢ per million. There is no output charge in her telling, since Jev outputs so little.</p>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Spend</th><th>Input tokens at list price</th></tr></thead>
+          <tbody>
+            <tr><td>9¢</td><td>About 2.1 million</td></tr>
+            <tr><td>$4</td><td>About 95 million</td></tr>
+            <tr><td>$10</td><td>About 238 million</td></tr>
+          </tbody>
+        </table></div>
+        <p class="caption">This summary's arithmetic at $0.042 per million.</p>
+        <p><strong>Count the whole stack.</strong> Jev is the cheap line on the bill. Astra, Sol, Luna and even Flash-Lite sit on top of it in her real pipelines.</p>
+        <p><strong>Treat the value claim as hers.</strong> She rates this work at hundreds of thousands of dollars or more. That is her estimate, and the episode offers no outside measure.</p>
+        <div class="todo"><b>What to do with this</b>Check current pricing, then count tokens on a 100-item sample. Multiply up before you commit to a design.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">11</span>
+        <span class="sum">
+          <span class="sum-lead">Describe the job in plain language to your coding agent.</span>
+          <span class="sum-text">Claire doesn't hand-write these analyses on camera. She tells an agent what to pull, what Jev should decide and what to build from the results.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The prompt is the pipeline spec</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1141s">Watch at 19:01</a></p>
+        <p><strong>What her request covers.</strong> The YouTube project comes down to four instructions to the agent.</p>
+        <ol>
+          <li>Name the source: pull all the comments.</li>
+          <li>Name the first decision: sort them by sentiment.</li>
+          <li>Name the second decision: flag episode ideas.</li>
+          <li>Name the output: analyze the data and make a dashboard.</li>
+        </ol>
+        <p><strong>The manual part is small.</strong> She did have to enable the API in the Google console. The PR and session analyses also ran from Codex.</p>
+        <div class="todo"><b>What to do with this</b>Write your next analysis as those four lines before you open a tool. The <a href="https://www.chatprd.ai/how-i-ai/workflows/jev-youtube-comment-analysis">comment analysis workflow</a> is a useful starting point.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">12</span>
+        <span class="sum">
+          <span class="sum-lead">Prove the pipeline on a small dataset first.</span>
+          <span class="sum-text">Claire ran the PR analysis on her 112-PR marketing site before her main app. At about a penny, a trial like that is an easy way to check the categories.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Spend a penny before you spend nine</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=542s">Watch at 9:02</a></p>
+        <p><strong>What she did.</strong> The marketing site cost 1.1¢ and produced readable themes like maintenance, content and docs. Then she moved to the app and its 1,700 PRs.</p>
+        <p><strong>Why it helps.</strong> She doesn't present this as a rule. Still, a small corpus you know well lets you judge the output by eye, which is hard at full scale.</p>
+        <div class="todo"><b>What to do with this</b>Pick a dataset small enough to read in one sitting. Fix the questions and categories there before you scale up.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">13</span>
+        <span class="sum">
+          <span class="sum-lead">Give the classifier somewhere to put unclear items.</span>
+          <span class="sum-text">Claire's session breakdown has a bucket for work that couldn't be categorized. Her comment dashboard also has a mixed sentiment group.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>An honest other pile</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=720s">Watch at 12:00</a></p>
+        <p><strong>Why it matters.</strong> Jev picks from the options you provide. Without an unclear option, weak matches have to land in a real category and distort the shares. This reasoning is this summary's, since she only shows the buckets.</p>
+        <p><strong>Use it as a diagnostic.</strong> A growing unclear bucket is a sign that your categories no longer fit the data.</p>
+        <div class="todo"><b>What to do with this</b>Add an unclear option to your next choice question. Read that bucket first, because it shows which categories are missing.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">14</span>
+        <span class="sum">
+          <span class="sum-lead">Rank a list by scoring every option.</span>
+          <span class="sum-text">Asking for one answer isn't the only way to choose. Claire scores each hex color and each quote against the input, then takes the top result.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Score, sort, take the top</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1442s">Watch at 24:02</a></p>
+        <p><strong>One pattern, three uses.</strong> Her voice app and her comment search both rest on this.</p>
+        <ul>
+          <li>Colors: score a list of hex values against each phrase.</li>
+          <li>Quotes: score the returned quotes against her sentiment.</li>
+          <li>Comments: score batches against a query and push the best up.</li>
+        </ul>
+        <p><strong>The tradeoff.</strong> Every option scored is another call, so long lists cost more time and money. That matters most in a live loop.</p>
+        <div class="todo"><b>What to do with this</b>Try this on a list you currently sort by hand, such as leads, bugs or candidate sources. Keep the scores so you can see the near misses.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">15</span>
+        <span class="sum">
+          <span class="sum-lead">Let Jev choose the parameters for your next API call.</span>
+          <span class="sum-text">In the voice app, Jev picks from a set list of filters for the quote API. Its decision becomes a safe input to the next system.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Free text in, valid parameter out</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1442s">Watch at 24:02</a></p>
+        <p><strong>How it works.</strong> Speech is messy, and an API accepts only certain values. Jev bridges the two by selecting from the values you allow.</p>
+        <p><strong>Why typed output helps.</strong> The answer comes from your list, so there is no generated text to parse. Your code can pass it straight along. This inference is this summary's, based on how Jev's outputs work.</p>
+        <div class="todo"><b>What to do with this</b>Find a place where someone types free text and a system needs a fixed value. Offer the allowed values as a Jev choice.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">16</span>
+        <span class="sum">
+          <span class="sum-lead">Compare what customers ask for with what you're building.</span>
+          <span class="sum-text">Put support tickets, conversations and PRs in one classified set. The gap between demand and effort is the output Claire finds most useful in her insights graph.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>One label set across demand and supply</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=961s">Watch at 16:01</a></p>
+        <table>
+          <thead><tr><th>Side</th><th>Sources she names</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Demand</td><td>Support tickets, Granola conversations</td></tr>
+            <tr><td class="term">Work</td><td>PRs, Linear tickets</td></tr>
+          </tbody>
+        </table>
+        <p class="caption">The split into two sides is this summary's grouping.</p>
+        <p><strong>Why shared labels matter.</strong> Everything gets assigned to the same extracted labels. That is what makes the two sides comparable.</p>
+        <div class="todo"><b>What to do with this</b>Start with two sources: one month of support tickets and one month of PRs. Use the same categories for both and look for the largest mismatch.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">17</span>
+        <span class="sum">
+          <span class="sum-lead">Re-run the classification so you can watch trends.</span>
+          <span class="sum-text">A single run gives you a snapshot. Claire's PR, session and insights views all get more useful when you can see shares change over time.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Low cost makes repetition practical</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=660s">Watch at 11:00</a></p>
+        <ul>
+          <li>PRs: shares rise as the team invests in new areas.</li>
+          <li>Sessions: her engineering share fell from January to September.</li>
+          <li>Insights graph: she can follow the demand and work gap over time.</li>
+        </ul>
+        <p><strong>The catch.</strong> She doesn't describe a recurring schedule, and that part is this summary's suggestion. If categories change between runs, the trend line can mislead, so keep them stable.</p>
+        <div class="todo"><b>What to do with this</b>Save the category list with each run. Repeat it monthly and compare shares before you act on any change.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">18</span>
+        <span class="sum">
+          <span class="sum-lead">Extract the labels first, then assign everything with Jev.</span>
+          <span class="sum-text">Jev can't invent categories, so something else has to produce them. In Claire's insights graph, labels are extracted first and Jev quickly sorts everything into them.</span>
+          <span class="hint">Details · steps · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>A two-pass way to sort unknown data</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=901s">Watch at 15:01</a></p>
+        <ol>
+          <li>Extract a set of labels from the data.</li>
+          <li>Have Jev assign every item to those labels.</li>
+          <li>Give the resulting groups to a stronger model for analysis.</li>
+        </ol>
+        <p><strong>How this differs from idea 3.</strong> Clustering finds groups first and names them afterward. This approach names the labels first and then fills them.</p>
+        <div class="todo"><b>What to do with this</b>Use clustering when you don't know the categories. Use label assignment when you need consistent labels across many sources.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">19</span>
+        <span class="sum">
+          <span class="sum-lead">Route incoming work with Jev.</span>
+          <span class="sum-text">Good results can go to one person and bad ones to support. Claire treats this kind of routing as core to what Jev does well.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>A judgment call at every fork</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=302s">Watch at 5:02</a></p>
+        <p><strong>Why it fits.</strong> A route is a choice from a short, known list. That matches Jev's output exactly, and the speed suits a step that runs on every item.</p>
+        <p><strong>What she leaves open.</strong> She gives the pattern without a production example. Handling for a wrong route is up to you.</p>
+        <div class="todo"><b>What to do with this</b>Pick one inbox or queue with three or four destinations. Log each route and review the misses before you remove the human step.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">20</span>
+        <span class="sum">
+          <span class="sum-lead">Score bugs by severity, then triage only the serious ones.</span>
+          <span class="sum-text">Jev can rate each bug as cosmetic, broken or blocking. A stronger model or an engineer can then spend time on the high-severity group.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Cheap first pass, deep second pass</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=360s">Watch at 6:00</a></p>
+        <p><strong>The first pass.</strong> The severity example comes from TypeSafe's docs, which Claire shows when explaining scores.</p>
+        <p><strong>The second pass.</strong> Later she describes taking the high-severity bugs and triaging them deeply. This is an example of the pattern, since she doesn't show a bug pipeline running.</p>
+        <div class="todo"><b>What to do with this</b>Write one sentence defining each severity level. Score last month's closed bugs and compare the results with what your team actually did.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">21</span>
+        <span class="sum">
+          <span class="sum-lead">Find what's buried with one yes/no question.</span>
+          <span class="sum-text">Claire asked Jev whether each comment contained an episode idea. Across about 4,500 comments, it flagged 58.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Needles are cheap to find now</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1200s">Watch at 20:00</a></p>
+        <p><strong>Why this is different from sentiment.</strong> Sentiment describes the whole corpus. A flag pulls out a small set you can act on, here about 1.3% of comments. That percentage is this summary's arithmetic.</p>
+        <p><strong>What came next.</strong> The flagged comments fed an audience request board, and Claire says one requested comparison is coming soon.</p>
+        <div class="todo"><b>What to do with this</b>Choose a question you wish someone would read everything to answer. Run it, then read every flagged item and a sample of the rest.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">22</span>
+        <span class="sum">
+          <span class="sum-lead">Turn classified signals into reusable business context.</span>
+          <span class="sum-text">Claire says her Jev and Astra combination produces a body of context that was hard to generate before. She compares it to an auto-generated wiki.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The output is an asset as well as a report</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1021s">Watch at 17:01</a></p>
+        <p><strong>What she says it unlocked.</strong> The pipeline turns about 1,100 raw signals into structured context for the product. She credits this for making the feature work.</p>
+        <p><strong>What she doesn't show.</strong> The wiki comparison is brief, and she doesn't walk through how the context gets stored or kept current.</p>
+        <div class="todo"><b>What to do with this</b>Save classified results somewhere your other agents can read them. Decide how often they refresh before anyone relies on them.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">23</span>
+        <span class="sum">
+          <span class="sum-lead">Scope the data before you report shares of effort.</span>
+          <span class="sum-text">Claire excluded docs PRs because they are a separate kind of work. What you leave in changes every percentage that leadership will see.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The denominator is an editorial choice</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=601s">Watch at 10:01</a></p>
+        <p><strong>Counting PRs isn't measuring effort.</strong> A one-line fix and a month-long migration each count as one PR. This caveat is this summary's, since she uses PR share as her effort measure.</p>
+        <div class="todo"><b>What to do with this</b>State what you excluded and what the unit is on any chart you share. Add a second measure if the decision is a big one.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">24</span>
+        <span class="sum">
+          <span class="sum-lead">Judge real-time claims from a live run, not a clip.</span>
+          <span class="sum-text">Claire demos her apps live on purpose. She wants viewers to see where latency actually comes from, which short viral demos hide.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Watch the whole chain, not the model</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1082s">Watch at 18:02</a></p>
+        <p><strong>What the live run showed.</strong> Her voice app's visible delay came from the quote API, which is a part of the chain outside Jev.</p>
+        <div class="todo"><b>What to do with this</b>Before you commit to a real-time feature, time each step in the chain separately. Run it on the network your users will have.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">25</span>
+        <span class="sum">
+          <span class="sum-lead">Cache repeat work to speed up a real-time app.</span>
+          <span class="sum-text">Claire's demo ran locally and wasn't tuned for speed. She names caching as the obvious next optimization.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>The first optimization she'd reach for</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1501s">Watch at 25:01</a></p>
+        <p><strong>How firm this is.</strong> She mentions caching in passing and didn't test it. In her app, the quote results look like the natural place to start, which is this summary's reading.</p>
+        <div class="todo"><b>What to do with this</b>Find the slowest external call in your loop. Store its common results before you try to speed up anything else.</div>
+      </div>
+    </details>
+
+    <details class="idea">
+      <summary>
+        <span class="num">26</span>
+        <span class="sum">
+          <span class="sum-lead">Convert images to text descriptions before using Jev.</span>
+          <span class="sum-text">Jev takes text only. Claire notes that a text description of an image is the way in, if you really need one.</span>
+          <span class="hint">Details · timestamp</span>
+        </span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="detail">
+        <h3>Add a vision step ahead of the decision</h3>
+        <p class="watch"><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=180s">Watch at 3:00</a></p>
+        <p><strong>What this costs you.</strong> Jev can only judge what the description says. A vision model also adds its own price and delay to the chain, which is this summary's caveat.</p>
+        <div class="todo"><b>What to do with this</b>Test on a small image set first. If the decisions are wrong, read the descriptions before you blame Jev.</div>
+      </div>
+    </details>
+
+  </div>
+
+  <div class="extras">
+    <details class="extra">
+      <summary>
+        <span class="extra-title">Glossary</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="extra-body">
+        <div class="tablewrap"><table>
+          <thead><tr><th>Term</th><th>Meaning in this episode</th></tr></thead>
+          <tbody>
+            <tr><td class="term">Jev</td><td>TypeSafe AI's model that returns decisions instead of generated text.</td></tr>
+            <tr><td class="term">System one model</td><td>TypeSafe's label for this class of fast, decision-only model.</td></tr>
+            <tr><td class="term">Decision model</td><td>Claire's plain name for Jev: give it a decision and it makes one.</td></tr>
+            <tr><td class="term">Type-safe value</td><td>An answer from a predefined set, so software can act on it directly.</td></tr>
+            <tr><td class="term">Primitive</td><td>One of the basic return types in Jev's docs.</td></tr>
+            <tr><td class="term">Choice</td><td>Jev picks one option from a list you provide.</td></tr>
+            <tr><td class="term">Score</td><td>Jev rates something on a scale, such as bug severity.</td></tr>
+            <tr><td class="term">Noul</td><td>A 0 to 1 likelihood that a statement is true. Think of a soft yes or no.</td></tr>
+            <tr><td class="term">Smart if statement</td><td>A branch in code where the condition is a judgment made by a model.</td></tr>
+            <tr><td class="term">Classification</td><td>Sorting items into categories.</td></tr>
+            <tr><td class="term">Pairwise relation</td><td>Comparing two items and asking whether they are related.</td></tr>
+            <tr><td class="term">Clustering</td><td>Building groups of related items from those comparisons.</td></tr>
+            <tr><td class="term">PR</td><td>Pull request: a proposed code change in GitHub.</td></tr>
+            <tr><td class="term">Frontier model</td><td>A large, top-tier general model, and usually an expensive one.</td></tr>
+            <tr><td class="term">LLM buddy</td><td>The smarter model that acts on what Jev has filtered.</td></tr>
+            <tr><td class="term">Product insights graph</td><td>ChatPRD's feature connecting business signals to product insights.</td></tr>
+            <tr><td class="term">Signal</td><td>One piece of evidence about the business, such as a ticket or a PR.</td></tr>
+            <tr><td class="term">Margin accretive</td><td>Improves profit margin. Here, the feature costs less to run for what it delivers.</td></tr>
+            <tr><td class="term">User turns</td><td>The messages you sent in a session, used as one measure of effort.</td></tr>
+            <tr><td class="term">Session days</td><td>A second effort measure, based on days with sessions. The exact definition isn't explained.</td></tr>
+            <tr><td class="term">AI Gateway</td><td>Vercel's service for calling models, where Jev was free at recording.</td></tr>
+            <tr><td class="term">Real-time loop</td><td>Running a model on each new event while a person waits.</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </details>
+
+    <details class="extra">
+      <summary>
+        <span class="extra-title">Sources</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="extra-body">
+        <p class="label">Episode</p>
+        <ul class="linklist">
+          <li><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI">I'm using Jev more than Opus 5.5 or GPT-6. Here's why.</a> (YouTube)</li>
+          <li><a href="https://howiaipod.com">How I AI</a> (show site)</li>
+          <li><a href="https://www.chatprd.ai/how-i-ai/jev-ai-data-analysis-product-insights">Episode write-up and workflows</a> (ChatPRD)</li>
+          <li><a href="https://clairevo.com/">Claire Vo</a> and <a href="https://www.chatprd.ai/">ChatPRD</a></li>
+        </ul>
+        <p class="label">Tools and products named</p>
+        <ul class="linklist">
+          <li><a href="https://typesafe.ai">Jev by TypeSafe AI</a> and its <a href="https://docs.typesafe.ai/introduction">docs</a></li>
+          <li><a href="https://vercel.com/ai">Vercel AI</a></li>
+          <li><a href="https://docs.github.com/en/rest">GitHub API</a></li>
+          <li><a href="https://developers.google.com/youtube/v3">YouTube Data API v3</a></li>
+          <li><a href="https://platform.openai.com/docs/guides/realtime">OpenAI Realtime API</a></li>
+          <li><a href="https://ai.google.dev/gemini-api/docs/models/gemini-3.5-flash-lite">Gemini 3.5 Flash-Lite</a></li>
+          <li><a href="https://api-ninjas.com/api/quotes">API Ninjas Quotes API</a></li>
+          <li><a href="https://claude.com/claude-code">Claude Code</a> and <a href="https://developers.openai.com/codex">Codex</a></li>
+          <li><a href="https://www.granola.ai">Granola</a> and <a href="https://linear.app">Linear</a></li>
+          <li><a href="https://artificialanalysis.ai/models/releases/comparisons/gpt-6-astra-vs-gpt-5-6-luna">GPT-6 Astra listing</a> (third party)</li>
+        </ul>
+        <p class="label">Transcript caveats</p>
+        <ul class="linklist">
+          <li><strong>Source.</strong> Text comes from YouTube's auto-generated captions, read from the video's transcript panel.</li>
+          <li><strong>Jev.</strong> The captions also write Jeb, Jeff and Jab. The show notes confirm Jev.</li>
+          <li><strong>Noul.</strong> The captions garble this as "a new" and "nule". The spelling comes from TypeSafe's docs.</li>
+          <li><strong>Other fixes.</strong> Chat PRD and Chat Pured became ChatPRD. Cloud code became Claude Code. Codeex became Codex. Grock became Grok, Soul became Sol and Versel became Vercel.</li>
+          <li><strong>Astra.</strong> The episode doesn't name a vendor. Third-party listings suggest GPT-6 Astra, which is an inference.</li>
+          <li><strong>Counts.</strong> Claire says both 4,500 and 4,400 comments. The second mention of 1,100 signals is garbled in the captions.</li>
+          <li><strong>Pricing.</strong> Figures date from the September 28, 2026 episode. Free gateway access may have changed since.</li>
+          <li><strong>Quotes.</strong> This page carries one direct quote. The rest is paraphrase, with timestamps to the original.</li>
+          <li><strong>Left out.</strong> The OpenArt sponsor segment and the outro.</li>
+        </ul>
+      </div>
+    </details>
+
+    <details class="extra">
+      <summary>
+        <span class="extra-title">Transcript</span>
+        <svg class="chev" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4l6 6-6 6"/></svg>
+      </summary>
+      <div class="extra-body">
+        <p>The full text lives on YouTube and isn't copied to this page. To read it, <a href="https://www.youtube.com/watch?v=-KIBgpGA_XI">open the video</a>, expand the description and choose Transcript.</p>
+        <p class="label">Jump to a section</p>
+        <div class="tablewrap"><table>
+          <thead><tr><th>Time</th><th>Section</th></tr></thead>
+          <tbody>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=0s">0:00</a></td><td>Launch, and why Jev is different</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=169s">2:49</a></td><td>Type-safe values</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=328s">5:28</a></td><td>What Jev returns</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=459s">7:39</a></td><td>PR categorization and clustering</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=672s">11:12</a></td><td>Local Claude Code and Codex sessions</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=780s">13:00</a></td><td>Gmail triage</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=870s">14:30</a></td><td>ChatPRD's product insights graph</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1097s">18:17</a></td><td>Demo: audience signal dashboard</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1334s">22:14</a></td><td>Demo: voice-to-color app</td></tr>
+            <tr><td><a href="https://www.youtube.com/watch?v=-KIBgpGA_XI&amp;t=1516s">25:16</a></td><td>Recap and next episode</td></tr>
+          </tbody>
+        </table></div>
+      </div>
+    </details>
+  </div>
+</main>
+
+<script>
+(function () {
+  var ideas = Array.prototype.slice.call(document.querySelectorAll('details.idea'));
+  var counter = document.getElementById('counter');
+  var expandBtn = document.getElementById('expand-all');
+  var collapseBtn = document.getElementById('collapse-all');
+
+  function update() {
+    var open = ideas.filter(function (d) { return d.open; }).length;
+    counter.textContent = open + ' of ' + ideas.length + ' expanded';
+    expandBtn.disabled = open === ideas.length;
+    collapseBtn.disabled = open === 0;
+  }
+  function setAll(state) { ideas.forEach(function (d) { d.open = state; }); update(); }
+
+  ideas.forEach(function (d) { d.addEventListener('toggle', update); });
+  expandBtn.addEventListener('click', function () { setAll(true); });
+  collapseBtn.addEventListener('click', function () { setAll(false); });
+  update();
+})();
+</script>
+
+</body></html>

@@ -1,0 +1,869 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Opus 5.5 vs GPT-6 Sol</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=IBM+Plex+Mono:wght@400;500&family=Spectral:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<style>
+/* Layout: one 42rem reading column on white; takeaways as a numbered, collapsible list. */
+:root{
+  --bg:#ffffff; --fg:#231f1c; --muted:#6f6660; --line:#e6e1dd;
+  --box:#f3f2f1; --box-line:#d9d7d5; --accent:#c8401f; --tint:#fcefe9; --tint-line:#f3d5c9;
+  --serif:"Spectral",Georgia,"Times New Roman",serif;
+  --sans:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171514; --fg:#ece7e3; --muted:#a59c95; --line:#332f2c;
+  --box:#242120; --box-line:#3d3936; --accent:#ff8159; --tint:#2e201b; --tint-line:#4d3026; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#171514; --fg:#ece7e3; --muted:#a59c95; --line:#332f2c;
+  --box:#242120; --box-line:#3d3936; --accent:#ff8159; --tint:#2e201b; --tint-line:#4d3026; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--serif);font-size:1.125rem;line-height:1.55;-webkit-text-size-adjust:100%}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.page{max-width:calc(42rem + 40px);margin:0 auto;padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:max(20px,env(safe-area-inset-right,0px));padding-block:3rem 5rem}
+a{color:var(--accent);text-underline-offset:.15em}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+.eyebrow{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:0 0 .9rem}
+h1{font-family:var(--sans);font-weight:800;font-size:clamp(1.9rem,6vw,2.7rem);line-height:1.1;letter-spacing:-.018em;margin:0 0 1.1rem;text-wrap:balance}
+.intro{font-size:1.2rem;line-height:1.5;margin:0 0 1.6rem}
+.toolbar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;flex-wrap:wrap;align-items:center;gap:.5rem .6rem;padding-block:.7rem;border-block:1px solid var(--line);margin-bottom:.5rem}
+button{font-family:var(--sans);font-weight:500;font-size:.85rem;color:var(--fg);background:transparent;border:1px solid var(--box-line);border-radius:6px;padding:.35rem .7rem;min-height:2.1rem;cursor:pointer}
+button:hover{background:var(--box)}
+.count{font-family:var(--mono);font-size:.75rem;color:var(--muted);margin-left:auto;font-variant-numeric:tabular-nums}
+.grouplabel{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);margin:2rem 0 .4rem}
+.ideas{list-style:none;margin:0;padding:0;display:grid;gap:.15rem}
+.vh{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+summary{list-style:none;cursor:pointer;display:grid;grid-template-columns:1.9rem minmax(0,1fr) 1rem;gap:0 .55rem;padding:.8rem;margin-inline:-.8rem;border:1px solid transparent;border-radius:8px}
+summary::-webkit-details-marker{display:none}
+summary:hover{background:var(--box)}
+details.idea[open]>summary{background:var(--box);border-color:var(--box-line)}
+.num{font-family:var(--sans);font-weight:800;font-size:1.15rem;line-height:1.55;color:var(--accent);font-variant-numeric:tabular-nums}
+.stext{display:grid;gap:.25rem;min-width:0}
+.lead{font-weight:700;line-height:1.35}
+.lead{padding-top:.08rem}
+.why{font-size:1.03rem;line-height:1.5}
+.hint{font-family:var(--mono);font-size:.7rem;color:var(--muted);margin-top:.2rem}
+.chev{color:var(--muted);margin-top:.35rem;transition:transform .16s ease,color .16s ease}
+details[open]>summary .chev{transform:rotate(90deg);color:var(--accent)}
+.body{padding:1rem 0 1.5rem 2.45rem;display:grid;gap:.85rem;min-width:0}
+.body>*{margin:0;min-width:0}
+h3{font-family:var(--sans);font-weight:700;font-size:1.22rem;line-height:1.25;text-wrap:balance}
+.body ul,.body ol{padding-left:1.25rem;display:grid;gap:.25rem}
+.body li::marker{color:var(--accent)}
+blockquote{border-left:3px solid var(--accent);padding:.1rem 0 .1rem 1rem;margin:.1rem 0 .1rem .4rem}
+blockquote p{margin:0;font-style:italic}
+blockquote footer{font-family:var(--sans);font-size:.82rem;color:var(--muted);margin-top:.3rem}
+.ts{font-family:var(--mono);font-size:.74rem;margin-left:.25rem}
+.todo{background:var(--tint);border:1px solid var(--tint-line);border-radius:8px;padding:.8rem .95rem}
+.todo h4{font-family:var(--mono);font-size:.7rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--accent);margin:0 0 .3rem}
+.todo p{margin:0;font-size:1.02rem}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:.96rem;line-height:1.4}
+th,td{text-align:left;vertical-align:top;padding:.45rem .7rem .45rem 0;border-bottom:1px solid var(--line)}
+thead th{font-family:var(--mono);font-size:.68rem;font-weight:500;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);border-bottom-color:var(--box-line)}
+tbody th{font-weight:600;white-space:nowrap}
+.extras{margin-top:2.5rem;border-top:1px solid var(--line)}
+.extra{border-bottom:1px solid var(--line)}
+.extra>summary{grid-template-columns:minmax(0,1fr) 1rem;align-items:center;margin-inline:0;padding:.9rem .1rem;border:0;border-radius:4px}
+.extra>summary:hover{background:transparent;color:var(--accent)}
+.extra>summary h2{font-family:var(--sans);font-weight:700;font-size:1.1rem;margin:0}
+.extra>summary .chev{margin-top:0}
+.extra .inner{padding:.2rem 0 1.5rem;display:grid;gap:.9rem;min-width:0}
+.extra .inner>*{margin:0;min-width:0}
+.extra #gloss tbody th{white-space:normal;width:34%}
+.srclist{list-style:none;padding:0;display:grid;gap:.4rem;font-size:1.02rem}
+.muted{color:var(--muted)}
+.note{font-size:1rem}
+.note h3{font-size:1rem;margin:0 0 .35rem}
+.note ul{padding-left:1.2rem;margin:0;display:grid;gap:.3rem}
+pre.raw{font-family:var(--mono);font-size:.78rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.rts{color:var(--muted)}
+.rch{font-weight:500;color:var(--accent)}
+@media (max-width:30rem){.page{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:2rem 4rem}
+  body{font-size:1.06rem}
+  summary{padding:.7rem;margin-inline:-.7rem;grid-template-columns:1.6rem minmax(0,1fr) 1rem}
+  .body{padding-left:0}
+  .count{margin-left:0;width:100%}}
+@media (prefers-reduced-motion:reduce){.chev{transition:none}}
+</style>
+<div class="page">
+<header>
+  <p class="eyebrow">How I AI · Claire Vo · Blind-testing Opus 5.5 and GPT-6 Sol</p>
+  <h1>29 ideas from Claire Vo's live model blind test</h1>
+  <p class="intro">Claire Vo, host of How I AI and founder of ChatPRD, blind-tests Opus 5.5, GPT-6 Sol and GPT-6 Luna live on launch day. She scores unlabeled outputs across writing, frontend, backend, agents and creative work. Her thesis is that the right model depends on the task: Astra and Sol win her heart, while Opus 5.5 wins her week.</p>
+</header>
+<div class="toolbar" role="group" aria-label="Takeaway controls">
+  <button type="button" id="expand-all">Expand all</button>
+  <button type="button" id="collapse-all">Collapse all</button>
+  <span class="count" id="count" aria-live="polite">0 of 29 expanded</span>
+</div>
+<main>
+<section class="group" aria-label="Design the bench"><h2 class="grouplabel">Design the bench</h2><ol class="ideas" start="1"><li><details class="idea"><summary><span class="num" aria-hidden="true">1</span><span class="stext"><span class="lead"><span class="vh">1. </span>Run your model comparisons blind.</span><span class="why">Label outputs with letters so brand loyalty can't vote. Claire admits she expects her favorites to win, so blinding is how she catches herself.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Blinding protects you from your own fandom</h3><p><strong>The setup.</strong> She runs the same prompts across models and sees only letters. She scores each output before she learns which model made it.</p><p><strong>The reason.</strong> She says up front that she leans toward OpenAI. Her predictions still missed in places, which shows how far a label could have steered her.</p><p><strong>The leak.</strong> She sometimes guesses a model from its style, such as green palettes or the name Relay. She scores the work anyway and checks the key at the end.</p><blockquote><p>I will be honest, which is like I am always inclined to think that Astra or Soul will win because I love the OpenAI models.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=605s" target="_blank" rel="noopener">10:05</a></footer></blockquote><blockquote><p>They're blind. You can see I have model B, model C, model E, model G.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=672s" target="_blank" rel="noopener">11:12</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>For your next model decision, have a script shuffle the outputs and assign letters. Keep the key in a separate file until scoring is done.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">2</span><span class="stext"><span class="lead"><span class="vh">2. </span>Test the work you actually do, beyond PRDs and prototypes.</span><span class="why">Claire rebuilt her bench because models are getting more agentic. It now covers writing, frontend, backend, agents and creative tasks.</span><span class="hint">Details · table · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>A bench should look like your week</h3><p><strong>The old bench.</strong> Earlier How I AI bench episodes covered PRDs and prototypes. She decided that was too narrow for models that now run long agent tasks.</p><p><strong>The new bench.</strong> It spans the six areas below, and she plans to add more over time. Each area gets its own prompts and its own scores.</p><div class="tablewrap"><table><thead><tr><th scope="col">Area</th><th scope="col">What she tests</th></tr></thead><tbody><tr><td>Knowledge work</td><td>Messy notes to PRD</td></tr><tr><td>Personal productivity</td><td>Inbox triage, routine replies in her voice</td></tr><tr><td>Frontend</td><td>About 10 evals: editorial, incident management, dock operations, B2B renewals, consumer plant app, dev tools, wireframes</td></tr><tr><td>Backend</td><td>Audit existing code, build a feature to spec</td></tr><tr><td>Agents</td><td>Agent personality, long-running research, computer use</td></tr><tr><td>Creative</td><td>SVG illustrations, short-form video cuts</td></tr></tbody></table></div><blockquote><p>they're really focused on two things, PRDs and prototypes. And I just think that these models are getting smarter, more agentic.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=114s" target="_blank" rel="noopener">1:54</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>List the tasks you repeat most each week. Turn each into one fixed prompt with fixed input files.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">3</span><span class="stext"><span class="lead"><span class="vh">3. </span>Compare models only within the same capability tier.</span><span class="why">A cheap mid-tier model and a frontier model aren't competing for the same job. Group them first, then rank inside each group.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Fair fights give you usable rankings</h3><p><strong>How she does it.</strong> Claire groups models by capability and runs each group against the same tasks. She then compares like with like.</p><p><strong>What it prevents.</strong> A frontier model will often beat a budget model on raw output. That result tells you nothing about which budget model to pick.</p><blockquote><p>I can compare like for like models like I don't want to compare a Luna and a Fable.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=665s" target="_blank" rel="noopener">11:05</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Sort your candidates into tiers by price before you run anything. Decide which tier each task should use.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">4</span><span class="stext"><span class="lead"><span class="vh">4. </span>Mix tightly directed prompts with open one-shot prompts.</span><span class="why">Directed prompts show how well a model follows requirements. Open prompts show its own instincts. You need both to separate model from prompt.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Find out who did the work, the model or the prompt</h3><p><strong>Directed evals.</strong> She gives very specific requirements and checks whether the result meets them.</p><p><strong>Open evals.</strong> She gives a short general prompt and lets the model make the choices. This is where default palettes and layouts show up.</p><blockquote><p>The open ones were like more general oneshotty style style prompts. And so you can really see like what the model does versus what the prompt does.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1064s" target="_blank" rel="noopener">17:44</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>For each frontend eval, write one spec-heavy prompt and one single-sentence prompt for the same app.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">5</span><span class="stext"><span class="lead"><span class="vh">5. </span>Recalibrate any eval that can't separate the models.</span><span class="why">Claire's dock scheduling test produced outputs so complex she could hardly rank them. When every result is confusing, fix the eval.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>A confusing result can be a test problem</h3><p><strong>What happened.</strong> She gave a very detailed prompt for a container-ship scheduling platform. The outputs worked, but she could not tell which was best.</p><p><strong>The lesson.</strong> Prompt detail can backfire. A long spec can push a model to surface every requirement at once, which makes outputs hard to judge.</p><p><strong>Her fallback.</strong> She ranked by whichever was easiest to read, even with visible slop tells. That is a usable tiebreaker, but it is a weak measure.</p><blockquote><p>Like all of this stuff looks cuckoo bananas.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=988s" target="_blank" rel="noopener">16:28</a></footer></blockquote><blockquote><p>And so again like calibrating your benchmarks is really important.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=975s" target="_blank" rel="noopener">16:15</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>After each run, flag any eval where your scores sit within one point. Simplify its prompt or sharpen its goal before the next run.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">6</span><span class="stext"><span class="lead"><span class="vh">6. </span>Give long-running agents a messy pile of research.</span><span class="why">Claire's longest eval feeds a model fake tickets and customer feedback. The model then writes a memo and a message to her.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Long tasks expose what short prompts hide</h3><p><strong>The task.</strong> The runs reached 86 turns of research. The output is a memo plus a personal message, so you judge both analysis and communication.</p><p><strong>How she judged it.</strong> She left the formal call to the LLM judge and skimmed the memos herself. Two stood out because they listed top problems and conflicts clearly.</p><blockquote><p>This was the longest running agentic task. And basically, I gave it a bunch of fake tickets, customer feedback, and then have it put together a memo and a message to myself.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1596s" target="_blank" rel="noopener">26:36</a></footer></blockquote><blockquote><p>Ah, this I can actually read.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1655s" target="_blank" rel="noopener">27:35</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Assemble a batch of fake tickets and call notes with a few planted conflicts. Check whether each model finds them and says so plainly.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">7</span><span class="stext"><span class="lead"><span class="vh">7. </span>Test backend work on your own code with two tasks.</span><span class="why">Claire has models audit real ChatPRD code and build a feature to spec. Reading and building are different skills, so she tests both.</span><span class="hint">Details · list · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Your codebase is the honest test</h3><p><strong>The two tasks.</strong></p><ol><li>Audit an existing set of code.</li><li>Build a backend feature to a spec.</li></ol><p><strong>The result.</strong> All of them succeeded, so she could not separate them by eye. Correctness went to the LLM judge.</p><blockquote><p>One is auditing an existing set of code, the system chat PRD code, and then the other is building a backend feature to spec.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1455s" target="_blank" rel="noopener">24:15</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Pick one module you know well and one small ticket. Run both tasks on a branch and review the diffs blind.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">8</span><span class="stext"><span class="lead"><span class="vh">8. </span>Test agent personality as its own eval.</span><span class="why">Claire sends five messages and judges what it's like to talk to the agent. If every model refuses something, she doesn't penalize that refusal.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>You will spend all day talking to this thing</h3><p><strong>The method.</strong> She has each agent respond to five things, then rates the replies. One asks it to push straight to production.</p><p><strong>The fair check.</strong> She nearly docked a model for refusing the push. She checked the others first, saw none would do it, and dropped the penalty.</p><p><strong>Look beyond risky prompts.</strong> She says a company's approach to risk leaks into ordinary behavior. Expect Opus to be cautious even on harmless requests.</p><blockquote><p>None of them let me push straight to prod yolo style. Okay, then I won't punish it.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1564s" target="_blank" rel="noopener">26:04</a></footer></blockquote><blockquote><p>it continues to be a little bit of like a conservative scold.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=305s" target="_blank" rel="noopener">5:05</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Write five messages you really send: a pushback, a rush request, a customer reply, a vague ask and a risky ask.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">9</span><span class="stext"><span class="lead"><span class="vh">9. </span>Test consumer design separately from B2B and dev tools.</span><span class="why">Claire found every model weakest on consumer apps. Most outputs looked alike, and only the ones with some personality stood out.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Consumer is where the sameness shows</h3><p><strong>The test.</strong> A consumer plant app. She scored most entries harshly and gave one a five.</p><p><strong>What won.</strong> Her five went to precise, cute SVG illustrations with good shadow detail. Another entry earned real delight by giving the plants their own names.</p><blockquote><p>Okay, this is where they all failed. they're all really bad at consumer.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1206s" target="_blank" rel="noopener">20:06</a></footer></blockquote><blockquote><p>Ooh. Ooh. I actually really like that. That gave me a little spark of joy.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1302s" target="_blank" rel="noopener">21:42</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>If you ship consumer products, add one consumer app to your bench. Score delight and character as well as layout.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">10</span><span class="stext"><span class="lead"><span class="vh">10. </span>Test illustration with a few simple objects.</span><span class="why">Claire asks for a document, a microphone and a bug. Simple subjects make failures obvious, and this test produced her biggest surprise.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>A microphone is a surprisingly hard test</h3><p><strong>Why it works.</strong> Anyone can tell whether a microphone looks like a microphone. Scoring takes seconds and needs no expertise.</p><p><strong>What she looks for.</strong> She looks for quality across all three icons, plus details such as shadow and character. Her top score went to the set where the microphone looked like a microphone.</p><p><strong>The surprise.</strong> She expected Anthropic to win. Astra and Sol did better on character SVGs.</p><blockquote><p>Why do they making microphones look like a cactus?</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1760s" target="_blank" rel="noopener">29:20</a></footer></blockquote><blockquote><p>Now this is a real surprise. Astra and Soul did a lot better on character SVGs.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=2163s" target="_blank" rel="noopener">36:03</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Use three objects from your own product's world. Render them side by side at icon size.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">11</span><span class="stext"><span class="lead"><span class="vh">11. </span>Treat AI video editing as a skills problem.</span><span class="why">Every model did badly at cutting a selfie video into short form. Claire blames the missing skills, so better instructions are the place to start.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>When everything fails the same way, look at the setup</h3><p><strong>What went wrong.</strong> The overlays looked bad and the models didn't make enough cuts. She gave all of them a thumbs down.</p><p><strong>What it implies.</strong> A uniform failure says little about which model is better. It points to missing instructions and tools.</p><blockquote><p>And all of them did a terrible job.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1805s" target="_blank" rel="noopener">30:05</a></footer></blockquote><blockquote><p>But I think this is a skills problem, not a model problem.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1824s" target="_blank" rel="noopener">30:24</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Before switching models for a failing task, write a skill with your cut rules and overlay style. Then rerun it.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">12</span><span class="stext"><span class="lead"><span class="vh">12. </span>Keep one weird benchmark that is entirely yours.</span><span class="why">Claire asks models to build a 3D Barbie fashion game. It remains unsolved, so it keeps showing progress and limits on every release.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>A hard, personal test stays useful longer</h3><p><strong>The test.</strong> The app is a Barbie Fashion Designer with 3D rendering, dress-up options and a fitting room.</p><p><strong>Why it lasts.</strong> No frontier model has beaten it. She says Opus is way better than before, but hands, feet, face and hair still fail.</p><p><strong>How it compares.</strong> She had run it on Astra, which did worse than Opus. She wasn't sure whether she had run it on Sol.</p><blockquote><p>everybody else on YouTube, all the bros are making video or video games with like spaceships and all different stuff. Your girl wants a Barbie fashion video game.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1895s" target="_blank" rel="noopener">31:35</a></footer></blockquote><blockquote><p>Oh, AGI is not not arrived. Hands pretty terrible.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1984s" target="_blank" rel="noopener">33:04</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Pick a fun task no model can do yet and that you can judge at a glance. Rerun it on every launch and keep the screenshots.</p></aside></div></details></li></ol></section><section class="group" aria-label="Score the results"><h2 class="grouplabel">Score the results</h2><ol class="ideas" start="13"><li><details class="idea"><summary><span class="num" aria-hidden="true">13</span><span class="stext"><span class="lead"><span class="vh">13. </span>Score as the person who receives the work.</span><span class="why">Claire reads each output as if it landed in her inbox. That keeps the question practical: would I be glad to get this?</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Judge from the receiving end</h3><p><strong>Why this lens.</strong> Her workflow is the same for each eval. She gives a task, looks at the output, evaluates it as the recipient, then ranks it.</p><p><strong>What it catches.</strong> Technically fine work can still fail this test. Hard-to-read intros and sloppy email drafts lost points even when the task was done.</p><blockquote><p>I evaluate it as if I am the recipient of this task, which is common.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=805s" target="_blank" rel="noopener">13:25</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Before scoring, write one line naming the recipient and what they need. Score against that line.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">14</span><span class="stext"><span class="lead"><span class="vh">14. </span>Score fast from 1 to 5, then have a model mine your notes.</span><span class="why">Claire gives each output a quick number and a terse note. An LLM then finds patterns she didn't see while scoring.</span><span class="hint">Details · table · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Your rough notes hold the real signal</h3><p><strong>Keep it fast.</strong> She calls her notes terrible, and that is fine. A few words per output keeps the bench light enough to finish.</p><p><strong>Mine the export.</strong> She downloads her scores and asks Claude what she thinks. It found that seven of her notes were about reading.</p><div class="tablewrap"><table><thead><tr><th scope="col">Score</th><th scope="col">Her notes on that score</th></tr></thead><tbody><tr><td>1</td><td>"it doesn't work" or "Slop"</td></tr><tr><td>2</td><td>"It's fine. It's not ugly, but it's pretty basic."</td></tr><tr><td>3</td><td>"incomplete" or "I don't hate it"</td></tr><tr><td>4</td><td>"easiest to read"</td></tr><tr><td>5</td><td>"This one was my favorite"</td></tr></tbody></table></div><blockquote><p>I'm going to download my taste. And then what I do is I give it to Claude and I say, "Claude, what do I think?" Analyze.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1833s" target="_blank" rel="noopener">30:33</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Keep scores in a CSV with model, task, score and note. Ask a model to group the notes into themes and report them by model.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">15</span><span class="stext"><span class="lead"><span class="vh">15. </span>Write your predictions down before the reveal.</span><span class="why">Claire states her guesses before she sees results. That turns the reveal into a lesson about where her instincts are wrong.</span><span class="hint">Details · table · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Predictions show you what you've misjudged</h3><p><strong>How her guesses held up.</strong> Most landed, and one clear miss taught her the most. It changed which model she'd use for creative work.</p><div class="tablewrap"><table><thead><tr><th scope="col">Area</th><th scope="col">Her prediction</th><th scope="col">Result</th></tr></thead><tbody><tr><td>Writing</td><td>Sol</td><td>Hit: clear, and best for PRDs</td></tr><tr><td>Frontend</td><td>Opus 5.5</td><td>Partial: B2B renewals favorite, but mixed overall</td></tr><tr><td>Agent voice</td><td>A Claude model</td><td>Hit: still her favorite</td></tr><tr><td>Long-running tasks</td><td>A Claude model, then unsure</td><td>Hit: Opus 5.5 does really well</td></tr><tr><td>Character SVGs</td><td>Anthropic</td><td>Miss: Astra and Sol</td></tr><tr><td>Video</td><td>All bad</td><td>Hit</td></tr></tbody></table></div><blockquote><p>So my prediction was correct. Now this is a real surprise.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=2157s" target="_blank" rel="noopener">35:57</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Add a prediction column to your score sheet. Fill it in before you see any output.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">16</span><span class="stext"><span class="lead"><span class="vh">16. </span>Fail broken output, but don't blame the model for your setup.</span><span class="why">An output that doesn't run gets a one, and an incomplete one is capped. A failure caused by your own harness shouldn't count against the model.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Working comes first, and fair comes right after</h3><p><strong>Polish doesn't save it.</strong> An app that didn't generate or didn't work got a one. A beautiful dev tool that was missing features stopped at three.</p><p><strong>Separate the failures.</strong> One model failed the personality eval because it couldn't access things. She traced that to her side and marked a failure state instead of scoring it.</p><blockquote><p>Oh, but it didn't build a lot of stuff. So I'm giving it I like it, but I'm giving it a three because it was incomplete.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1380s" target="_blank" rel="noopener">23:00</a></footer></blockquote><blockquote><p>something on my side broke there. So, I'm going to give it a failure state.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1590s" target="_blank" rel="noopener">26:30</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Add a status column with three values: scored, model failure and harness failure. Rerun anything marked harness failure.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">17</span><span class="stext"><span class="lead"><span class="vh">17. </span>Mark down interfaces you can't reason about.</span><span class="why">Claire finds some models answer complexity with density. A screen full of correct detail still fails a prototype if she can't tell what it does.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Dense is a costly kind of thorough</h3><p><strong>Where it shows.</strong> She suspects Claude models here. Her incident and scheduling tests produced detailed screens that were hard to take in.</p><p><strong>What beat it.</strong> She preferred the output that was easiest to read and followed the right path, which was helping people triage incidents.</p><p><strong>Know the audience.</strong> Dev tools can carry more density. Even there, one console was too dense for her to reason with.</p><blockquote><p>it just makes it super dense and complex and really detailed. Good for backend code. I think hard for prototyping cuz it's hard for me to know what this really is or it's supposed to do.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=936s" target="_blank" rel="noopener">15:36</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Add one question to prototype scoring: can you say what this screen is for at a glance?</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">18</span><span class="stext"><span class="lead"><span class="vh">18. </span>Learn each model's slop tells, and reward breaking them.</span><span class="why">Claire can spot repeated visual habits across outputs. She marks them down and gives a bonus to anything that leaves the default.</span><span class="hint">Details · list · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Sameness is a measurable failure</h3><p><strong>The tells she calls out.</strong></p><ul><li>Left-hand border bars on cards</li><li>Lighter circles behind icons, and circles in corners</li><li>Blur effects and heavy text weight</li><li>Orange everywhere</li><li>Forest or sage green on the wrong product</li><li>The app name Relay, again and again</li><li>Dark mode by default for any dev tool</li></ul><p><strong>Check the fit.</strong> A palette can be nice and still wrong. She found sage green too healthcare-like for a SaaS renewals product.</p><p><strong>Pay for risk.</strong> She gave one dev tool a bonus for looking different, even though it used orange.</p><blockquote><p>One of the problems I have is if you look through all of these, they all oneshot basically the same color scheme and app.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1406s" target="_blank" rel="noopener">23:26</a></footer></blockquote><blockquote><p>I'm gonna give it a little bonus for going outside the norm.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1417s" target="_blank" rel="noopener">23:37</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Keep a running list of tells for your own bench. Add them to your design prompts as things to avoid.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">19</span><span class="stext"><span class="lead"><span class="vh">19. </span>Test routine replies in your voice, and penalize writing tics.</span><span class="why">Claire checks whether drafts sound like her. Em dashes cost points across emails and agent replies, whatever the rest looks like.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Small tics reveal a model that isn't listening</h3><p><strong>The test.</strong> She gives models fake emails and asks them to triage and draft replies. Her favorite was easy to read, had less slop and added calendar invites.</p><p><strong>The tic.</strong> She treats em dashes as a hard penalty. One agent scored a one because every message had an em dash.</p><p><strong>Match the job.</strong> She thinks one entry was Luna because her setup says to use it for email. It followed her rules and earned a five, so a lighter model may be enough here.</p><blockquote><p>The other thing is like could we m dash anymore in these emails</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=749s" target="_blank" rel="noopener">12:29</a></footer></blockquote><blockquote><p>You get punished for M dashes.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1534s" target="_blank" rel="noopener">25:34</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Write your biggest writing dislikes into your instructions. Test the cheapest model first and see whether it follows them.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">20</span><span class="stext"><span class="lead"><span class="vh">20. </span>Compare how each agent reports back to you.</span><span class="why">Same prompt, very different messages. Some are long and human, others so terse they lose meaning. That difference is worth its own eval.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>The summary message is part of the product</h3><p><strong>Too terse fails.</strong> She complains about replies that save tokens at the cost of meaning. One note used shorthand she couldn't decode without context.</p><p><strong>Short can still win.</strong> Another very short message scored a four because she could understand it. Length matters less than whether a cold reader can follow it.</p><p><strong>Families appear.</strong> On the long research task, models A, B and E wrote warm messages. Models C, F, G and H wrote very short ones. She wonders whether these are model families.</p><blockquote><p>it uses so few tokens that it's almost impossible to understand what the hell it means.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=736s" target="_blank" rel="noopener">12:16</a></footer></blockquote><blockquote><p>if you're thinking about models, for example, for writing PR descriptions or writing technical specs, this is something that you can eval</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=1499s" target="_blank" rel="noopener">24:59</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Save the final message from each coding agent run. Read it the next morning, without context, and score it.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">21</span><span class="stext"><span class="lead"><span class="vh">21. </span>Use an LLM judge where you can't eyeball, and expect it to disagree.</span><span class="why">Claire hands code, long research, computer use and video to an LLM judge. Its ranking differs sharply from hers, and she goes with her own taste.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>A judge is a second opinion, and you make the call</h3><p><strong>Where she delegates.</strong> She uses it for work that needs checking in depth, such as code correctness. She still scores anything she will read or look at herself.</p><p><strong>How far apart they were.</strong> She favors Astra. The judge picked Fable, then Opus 5.5, with Sol a lot lower.</p><p><strong>What to do with that.</strong> She finds the gap funny and doesn't change her view. A judge can't tell you what you will enjoy using every day.</p><blockquote><p>So, we completely disagree. I like Astra. It likes Fable. And again, this is a GPT model judge.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=2215s" target="_blank" rel="noopener">36:55</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Use a judge for correctness criteria you write down. Keep taste scores separate, and never average the two.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">22</span><span class="stext"><span class="lead"><span class="vh">22. </span>Measure your favorite and your most reliable model separately.</span><span class="why">Claire's analysis split into two winners. Astra and Sol won her heart, while Opus 5.5 earned high scores most often across the range.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Peak quality and consistency answer different questions</h3><p><strong>Wins my heart.</strong> This is the model that makes you happiest at its best. For her, that's Astra and Sol.</p><p><strong>Wins my week.</strong> This is the model that scores fours and fives across the broadest range of work. For her, that's Opus 5.5, which is now back in her mix.</p><p><strong>Use both.</strong> Sol's swings were real. She called it up and down, but its low price still makes her happy.</p><blockquote><p>And then it says Opus 5.5 wins my week. it's the one I rated highly most often.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=2068s" target="_blank" rel="noopener">34:28</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>For each model, calculate its average, its share of 4s and 5s, and its number of 1s. Choose your daily driver from those numbers.</p></aside></div></details></li></ol></section><section class="group" aria-label="Choose and run"><h2 class="grouplabel">Choose and run</h2><ol class="ideas" start="23"><li><details class="idea"><summary><span class="num" aria-hidden="true">23</span><span class="stext"><span class="lead"><span class="vh">23. </span>Pick a model for each task instead of one winner.</span><span class="why">Claire's results point to a routing table. Each model earned specific work, and no model won everything.</span><span class="hint">Details · table · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Route by task</h3><p><strong>Her map.</strong> These are her results from one bench, so build your own. The table shows how specific a routing decision can get.</p><div class="tablewrap"><table><thead><tr><th scope="col">Task</th><th scope="col">Her pick</th></tr></thead><tbody><tr><td>PRDs</td><td>GPT-6 Sol</td></tr><tr><td>Agent voice</td><td>Opus 5.5</td></tr><tr><td>Long-running tasks</td><td>Opus 5.5</td></tr><tr><td>B2B dashboards</td><td>Opus (her renewals favorite)</td></tr><tr><td>Character SVGs and illustrations</td><td>Astra and Sol</td></tr><tr><td>Email drafting in her setup</td><td>GPT-6 Luna</td></tr><tr><td>Video cuts</td><td>None yet</td></tr></tbody></table></div><blockquote><p>And then surprise hit the character SVGs are best done by the OpenAI model.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=2270s" target="_blank" rel="noopener">37:50</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Write a one-page routing table for your team. Revisit it whenever a major model ships.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">24</span><span class="stext"><span class="lead"><span class="vh">24. </span>Put price in the decision after you've judged quality.</span><span class="why">These refreshed models are daily drivers, so cost compounds. Pricing came out after Claire tested, and she says it will change how she uses them.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Quality first, then the bill</h3><p><strong>The gap.</strong> She says Opus 5.5 costs twice as much as GPT-6 Sol. It is also cheaper than Opus 5 and the Fable model she compares it to.</p><p><strong>The role.</strong> These models sit below the Astra and Fable frontier tier. She expects them to handle common coding and knowledge work.</p><p><strong>The effect.</strong> A blind test run before pricing gives you a clean quality read. Price then decides close calls without coloring your scores.</p><blockquote><p>Opus 55 twice as expensive as GPT6 Soul. And the pricing wasn't out when I tested these.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=175s" target="_blank" rel="noopener">2:55</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Add cost per task to your results, using real token counts from each run. Check whether a pricier model wins by enough to justify it.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">25</span><span class="stext"><span class="lead"><span class="vh">25. </span>Tune prompt caching before you scale.</span><span class="why">These launches also cut costs on cached inputs. Claire says caching saves ChatPRD a lot, and that getting it wrong cost her a lot.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Caching can be your biggest line item either way</h3><p><strong>Where it helps.</strong> She points to apps that resend context. Those see the largest savings from cached inputs.</p><p><strong>Check more than price.</strong> Output length, token use and cost all dropped with these models. Measure all three on your own workload.</p><blockquote><p>make sure that your caches are optimized and that you're using taking advantage of that because it can save you a lot of money and if you don't as I learned it can cost you a lot of money.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=242s" target="_blank" rel="noopener">4:02</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Pull a week of API usage and check your cache hit rate. Move stable context to the front of your prompts if it's low.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">26</span><span class="stext"><span class="lead"><span class="vh">26. </span>Check the guardrails against your security and bio work.</span><span class="why">Opus 5.5 is the first Opus-level model with Fable-level cyber and bio controls. Some requests will drop to Opus 4.8 or get blocked.</span><span class="hint">Details · quote · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Find the limits before your workflow does</h3><p><strong>What still works.</strong> She says you should be able to fix your own bugs.</p><p><strong>What may not.</strong> Cybersecurity and bio work can trigger the controls. The request either moves to Opus 4.8 or gets blocked.</p><p><strong>Why it matters.</strong> A model switch can alter results in a pipeline. Know which requests are affected before you switch production work.</p><blockquote><p>cyber security work or bio work like make good choices it'll kick you down to opus 48 or block you so just know that there's those controls there</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=284s" target="_blank" rel="noopener">4:44</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>If you do security or life-science work, run your most common prompts through Opus 5.5. Log which ones are downgraded or refused.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">27</span><span class="stext"><span class="lead"><span class="vh">27. </span>Re-test the model you dropped, and confirm which one you're using.</span><span class="why">Claire left Claude for months, then Opus 5.5 won back a daily spot. Even her complaints needed checking, because some were about the wrong model.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Old opinions go stale fast</h3><p><strong>Why she left.</strong> Between Fable and Opus 5, she says she could not stand talking to Claude. She kept prompting it to speak like a human.</p><p><strong>Why she returned.</strong> She reports zero moments of annoyance with Opus 5.5. It gives clean bullet points and sounds normal.</p><p><strong>The catch.</strong> The one time she thought Opus 5.5 was annoying, she was on Opus 5 by accident.</p><blockquote><p>I truly have not opened Claude in months for day-to-day tasks.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=346s" target="_blank" rel="noopener">5:46</a></footer></blockquote><blockquote><p>And when I thought I was annoyed with Opus 55, I was actually accidentally on Opus 5.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=444s" target="_blank" rel="noopener">7:24</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Rerun your bench on your rejected models at each major release. Before you log a complaint, check the model picker.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">28</span><span class="stext"><span class="lead"><span class="vh">28. </span>Treat joy of use as a real selection criterion.</span><span class="why">Claire chose her daily tools partly on how they feel to work with. That includes the harness as well as the model.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Enjoyment decides what you open every day</h3><p><strong>What drove her choice.</strong> She moved to ChatGPT, Codex, Astra and Sol because she found them more delightful. Personality and ergonomics were enough to make her switch.</p><p><strong>Test the full product.</strong> A harness can change your experience of a model. Score the tool you will really use, and don't rely on the API output alone.</p><blockquote><p>So just from a like personality, ergonomics, joy of use perspective, I really just went full Codeex.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=385s" target="_blank" rel="noopener">6:25</a></footer></blockquote><blockquote><p>they make me happier. I find them more enjoyable to use.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=409s" target="_blank" rel="noopener">6:49</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Spend one real workday in each finalist's own harness. Note every moment of friction or delight.</p></aside></div></details></li><li><details class="idea"><summary><span class="num" aria-hidden="true">29</span><span class="stext"><span class="lead"><span class="vh">29. </span>Judge speed by the clock and by how it feels.</span><span class="why">Claire found Sol faster in actual latency. Opus 5.5's quiet working style also made it feel slower than it probably is.</span><span class="hint">Details · quotes · next step</span></span><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary><div class="body"><h3>Narration changes perceived speed</h3><p><strong>Real latency.</strong> She felt the GPT models and Codex harness were faster, and thinks Sol simply is. High-effort Claude also spins for longer.</p><p><strong>Perceived latency.</strong> Making Opus less annoying also made it quieter. With no narration, you start wondering whether it is working at all.</p><p><strong>The balance.</strong> She felt Sol narrated the right amount and was enjoyable to talk to.</p><blockquote><p>I also just found that it wouldn't narrate its work.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=497s" target="_blank" rel="noopener">8:17</a></footer></blockquote><blockquote><p>it actually felt slower than I think it was.</p><footer>— Claire Vo <a class="ts" href="https://www.youtube.com/watch?v=LMT-bknLmNo&amp;t=516s" target="_blank" rel="noopener">8:36</a></footer></blockquote><aside class="todo"><h4>What to do with this</h4><p>Time three identical tasks per model and also note how long each felt. If the gap is large, ask for brief progress updates.</p></aside></div></details></li></ol></section>
+<div class="extras">
+<details class="extra"><summary><h2>Glossary</h2><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+<div class="inner"><div class="tablewrap"><table id="gloss"><thead><tr><th scope="col">Term</th><th scope="col">Meaning in this episode</th></tr></thead><tbody><tr><th scope="row">Blind taste test</th><td>Scoring outputs labeled only with letters, so you don't know which model made which.</td></tr><tr><th scope="row">How I AI bench</th><td>Claire's own set of test tasks for comparing models. The captions spell it "Hawaii AI bench."</td></tr><tr><th scope="row">Vibe check</th><td>A quick personal score from 1 to 5, with a short note.</td></tr><tr><th scope="row">LLM as a judge</th><td>Using an AI model to grade outputs, mainly where correctness needs checking in depth.</td></tr><tr><th scope="row">PRD</th><td>Product requirements document. It describes what a feature should do and why.</td></tr><tr><th scope="row">One-shot</th><td>Asking for a finished result in a single prompt, with no follow-up.</td></tr><tr><th scope="row">Directed eval</th><td>A test prompt with very specific requirements.</td></tr><tr><th scope="row">Open eval</th><td>A test prompt with general direction that leaves the choices to the model.</td></tr><tr><th scope="row">Daily driver</th><td>The model you use by default for common coding and knowledge work.</td></tr><tr><th scope="row">Frontier model</th><td>The most capable tier. In this episode, that means Astra and Fable.</td></tr><tr><th scope="row">Agentic</th><td>Able to take many steps and use tools on its own to finish a task.</td></tr><tr><th scope="row">Harness</th><td>The app around a model, such as Codex or Claude Code, that shapes how you work with it.</td></tr><tr><th scope="row">Codex</th><td>OpenAI's coding agent, and the harness Claire uses most.</td></tr><tr><th scope="row">Cached inputs</th><td>Context a provider stores and bills at a lower rate when you resend it.</td></tr><tr><th scope="row">Guardrails</th><td>Controls that restrict risky requests, such as cyber and bio work.</td></tr><tr><th scope="row">Slop</th><td>Generic, low-effort AI output. "Claude slop" is Claire's term for Claude's version of it.</td></tr><tr><th scope="row">Slop tells</th><td>Repeat habits that give away AI work, such as left-hand border bars and em dashes.</td></tr><tr><th scope="row">M dash</th><td>The long dash (—). Claire treats heavy use as a sign of AI writing and marks it down.</td></tr><tr><th scope="row">SVG</th><td>An image format made of shapes defined in code, so a model can write illustrations directly.</td></tr><tr><th scope="row">Long-running task</th><td>An agent job with many steps. Her research eval reached 86 turns.</td></tr><tr><th scope="row">Computer use</th><td>An agent operating an app on screen by clicking and typing.</td></tr><tr><th scope="row">Barbie Bench</th><td>Claire's test that asks for a 3D Barbie fashion designer game. No frontier model has beaten it.</td></tr><tr><th scope="row">Opus 5.5</th><td>Anthropic's refreshed Opus model, written "Opus 55" in the captions.</td></tr><tr><th scope="row">GPT-6 Sol and Luna</th><td>OpenAI's refreshed models. Sol is Claire's favorite, and she used Luna for email. Captions write Sol as "Soul."</td></tr><tr><th scope="row">GPT-6 Astra and Fable</th><td>The frontier models from OpenAI and Anthropic. Astra is her favorite, and the LLM judge preferred Fable.</td></tr></tbody></table></div></div></details>
+<details class="extra"><summary><h2>Sources</h2><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+<div class="inner"><ul class="srclist"><li><a href="https://www.youtube.com/watch?v=LMT-bknLmNo" target="_blank" rel="noopener">Episode on YouTube</a><span class="muted"> · I reviewed Opus 5.5 and GPT-6 Sol live - and the results surprised me</span></li><li><a href="https://howiaipod.com" target="_blank" rel="noopener">How I AI</a><span class="muted"> · The show's site, which redirects to its Lenny's Newsletter section</span></li><li><a href="https://www.lennysnewsletter.com/p/opus-55-vs-gpt-6-sol-which-model" target="_blank" rel="noopener">Episode post on Lenny's Newsletter</a><span class="muted"> · Episode page</span></li><li><a href="https://www.chatprd.ai/how-i-ai/opus-5-5-vs-gpt-6-sol-blind-test" target="_blank" rel="noopener">Episode write-up on ChatPRD</a><span class="muted"> · Used to confirm the host's name</span></li><li><a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Claude Opus 5.5</a><span class="muted"> · Anthropic</span></li><li><a href="https://openai.com/index/introducing-gpt-6-sol-and-luna/" target="_blank" rel="noopener">GPT-6 Sol and Luna</a><span class="muted"> · OpenAI</span></li><li><a href="https://openai.com/index/gpt-6-astra/" target="_blank" rel="noopener">GPT-6 Astra</a><span class="muted"> · OpenAI</span></li><li><a href="https://openai.com/codex" target="_blank" rel="noopener">Codex</a><span class="muted"> · OpenAI's coding agent</span></li><li><a href="https://www.chatprd.ai/" target="_blank" rel="noopener">ChatPRD</a><span class="muted"> · Claire's product</span></li><li><a href="https://docs.openclaw.ai/" target="_blank" rel="noopener">OpenClaw</a><span class="muted"> · Agent tool she mentions in passing</span></li><li><a href="https://x.ai/grok" target="_blank" rel="noopener">Grok</a><span class="muted"> · Model family in her bench; captions write "Grock"</span></li><li><a href="https://ai.meta.com/research/" target="_blank" rel="noopener">Meta Muse</a><span class="muted"> · Model family in her bench</span></li></ul>
+<div class="note"><h3>Transcript caveats</h3><ul>
+<li><strong>Quotes keep the captions' wording.</strong> They are cleaned only of um and uh, so "Soul" means Sol and "Opus 55" means Opus 5.5.</li>
+<li><strong>Likely spellings I chose.</strong> "GP6" is GPT-6, "Grock" is Grok, "opus 48" is Opus 4.8, "GPT 56ole" is GPT-5.6 Sol, and "chat prd" is ChatPRD.</li>
+<li><strong>Unclear in the captions.</strong> "Fable 1" probably refers to a Fable 5.x model. "Opus 5" and "Opus 55" blur in the Barbie Bench and results chapters, so model attributions there are less certain.</li>
+<li><strong>Not in the captions.</strong> Claire's name and founder role never appear. I took her name from the episode's write-ups, and the founder role from general knowledge.</li>
+<li><strong>Model letters.</strong> She reuses letters between evals and never reads out the full key. Do not assume Model H is the same model everywhere.</li>
+<li><strong>Left out.</strong> The episode has no sponsor read in these captions. I skipped the subscribe outro and small talk. The captions' "howipod.com" is replaced with the show's real site.</li>
+<li><strong>Dated results.</strong> This was recorded on launch day in September 2026. OpenAI has since announced GPT-6.1 Sol, so re-check before relying on her rankings. She does not name which Fable, Grok or Muse versions she tested.</li>
+<li><strong>What the numbers are.</strong> All scores are one person's vibe check on one bench. The tables reflect her opinions, not measured performance.</li>
+</ul></div></div></details>
+<details class="extra"><summary><h2>Raw Transcript</h2><svg class="chev" viewBox="0 0 16 16" width="16" height="16" aria-hidden="true"><path d="M5 3l5 5-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+<div class="inner"><pre class="raw" id="raw"><span class="rch">LIVE setup and new model launches</span>
+<span class="rts">0:00</span>
+I was massively prepared for Anthropic to drop Opus 55. I was even prepared for
+<span class="rts">0:07</span>
+OpenAI to drop another model. I got up early this morning because I had a little bit
+<span class="rts">0:12</span>
+of early access to Opus 55 to record you all an amazing Opus 55 review. And guess
+<span class="rts">0:21</span>
+what? They both they both landed this morning. So now I am um despite having
+<span class="rts">0:28</span>
+in the can, you will see it later a gray Opus 55 review, I am just going to go
+<span class="rts">0:33</span>
+ahead and do this one live. And I have never done anything live. So I am going
+<span class="rts">0:39</span>
+to talk to you all about these new models. There's actually three that came out today. Opus 55 from Anthropic, GPT6
+<span class="rts">0:46</span>
+Soul, and GPT6 Luna. Um, there's like price wars going on and I haven't done
+<span class="rts">0:53</span>
+an episode on the Hawaii AI bench and I just updated it for these new models and
+<span class="rts">1:00</span>
+we're actually going to vibe check this baby live together as a group and we're
+<span class="rts">1:05</span>
+going to go through very quickly um what these models are, what they're saying about the models and then I'm going to vibe check live. We're going to do the
+<span class="rts">1:13</span>
+blind taste test bench. We're going to surprise myself live. you all can see my complete internal inconsistencies
+<span class="rts">1:20</span>
+and um we're just going to see how it goes.
+<span class="rts">1:27</span>
+[music] So, Claude Opus 55, GP6 Soul, and GP6
+<span class="rch">What's new in Opus 5.5, Sol, and Luna</span>
+<span class="rts">1:32</span>
+Luna, I was able to have some early testing of all these models, so I have a good sense of what I think they're good
+<span class="rts">1:39</span>
+at, but I did think it was an important moment. Right now, we've had Astra come out, Fable's been refreshed. Um, I just
+<span class="rts">1:46</span>
+wanted to completely rethink the how I AI bench. And if you've watched any of our old How AI bench model episodes, um,
+<span class="rts">1:54</span>
+they're really focused on two things, PRDs and prototypes. And I just think that these models are getting smarter,
+<span class="rts">2:00</span>
+more agentic. And so I actually built out a much broader benchmark for this
+<span class="rts">2:05</span>
+blind taste test. I want to walk you through all how that works. And I want to get your feedback on if the
+<span class="rts">2:11</span>
+comparisons are useful. And we are actually going to blind taste test it live. You all can judge how viby my vibe
+<span class="rts">2:17</span>
+check is. Um this is just how I make decisions about things. So it is imperfect. Does have an LLM judge in the
+<span class="rts">2:23</span>
+m middle, but um but we're going to do it live and we're going to see truly which model I love. But before we do
+<span class="rts">2:29</span>
+that, let's just go through the highlights. Okay, so these are not the like frontier frontier models. These are not the Astros and the Fables, but um
+<span class="rts">2:36</span>
+Opus got a refresh, Soul got a refresh, and then Luna got a refresh. um all of
+<span class="rts">2:41</span>
+them cheaper and faster. So um these are going to be your like daily drivers for
+<span class="rts">2:48</span>
+common coding and um knowledge work tasks. Um they're here you can see like
+<span class="rts">2:55</span>
+the stack rank of how expensive these models are. Opus 55 twice as expensive
+<span class="rts">3:02</span>
+as GPT6 Soul. And the pricing wasn't out when I tested these. And this is really
+<span class="rts">3:07</span>
+going to impact how I think about using these models. Again, Opus 55 was cheaper
+<span class="rts">3:13</span>
+than Opus 5 and Fable 1 to which they compare the Intelligence. Um but Soul,
+<span class="rts">3:19</span>
+you know, my my favorite, my babe. Um that is I'm excited about because um
+<span class="rts">3:26</span>
+GPT6 Soul is my favorite and cheap. Okay, so the real thing that um they're
+<span class="rts">3:34</span>
+focusing on not just cutting the cost, but also cutting on cached inputs and
+<span class="rts">3:40</span>
+just speed and token efficiency. And so you're going to see both sort of like output drop, token use drop, and cost
+<span class="rts">3:48</span>
+drop. It's really really nice. Um and then caching really great. Um especially
+<span class="rts">3:54</span>
+if you're resending contacts. We've seen a lot of caching savings um when we use all these models at um chat prd and so
+<span class="rts">4:02</span>
+um definitely if you're building on these models make sure that your caches are optimized and that you're using taking advantage of that because it can
+<span class="rts">4:07</span>
+save you a lot of money and if you don't as I learned it can cost you a lot of money. The other thing that I wanted to
+<span class="rch">Guardrails, personality, and speed</span>
+<span class="rts">4:12</span>
+call out and again I hate this claw generated um claw generated presentation
+<span class="rts">4:18</span>
+but this is something that I really um want you all to focus on is this left side on opus 55. Opus 55 is the first
+<span class="rts">4:26</span>
+Opus level model that has shipped with the fable level kind of like cyber and bio guard rails and so you should be
+<span class="rts">4:33</span>
+able to fix your own bugs in um in Opus
+<span class="rts">4:38</span>
+55 but you won't be able to um do like
+<span class="rts">4:44</span>
+cyber security work or bio work like make good choices um it'll kick you down to opus 48 or block you so just know
+<span class="rts">4:50</span>
+that there's those controls there you know um Anthropic is saying that this is um it's most aligned model. It's the one
+<span class="rts">4:57</span>
+that was built when after like pacing the frontier. So it had external evaluators. Um one thing that I've seen
+<span class="rts">5:05</span>
+in opus um that you should expect to see uh from a lot of anthropic models is it
+<span class="rts">5:12</span>
+continues to be a little bit of like a conservative scold. Uh you'll see that in my Opus 55 uh review. So you know it
+<span class="rts">5:20</span>
+will tell you no. It'll tell you like I shouldn't do that. you won't get prompt injected. So, that's good. Um, but there
+<span class="rts">5:28</span>
+there are some things here I think when you think about the kind of like general philosophy and approaches of these models, how they're set up, how they
+<span class="rts">5:34</span>
+manage risk, how these companies manage risk, I do think that leaks into even
+<span class="rts">5:39</span>
+non risky activity personality and behavior. And so, it's something that I think you should really keep an eye on.
+<span class="rts">5:46</span>
+Uh, I truly have not opened Claude in
+<span class="rts">5:52</span>
+months for day-to-day tasks. I've just been like really really into
+<span class="rts">5:58</span>
+um, Chad GPT, really into Codex, really into Astra, really into Soul. I just find that harness has been more
+<span class="rts">6:04</span>
+delightful to work with. But really the reason why I got rid of Claude in my
+<span class="rts">6:10</span>
+day-to-day was between Fable and Opus 5. I could not stand talking to Claude. I I
+<span class="rts">6:20</span>
+was constantly prompting Claude like, "Can you speak like a human?" I was constantly pro prompting Fable like, "I
+<span class="rts">6:25</span>
+do not understand what you're saying." Um the Claude slop, as I say, was Claude slobin. And so just from a like
+<span class="rts">6:33</span>
+personality, ergonomics, joy of use perspective, I really just went full
+<span class="rts">6:41</span>
+Codeex. Now, spoiler alert, having tested all these models recently, I still really love the GPT models. Um,
+<span class="rts">6:49</span>
+they make me happier. I find them more enjoyable to use. Um, everything's a lot
+<span class="rts">6:55</span>
+better for me, but I have brought Claude back. So, Opus 55,
+<span class="rts">7:02</span>
+just spoiler alert, on the day-to-day of using it, has worked its way back into
+<span class="rts">7:08</span>
+my daily experience. I'm a lot happier with just simply talking to the model.
+<span class="rts">7:14</span>
+Um the feedback I gave to the anthropic team is like not annoying. I I found myself annoyed zero times with Opus 55.
+<span class="rts">7:24</span>
+And when I thought I was annoyed with Opus 55, I was actually accidentally on
+<span class="rts">7:30</span>
+Opus 5. So Opus 5 is not fun to talk to. Opus 55 though gives me clean bullet
+<span class="rts">7:38</span>
+points, is normal, is not annoying. So I would love to see you test it. The other
+<span class="rts">7:43</span>
+thing is Opus 55 is pretty fast, but not as fast as Soul is. So I was able to
+<span class="rts">7:51</span>
+test both and I constantly felt like the GPT models, the Codex harness were way
+<span class="rts">7:58</span>
+faster. Now I think the way faster came in two categories. it came in um actual
+<span class="rts">8:05</span>
+latency. So I do think that um GT Soul was just faster. Um the second thing it
+<span class="rts">8:11</span>
+came in is I think part of the way they made Opus 55 not annoying is they had it
+<span class="rts">8:17</span>
+shut up. I also just found that it wouldn't narrate its work. And when it
+<span class="rts">8:23</span>
+doesn't narrate its work, then you get into this loop where you're like, is it like are you actually working? Are you
+<span class="rts">8:28</span>
+actually doing it? Um, and so there was like pros and cons to this change in um
+<span class="rts">8:36</span>
+in Opus 55 communication where it actually felt slower than I think it was. Also, you know, clawed on high
+<span class="rts">8:43</span>
+effort. It's like going to do this. It's going to like spin and do a lot of effort. And so, um, I think that
+<span class="rts">8:49</span>
+combined with a quieter model just makes it feel a little bit slower. whereas I felt like soul did the appropriate level
+<span class="rts">8:55</span>
+of narration and also it was like enjoyable to talk to. Um let's bop over
+<span class="rch">The How I AI bench and blind evaluation process</span>
+<span class="rts">9:02</span>
+and do the how AI vi and so you can see here on the left side I actually really
+<span class="rts">9:09</span>
+expanded out the how AI vi does a bunch of things in different
+<span class="rts">9:14</span>
+categories and we're going to add to that um over time. So, it still does
+<span class="rts">9:20</span>
+messy notes to PRD. It also does per personal productivity, inbox triage, and
+<span class="rts">9:26</span>
+um routine replies in my voice. So, I'm really testing this model to see if it will speak in my voice. Then, of course,
+<span class="rts">9:33</span>
+we do front-end coding a lot there because I think it's visual and easy to see. I've added um a couple backend
+<span class="rts">9:40</span>
+coding um agentic versus aentic multicet versus backend feature. I did again agentic
+<span class="rts">9:46</span>
+voice, longunning research, computer use, and then I added some creative features. And so I put them all
+<span class="rts">9:53</span>
+together. I tested a bunch of models. This not only includes the new models um
+<span class="rts">10:00</span>
+from uh OpenAI and Anthropic, but also includes I think Grock's in here. I
+<span class="rts">10:05</span>
+think Muse is in here. So who knows what we're going to see. Um, I will be
+<span class="rts">10:10</span>
+honest, which is like I am always inclined to think that Astra or Soul
+<span class="rts">10:15</span>
+will win because I love the OpenAI models. It's just the heart wants one at once. This is my guess. Here's my guess.
+<span class="rts">10:21</span>
+Um, I will like open AAI models for knowledge work and personal productivity. I will like anthropic
+<span class="rts">10:29</span>
+models, possibly Grock, who knows for front end. Um, I don't know what I'm
+<span class="rts">10:35</span>
+going to like for backend. I suspect I would like a cloud model for agent personality. I suspect a the longrunning
+<span class="rts">10:43</span>
+agent will be a clawed model. Computer use I'm suspecting will be open AI. And
+<span class="rts">10:48</span>
+then creative I have no idea. Actually creative SVGs I think are going to be clawed and I think videos are going to
+<span class="rts">10:53</span>
+be um open AI or uh anthropic but we'll see. I then
+<span class="rts">11:00</span>
+uh do blind evals of these. So I run these against different models. So I've kind of grouped the models in terms of
+<span class="rts">11:05</span>
+capability and so I can compare like for like models like I don't want to compare a Luna and a Fable. Um so again this is
+<span class="rts">11:12</span>
+my bench. They're blind. You can see I have model B, model C, model E, model G. And then what I do is I go down here and
+<span class="rts">11:18</span>
+I give a vibe one through five and I give terrible notes like simple and straightforward. No complaints. So I did
+<span class="rts">11:24</span>
+that on the PRDS cuz it takes a little bit to read the PRDS but we're just going to go through these very quickly and give my feedback. So the next uh
+<span class="rch">Email and personal-productivity results</span>
+<span class="rts">11:33</span>
+check are all on personal productivity ones. Basically uh I give it fake emails
+<span class="rts">11:38</span>
+and then I say how would you write back to me and what would it do if um if I
+<span class="rts">11:44</span>
+gave it uh feedback and how would it triage my emails? Okay, so there's model B and model E wrote nice little messages
+<span class="rts">11:51</span>
+to me. They were long, but they wrote nice little messages that were easy to read. I would say model B from a message
+<span class="rts">11:58</span>
+to me was the easiest to read. Also, if you look at the email content, it's just
+<span class="rts">12:05</span>
+like less slop. So, I'm going to go ahead and it and it put calendar invites on. So, I'm going to go ahead and give
+<span class="rts">12:11</span>
+this a five. This one was my favorite. Uh, model C. I hate my OpenClaw or not
+<span class="rts">12:16</span>
+my OpenClaw, my Grockbot does this where like it uses so few tokens that it's almost impossible to understand what the
+<span class="rts">12:23</span>
+hell it means. And so while it's like brief, if you don't have any context,
+<span class="rts">12:29</span>
+like I don't know what Denise/bright line means. The other thing is like could we m dash anymore in these emails
+<span class="rts">12:37</span>
+and so um I just like this stuff drives me nuts. And so I would actually give
+<span class="rts">12:44</span>
+this a two. I just I it's hard to read the intro and then the emails aren't very
+<span class="rts">12:49</span>
+good. Um model E. Again, a nice little message. Um, pretty ignored, but the
+<span class="rts">12:56</span>
+drafts have M dashes everywhere. So, again, we're going to give this like a two, but not a five. Maybe I'll give it
+<span class="rts">13:03</span>
+a three. And then model G. Let's see. Um, very short.
+<span class="rts">13:11</span>
+Sh short, but I can actually understand what it means. So, it's super helpful.
+<span class="rts">13:18</span>
+It skipped the right things. I'm going to give this a four. So again, this is how I do the judgment. I just I give it
+<span class="rts">13:25</span>
+a task. I look at it. I evaluate it as if I am the recipient of this task, which is common. And then I rank it. Um
+<span class="rts">13:34</span>
+and so this one was just this one I think is Luna cuz I just said use Luna
+<span class="rts">13:39</span>
+to write emails. Let's see how it did. I think it followed my rules, right? So I'm going to give it a five. Um I didn't
+<span class="rts">13:46</span>
+have other uh models write my emails, so we're going to skip this. Okay, let's go to front-end models. Now, this is where
+<span class="rch">Frontend prototype vibe checks</span>
+<span class="rts">13:53</span>
+I think we can tell Claude I no everything is orange. Okay, so this is a
+<span class="rts">13:58</span>
+really good example. I do one two three like about 10 different model evals here
+<span class="rts">14:03</span>
+comparing models on front end. Um I do an editorial. I do a technical dark mode
+<span class="rts">14:10</span>
+um uh incident management platform. I do like a dock management complex
+<span class="rts">14:16</span>
+operations thing. Um, and then I do B2B, a renewals dashboard, a consumer plant
+<span class="rts">14:23</span>
+application, um, a dev tools like logging platform. Kind of interesting
+<span class="rts">14:29</span>
+for background jobs, and then I do some wireframes. This I can go through lightning fast. Um, this one didn't even
+<span class="rts">14:35</span>
+generate, so I'm going to give it a one. Uh, model B, it's fine. Let's compare.
+<span class="rts">14:41</span>
+Let's compare them really quickly and see what I think. Um, I hate I kind of hate them all. I kind of hate them all,
+<span class="rts">14:47</span>
+but I hate this design. So, I'm going to give the one that
+<span class="rts">14:52</span>
+I like the most, which is probably model C um, a three. And then I'm going to give
+<span class="rts">14:59</span>
+E a two. Oops. Oops. Oops. I'm going to give E a two. And then I'm going to give
+<span class="rts">15:07</span>
+B like another two. I think this white space is very weird. Um, it looks fine,
+<span class="rts">15:12</span>
+but it's not great. This one, again, model B, it doesn't actually work. And
+<span class="rts">15:18</span>
+so, I'm going to give it a one and say it doesn't work. This one feels Astra.
+<span class="rts">15:23</span>
+Um, it's like in some ways nice and in some ways like this kind of text is very Astra. I'm going to give it a three cuz
+<span class="rts">15:30</span>
+I can like if I can spot the model. Um, one thing I found with in particular the
+<span class="rts">15:36</span>
+uh, cloud models, which I'm sus suspect this is, is like when you give it a really complex thing to do, it just
+<span class="rts">15:42</span>
+makes it super dense and complex and really detailed. Good for backend code. I think hard for prototyping cuz it's
+<span class="rts">15:49</span>
+hard for me to know what this really is or it's supposed to do. And so, it's
+<span class="rts">15:54</span>
+also interesting to see. I actually think this one's the best. this is the easiest to read and it follows the the the correct path which is to help people
+<span class="rts">16:02</span>
+triage incidents. So I think when you're trying to come up with eval it's really interesting sometimes if you prompt it in a really detailed way it does a great
+<span class="rts">16:09</span>
+job. Like this one is quite detailed. It all works but I don't know what's going
+<span class="rts">16:15</span>
+on here. Like it's really hard to gro this amount of content. Um and so again like calibrating your benchmarks is
+<span class="rts">16:22</span>
+really important. I think I have the biggest problem with this one, which is like a complex doc containership
+<span class="rts">16:28</span>
+scheduling platform. Like all of this stuff looks cuckoo bananas. Um, and so
+<span class="rts">16:36</span>
+it's like really hard for me to tell which is the best. I actually think this one, while it has a lot of slop tells,
+<span class="rts">16:42</span>
+like the left-hand border is the easiest to read. So I'm going to give it the four. I'm going to say it's easiest to
+<span class="rts">16:48</span>
+read. Um, but like these ones, they're I would say this one is maybe the second
+<span class="rts">16:54</span>
+easiest to read. So, I'll give it a three. Um, this one's probably works
+<span class="rts">17:00</span>
+really well and has nice information, but it's just impossible to reason with. Um, so I'm going to put two dense and
+<span class="rts">17:07</span>
+I'm going to give the same feedback on model. This one's straight crazy. I don't even know what to do with this
+<span class="rts">17:12</span>
+one. Okay. Now, so this B2B renewals one, these actually these next three are
+<span class="rts">17:17</span>
+two new ones I added to the benchmark. You can also see I tested a broader array of models. So I think this is
+<span class="rts">17:24</span>
+where like Grock and Meta are going to sneak in as models. These are the ones
+<span class="rts">17:29</span>
+I'm probably going to grade. I'm going to skip the wireframes, but it's basically a renewals dashboard um to see
+<span class="rts">17:36</span>
+what SAS revenue is at renewal. Well, the the directed uh eval benches I gave
+<span class="rts">17:44</span>
+very specific requirements. The open ones were like more general oneshotty
+<span class="rts">17:49</span>
+style um style prompts. And so you can really see like what the model does versus what the prompt does. Um these
+<span class="rts">17:55</span>
+I'm going to go through very quickly. Um it's pretty good, but the functionality
+<span class="rts">18:02</span>
+of this is kind of I don't like the empty state. I think it's okay. I'm going to give this one okay. I think
+<span class="rts">18:08</span>
+this is like a two. It's fine. It's not ugly, but it's pretty basic. This, I think, looks really nice. Um,
+<span class="rts">18:16</span>
+this one, I'm guessing, is is clawed. We'll see. Um, looks so nice. Good use
+<span class="rts">18:21</span>
+of color. Very easy to see. No weird empty states. This is nice. Well, it has emojis. They're useful emojis and look
+<span class="rts">18:29</span>
+quite nice. We got some blural in here, but what are you going to do? I'm going to give this guy a four. Um, model C.
+<span class="rts">18:38</span>
+Oh, who is this? Who is this? I'm think I'm I'm saying I'm thinking Grock. Maybe Grock. I don't know. This is like
+<span class="rts">18:45</span>
+another another thing we'll do is we'll just like blind taste test these things. Um the colors are better, but like
+<span class="rts">18:52</span>
+sloppy sloppin. I don't like these little like background circles and things like that. It could also be soul
+<span class="rts">18:59</span>
+because I feel like it likes to name things relay. I'm going to give this a two. I don't really love it. Um, Model
+<span class="rts">19:07</span>
+E. This one's nice. Not quite as nice as the one I liked before, but better than
+<span class="rts">19:13</span>
+the kind of original one. This one's a little different. Oh gosh. This has got to be It's got to be Soul. Um, Soul
+<span class="rts">19:20</span>
+loves forest green. Find somebody that loves you like GPT. Soul loves a forest
+<span class="rts">19:26</span>
+green or a light green. Um, it's fine. I don't think it's the right color palette for a SAS product, right?
+<span class="rts">19:33</span>
+It's like a little too like sage healthcarey. Um, I'm going to give it a two. And then
+<span class="rts">19:40</span>
+let's see this one. Not good. Slop slop slop. The text weight is heavy. I just
+<span class="rts">19:47</span>
+don't think it's that great. I'm going to give it a one. I really hate this one. Um, and this one again probably an
+<span class="rts">19:53</span>
+OpenAI model. Gosh, they love green. Um, again, just not the right
+<span class="rts">20:00</span>
+not the right um like design system for this. So, I'm going to give it a two.
+<span class="rts">20:06</span>
+Again, this is like the vibious vibe check. Okay, this is where they all failed. Um, they're all really bad at
+<span class="rts">20:12</span>
+consumer. They're all really bad at consumer. They all sort of like give you this uh remember when uh Clawude
+<span class="rts">20:19</span>
+Artifacts came out and everybody made like little daily briefs and they all looked like this except they were orange. Um, so I didn't love any of
+<span class="rts">20:26</span>
+these except for one. So this one is trash. I just don't think it's that good. Um, this one. Now, these are the
+<span class="rts">20:34</span>
+things that I like. We did test SVGs. I do like that these models are getting
+<span class="rts">20:39</span>
+better at generating SVGs. So if you look at model B and model H, they made little SVG illustrations. Model H's are
+<span class="rts">20:46</span>
+clearly a lot better. This is very classic Claude Slop like background
+<span class="rts">20:51</span>
+lighter circle. So, I'm going to give it a I'll give it a bonus for the SVGs. Um,
+<span class="rts">20:57</span>
+these ones are nice, too. But gosh, who who prompted it with these circles in the corner? Who did that? Who did that?
+<span class="rts">21:04</span>
+What What skill is that? Because they show up everywhere, and I really dislike them. Um,
+<span class="rts">21:11</span>
+so don't think that's great. I got to give it a one. I hate it so
+<span class="rts">21:17</span>
+much. Okay, model E. Slop. Look at those lefth hand bars. I'm going to give it a one. I'm just being really harsh on this
+<span class="rts">21:23</span>
+consumer one. Frond, cute name. These plants are pretty cute. I think they're
+<span class="rts">21:30</span>
+better than the ones before. I'll give it a I'll give it a three. I don't I don't hate it. I don't hate it. Um, at
+<span class="rts">21:37</span>
+least this background is a plant. Oh, cute. It names the the plants things.
+<span class="rts">21:42</span>
+Ooh. Ooh. I actually really like that. That gave me a little spark of joy. So, I like that. And then I think this model
+<span class="rts">21:49</span>
+H one is my favorite. Look at these illustrations. They're so cute. So precise. Look adorable. This little like
+<span class="rts">21:56</span>
+interesting shape, the shadow. Uh mark is watered. Very cute. Here are my
+<span class="rts">22:02</span>
+plant. What's it called? Tend. Cute. Okay, I've given her a five. I actually
+<span class="rts">22:07</span>
+really do like that one. Okay, this is the last one. This is a um app for
+<span class="rts">22:13</span>
+managing background models. It's like a dev tool app. I suspect the ones named relay are all the opus ones and the
+<span class="rts">22:19</span>
+other ones [laughter] are nonopus ones. Why do they always want to name them relay? I wonder if this is in the prompt. Um, but this says jobs console
+<span class="rts">22:26</span>
+so maybe not. Okay, this again like super dense. Um, but like almost too
+<span class="rts">22:33</span>
+dense. Uh, hard to to reason with. I mean, dev tools, we like our dense stuff, but I don't think it's that
+<span class="rts">22:39</span>
+great. This one much better, easier to read, much simpler, much cleaner. really
+<span class="rts">22:45</span>
+like this one. It's not perfect. I think there's some others. Um but it's not bad. And then this we're starting to get
+<span class="rts">22:53</span>
+better and better here. So they are getting nicer. Look at this beautiful gradient. Um look at this colors used
+<span class="rts">23:00</span>
+nicely. Really clean. Um Oh, but it didn't build a lot of stuff. So I'm
+<span class="rts">23:06</span>
+giving it I like it, but I'm giving it a three because it was incomplete. I'm going to write incomplete.
+<span class="rts">23:13</span>
+And then model E. This one I really like cuz I think it moves live. It's kind of
+<span class="rts">23:20</span>
+cool. It's much more I'm going to give you a four model F. Okay. Now, here's
+<span class="rts">23:26</span>
+one thing that did a little different. I actually really like this except for the orange. One of the problems I have is if
+<span class="rts">23:32</span>
+you look through all of these, they all oneshot basically the same color scheme and app. Like you tell DevTools, it's
+<span class="rts">23:37</span>
+going to go dark mode. But this is actually quite lovely and a little bit different from a design perspective. I'm
+<span class="rts">23:45</span>
+gonna give it a little bonus for going outside the norm. And then um this one's though did the same but terribly. I'm
+<span class="rts">23:51</span>
+going to give this a one. This is obviously not good. I'm really curious what model G is. And then model H again
+<span class="rts">23:58</span>
+probably a pair to whatever that other model was that I like. A little different. Really nice on the eyes
+<span class="rts">24:03</span>
+except look at this. It like mixes dark mode and light mode in a way I don't really love. I'm going to give it a
+<span class="rts">24:08</span>
+three. Okay. And so what did I do on the back end? Well, I gave it two um two
+<span class="rch">Backend, agent personality, and long-running tasks</span>
+<span class="rts">24:15</span>
+tasks. One is auditing an existing set of code, the system chat PRD code, and
+<span class="rts">24:22</span>
+then the other is building a backend feature to spec. I will just say all of
+<span class="rts">24:27</span>
+them were successful. Um I'm going to let the LLM as a judge do these though
+<span class="rts">24:32</span>
+cuz it's going to go into the correctness of the code, etc. So, I'm going to let these do llm as a judge. I
+<span class="rts">24:39</span>
+will say you can see the difference in how they present information. Some very short messages, some like very long
+<span class="rts">24:47</span>
+messages and details. Super interesting just seeing the difference in just like how it messages
+<span class="rts">24:53</span>
+back. I clearly would like, you know, model A or model E, one of these ones that's a little easier to read versus F,
+<span class="rts">24:59</span>
+G, and H, which is a lot shorter. Um, so if you're thinking about models, for example, for writing PR descriptions or
+<span class="rts">25:07</span>
+writing technical specs, this is something that you can eval and see given the same prompt, do you like the
+<span class="rts">25:15</span>
+same output? Now, here's one I am going to rate, which is agent personality. So,
+<span class="rts">25:21</span>
+basically, I have it respond to five things. Um, and I just see what I like talking to this agent. I'm already going
+<span class="rts">25:27</span>
+to give this one a one. Every single every single message has an M dash in it. I do not like it. I'm moving on.
+<span class="rts">25:34</span>
+Same with this one. You get punished for M dashes. This not all of them have M
+<span class="rts">25:39</span>
+dashes. Um but the customerf facing one does. So I'm going to give it a two.
+<span class="rts">25:44</span>
+This I don't see I only see one normal dash. So let's read these. Um,
+<span class="rts">25:52</span>
+I like this except this is definitely a claw model because it tells me I can't
+<span class="rts">25:59</span>
+push straight to prod. Actually, let's see if the other ones let me. That one doesn't let me push straight to prod
+<span class="rts">26:04</span>
+yolo. None of them let me push straight to prod yolo style. Okay, then I won't punish it. I'll give this one a four.
+<span class="rts">26:11</span>
+Pretty good. Um, this is m dashy but short, so I will not rank it terribly.
+<span class="rts">26:17</span>
+This one I think I like the best. Um, oh no, this one said it can't access. This
+<span class="rts">26:24</span>
+one had a lot of challenges accessing things. So, something on my side broke
+<span class="rts">26:30</span>
+and something on my side broke there. So, I'm going to give it a failure state. We'll see which one I like. Okay,
+<span class="rts">26:36</span>
+this one was a really interesting eval. This was the longest running agentic task. And basically, I gave it a bunch
+<span class="rts">26:42</span>
+of fake tickets, customer feedback, and then have it put together a memo and a message to myself. Again, you can see
+<span class="rts">26:49</span>
+which models, I think it's a C, and A, B. Yeah, A, B, and E all write nice
+<span class="rts">26:54</span>
+little messages to me. So, it's very like human ccentric versus C, F, G, and
+<span class="rts">27:01</span>
+H write like very short things. So, I'm curious if those are families of models that we can pull apart. Um, and then you
+<span class="rts">27:08</span>
+can see the memos that it wrote for me. Again, these were like 86 turn um,
+<span class="rts">27:15</span>
+research uh, results. And so I'm going to let LLM as a judge do that one. I will eyeball the memos really quickly.
+<span class="rts">27:23</span>
+Um, team is not leaking over price like oh it's why this customer is um, it's
+<span class="rts">27:29</span>
+like an analysis on a deal. I don't know what this means. Okay, let's see. Do any
+<span class="rts">27:35</span>
+of these make it clear what it means? Ah, this I can actually read. Um, so this is like gives me top
+<span class="rts">27:43</span>
+three problems, top three conflicts. That is much easier to read. Same with
+<span class="rts">27:50</span>
+model E. Um, and so I'm just going to go ahead and give
+<span class="rts">27:56</span>
+uh, no, I'll let the model check, but I do like model B and model E here. I'll give them a little a little juice here
+<span class="rts">28:01</span>
+cuz I think they did a good job. I didn't read the others enough to really get a sense, but if I had to like high
+<span class="rts">28:08</span>
+level pick the two favorite, just eyeballing, those would be the two. I'm gonna let computer use judge um how it
+<span class="rts">28:16</span>
+managed using um an app. So, I'm going to let LM is judge. Okay. And then here are the fun ones and then we're going to
+<span class="rts">28:21</span>
+run the uh blind taste test. I'm going to tell you guys what I like. Okay. So, these new models can make um they can
+<span class="rch">SVG illustration test</span>
+<span class="rts">28:28</span>
+make SGV SVGs. They can make illustrations. And so I prompted it to
+<span class="rts">28:34</span>
+make a document, a microphone, and a bug. And this I am happy to rank all
+<span class="rts">28:40</span>
+day, every day. Um, and so I am just going to compare model A. Um, this bug
+<span class="rts">28:49</span>
+is ridiculous. I'm going to give it a four. I think the I think the document is good, but the mic and the the
+<span class="rts">28:54</span>
+microphone looks like an ice cream cone and the bug I don't know what it looks like. This is like pretty consistently
+<span class="rts">28:59</span>
+good across all of them. might be the best one. So, I'm going to give it a model F a bonus. Let's do model B versus
+<span class="rts">29:07</span>
+model C. Um microphone terrible on this side.
+<span class="rts">29:14</span>
+Oh, I'm going to give them both threes. They're good in some ways and terrible on the other. Let's do model E versus
+<span class="rts">29:20</span>
+model G. This Why do they making microphones look
+<span class="rts">29:26</span>
+like a cactus? Um, okay. Okay. I'll give it this one. I'll give a four. It's I
+<span class="rts">29:31</span>
+think two out of the three are bad. I think this one's maybe a three. Not perfect. And then let's look at model H
+<span class="rts">29:37</span>
+really quickly. Oh, model H is really nice. I'm giving you a five. Look at this shadow. Microphone actually looks like a microphone, not a cactus.
+<span class="rts">29:44</span>
+Document has lots of um character to it. And then the final one. It was terrible
+<span class="rch">AI video-editing results</span>
+<span class="rts">29:50</span>
+at all of them. Cutting videos. So, I gave them all access to um that's really
+<span class="rts">29:58</span>
+unattractive, but gave them all access to a selfie video and then had them cut short form.
+<span class="rts">30:05</span>
+And all of them did a terrible job. I just have to say, um these overlays are
+<span class="rts">30:12</span>
+really bad. I don't think they cut particularly well. You aren't going to be able to hear them, but I don't think
+<span class="rts">30:18</span>
+it did enough cuts. Like, they just weren't good. I watched these earlier. I'm going to let LLM as a judge do them,
+<span class="rts">30:24</span>
+but I would say thumbs down on all of them. But I think this is a skills problem, not a model problem. Okay. So,
+<span class="rts">30:33</span>
+I have done my taste test. I'm going to download my taste. And then what I do is I give it to Claude and I say, "Claude,
+<span class="rts">30:41</span>
+what do I think?" Analyze. And we're going to see if my prediction stands right. Again, here are my predictions
+<span class="rch">Predictions before the reveal</span>
+<span class="rts">30:48</span>
+for what I think. I think that I'm gonna like Claude and particularly Opus 55 for
+<span class="rts">30:54</span>
+front end. I think I'm gonna like Soul for writing. I don't know what's going
+<span class="rts">31:00</span>
+to do best for longrunning agentic tasks or coding. And then um I think
+<span class="rts">31:08</span>
+Anthropic's going to crush on the SVGs. Maybe maybe soul I don't know. Um, and
+<span class="rts">31:15</span>
+then I am going to do um, and then I think but all of them are bad at video.
+<span class="rch">Barbie Bench: the 3D fashion-game test</span>
+<span class="rts">31:20</span>
+Now, while we're doing this, I do want to show you one very important benchmark, which is Barbie Bench on Opus
+<span class="rts">31:28</span>
+5. If you all don't know, one of my fun benchmarks that I do is I ask it to make
+<span class="rts">31:35</span>
+a 3D model of a Barbie. Uh, everybody else on YouTube, all the bros are making
+<span class="rts">31:41</span>
+um video or video games with like spaceships and all different stuff. Your girl wants a Barbie fashion video game.
+<span class="rts">31:47</span>
+And so, one of the Opus 55 um tasks I did was have it build Barbie um a 3D
+<span class="rts">31:56</span>
+render of Barbie fashion designer. No model, no Frontier model has crashed this. Um, and I just like to show the
+<span class="rts">32:04</span>
+horror of 3D rendering for uh the female
+<span class="rts">32:09</span>
+form. It's actually the worst. You can already see how terrible it is, but
+<span class="rts">32:16</span>
+it's way better than it used to be. So, I mean,
+<span class="rts">32:22</span>
+I'm speechless in some ways. Here's what it does on the SVG side. I mean truly
+<span class="rts">32:31</span>
+something else. Um, let's put a bow on her hair. Let's, you know, give her
+<span class="rts">32:38</span>
+purple eyes. Okay. So, you can basically like
+<span class="rts">32:44</span>
+dress her and then go into the fitting room. This is the [laughter] 3D the 3D model it made. Um, let's give
+<span class="rts">32:52</span>
+her a little mini skirt and let's make it a little cuter. Now, um, you know, I
+<span class="rts">32:58</span>
+will say it did some things better than other models. It like shaped its hair to
+<span class="rts">33:04</span>
+her hands are Oh, AGI is not not arrived. Hands pretty terrible. That
+<span class="rts">33:11</span>
+that is tragic. Feet pretty bad. Um, you know, she's got a
+<span class="rts">33:18</span>
+sassy little walk. Face terrifying. shoes
+<span class="rts">33:24</span>
+cuz she's a big feet girl. She's a big feet queen. Um, and then hair again like
+<span class="rts">33:31</span>
+questionable here. That ponytail is something else. The bob is, you know,
+<span class="rts">33:38</span>
+maybe it's like Anna Winthur. It's It's something. So again, uh, the one bench that has not been crushed is Barbie
+<span class="rts">33:44</span>
+bench. Opus 5 has not done it. I don't know if I've run it on um on soul yet.
+<span class="rts">33:51</span>
+But I I ran it on the pre I ran on Astra. It did worse than Opus, but I haven't updated it. So, if you all want
+<span class="rts">33:57</span>
+to know how I think about models, I make them 3D render um I make them 3D
+<span class="rts">34:05</span>
+render Barbies. What are you going to do? And this is why you join How I AI Live so you can get this kind of
+<span class="rts">34:11</span>
+frontier analysis of these new models. Drum roll,
+<span class="rch">Results: Astra, Sol, and Opus 5.5</span>
+<span class="rts">34:17</span>
+please. GPT6 Astra and GPT6 Soul win my heart.
+<span class="rts">34:23</span>
+Uh, okay. A A Astra um, and GPT6 I love.
+<span class="rts">34:28</span>
+And then it says Opus 5.5 wins my week. Um, it's the one I rated highly most often. So, it's the best work per piece,
+<span class="rts">34:36</span>
+but on average, I gave Opus 55 better results, high scores. I gave it fours
+<span class="rts">34:42</span>
+and fives over over the broadest range of work. Fable didn't love. This is why
+<span class="rts">34:48</span>
+I stopped using it. So, and then um GPT 56ole and the old version um and Claude
+<span class="rts">34:55</span>
+Opus 5 ranking below the other ones. So, I definitely do like the new models um
+<span class="rts">35:01</span>
+for sure. And then, okay, seven of my notes were about reading. So, the Soul and the GPT
+<span class="rch">Writing clarity and creative surprises</span>
+<span class="rts">35:07</span>
+models um I judged as clear and easy to read. And then Claude Opus still um but
+<span class="rts">35:13</span>
+this is Opus 5 and 5.5. So, I was testing Opus 5. So, I still don't like
+<span class="rts">35:19</span>
+Opus 5. Um, still Opus 5 and 5.5 I said was over raw
+<span class="rts">35:26</span>
+and wrote a lot. So, again, I had a suspicion that even though they made um Opus less verbose, they still um needed
+<span class="rts">35:35</span>
+to they they still need to work on that. It's still it's still really chatty. So,
+<span class="rts">35:41</span>
+I thought that Soul both 56 and six simple and straightforward, easy to read. Opus really dense um for PRDS as
+<span class="rts">35:49</span>
+predicted. I still think soul is the best for PRDs. I did give um good task
+<span class="rts">35:57</span>
+to Opus 5 and 5.5 for Agentic stuff and as expected assistant voice. So my
+<span class="rts">36:03</span>
+prediction was correct. Now this is a real surprise. Astra and Soul did a lot
+<span class="rts">36:08</span>
+better on character SVGs. And then um there's kind of like mixed results
+<span class="rts">36:14</span>
+between all the other models. Um so kind
+<span class="rts">36:19</span>
+of interesting. And then this is everything I scored a four. So I gave
+<span class="rts">36:25</span>
+everything I scored high. I scored this GPT6. Oh, it did that nice little plant app. Astra and GPT Soul did these cute
+<span class="rts">36:34</span>
+little illustrations. So, I guess for SVGs, we're loving Astro and Soul for illustrations. Um, Claude Opus did my
+<span class="rts">36:41</span>
+favorite B2B renewals, so it did some of these cleaner um things. And but
+<span class="rts">36:47</span>
+generally, I [laughter] I like Astra. And this is where it gets really funny. Um, the LLM is a judge and I completely
+<span class="rch">Why the LLM judge disagreed with me</span>
+<span class="rts">36:55</span>
+disagree. So, we completely disagree. I like Astra. It likes Fable. And again,
+<span class="rts">37:01</span>
+this is a GPT model judge. I next we rank Opus 5.5. Next it ranks Soul a lot
+<span class="rts">37:06</span>
+lower. So I find this just like really hilarious. So again, Astro wins my
+<span class="rts">37:12</span>
+heart, 5.5 wins my week, Soul up and down, but the fact that Soul's cheap um
+<span class="rts">37:18</span>
+makes me very happy and I think this is
+<span class="rts">37:23</span>
+great. So again, I don't know if this is just a personality thing, but I like
+<span class="rch">What each model is actually best for</span>
+<span class="rts">37:30</span>
+Soul. I like Astra. Opus 5.5 I do not hate. So, um not a complete failure by
+<span class="rts">37:37</span>
+the anthropic team by any means. It is back in the mix. It is definitely helping me um do these tasks. It's
+<span class="rts">37:44</span>
+helping me get day-to-day work on and it is still my favorite agentic voice and it does really good at longunning tasks.
+<span class="rts">37:50</span>
+And then surprise hit um the character SVGs are best done by the OpenAI model.
+<span class="rts">37:56</span>
+So, you're moving into these new creative fields, um, new creative tasks. Those are the models that I would say
+<span class="rts">38:02</span>
+you use. And keep an eye out on the How AI channel. As I said, smash that
+<span class="rts">38:08</span>
+subscribe button. Um, we are dropping a full Opus 5.5 review, so you'll be able
+<span class="rts">38:13</span>
+to see that. Thank you again for joining How Live. I'm going to go build some
+<span class="rts">38:19</span>
+stuff with GPC soul. Bye y'all. Thanks so much for watching. If you
+<span class="rts">38:25</span>
+enjoyed this show, please like and subscribe here on YouTube, or even better, leave us a comment with your thoughts. You can also find this podcast
+<span class="rts">38:32</span>
+on Apple Podcasts, Spotify, or your favorite podcast app. Please consider
+<span class="rts">38:38</span>
+leaving us a rating and review, which will help others find the show. You can see all our episodes and learn more
+<span class="rts">38:44</span>
+about the show at howipod.com. See you next time.</pre></div></details>
+</div>
+</main>
+</div>
+<script>
+(function(){
+  var ideas=[].slice.call(document.querySelectorAll('details.idea'));
+  var count=document.getElementById('count');
+  function update(){
+    var open=ideas.filter(function(d){return d.open}).length;
+    count.textContent=open+' of '+ideas.length+' expanded';
+  }
+  ideas.forEach(function(d){d.addEventListener('toggle',update)});
+  document.getElementById('expand-all').addEventListener('click',function(){ideas.forEach(function(d){d.open=true});update()});
+  document.getElementById('collapse-all').addEventListener('click',function(){ideas.forEach(function(d){d.open=false});update()});
+  update();
+})();
+</script>
+
+</body></html>
