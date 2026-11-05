@@ -9,20 +9,43 @@ import { AutoLogoutDialog } from '@/components/auth/AutoLogoutDialog';
 import { QueryProvider } from '@/components/QueryProvider';
 import { CustomDomainHeaderWrapper } from '@/components/layout/CustomDomainHeaderWrapper';
 import { AppSideNav } from '@/components/layout/AppSideNav';
+import { AppChrome } from '@/components/layout/AppChrome';
 import { ScrollToTopOnNavigate } from '@/components/layout/ScrollToTopOnNavigate';
 import { domainMappingsApi } from '@/lib/domain-mappings-api';
 import { CustomDomainProvider } from '@/components/providers/CustomDomainProvider';
 import { CookieConsentBanner } from '@/components/consent/CookieConsentBanner';
 import { ACCESS_TOKEN_KEY } from '@/lib/auth-storage';
+import { Archivo, Spectral, IBM_Plex_Mono } from 'next/font/google';
+
+// Outside-In Brain editorial fonts (design/BRIEF.md), exposed as CSS variables for styles/brain.css.
+const archivo = Archivo({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  variable: '--font-archivo',
+  display: 'swap',
+});
+const spectral = Spectral({
+  subsets: ['latin'],
+  weight: ['400', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-spectral',
+  display: 'swap',
+});
+const plexMono = IBM_Plex_Mono({
+  subsets: ['latin'],
+  weight: ['500'],
+  variable: '--font-plex-mono',
+  display: 'swap',
+});
 
 export async function generateMetadata(): Promise<Metadata> {
   const headersList = await headers();
   const host = headersList.get('host') || '';
 
   const defaultMetadata: Metadata = {
-    title: 'App Starter',
+    title: 'Outside-In Brain',
     description:
-      'A multi-tenant SaaS starter with authentication, organizations, and invites already wired up.',
+      'Save anything while you browse. Get five takeaways and a two-voice podcast once or twice a week.',
     icons: {
       icon: '/images/favicon.png',
     },
@@ -88,7 +111,11 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html
+      lang="en"
+      suppressHydrationWarning
+      className={`${archivo.variable} ${spectral.variable} ${plexMono.variable}`}
+    >
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -102,25 +129,25 @@ export default async function RootLayout({
           <CookieSync />
           <ThemeProvider
             attribute="class"
-            defaultTheme="light"
+            defaultTheme="system"
             enableSystem
             disableTransitionOnChange
           >
             <CustomDomainProvider domain={customDomain} organizationId={customDomainOrganizationId}>
               <TooltipProvider>
-                <div className="min-h-screen flex flex-col">
-                  <CustomDomainHeaderWrapper
-                    isWhiteLabelCalendar={isWhiteLabelCalendar}
-                    customLogoUrl={customLogoUrl}
-                    logoHeight={logoHeight}
-                  />
-                  <div className="flex flex-1 min-w-0">
-                    {!hideSidebar && <AppSideNav />}
-                    <main className={hideSidebar ? 'flex-1 min-w-0' : 'flex-1 min-w-0 md:ml-16'}>
-                      {children}
-                    </main>
-                  </div>
-                </div>
+                <AppChrome
+                  hideSidebar={hideSidebar}
+                  header={
+                    <CustomDomainHeaderWrapper
+                      isWhiteLabelCalendar={isWhiteLabelCalendar}
+                      customLogoUrl={customLogoUrl}
+                      logoHeight={logoHeight}
+                    />
+                  }
+                  sideNav={<AppSideNav />}
+                >
+                  {children}
+                </AppChrome>
               </TooltipProvider>
               <Toaster />
               <AutoLogoutDialog />

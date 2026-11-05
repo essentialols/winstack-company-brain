@@ -14,7 +14,13 @@ import { ACCESS_TOKEN_KEY } from '@/lib/auth-storage';
  * by client script, so presence proves intent rather than identity. Every
  * response still comes from the API, which validates the JWT on each request.
  */
-const PROTECTED_PATH_PREFIXES = ['/dashboard', '/organizations', '/profile', '/settings'] as const;
+const PROTECTED_PATH_PREFIXES = [
+  '/dashboard',
+  '/issues',
+  '/organizations',
+  '/profile',
+  '/settings',
+] as const;
 
 const isProtectedPath = (pathname: string): boolean =>
   PROTECTED_PATH_PREFIXES.some(
@@ -42,19 +48,24 @@ function isShortLinkCandidate(pathname: string): boolean {
     'cookies',
     'dashboard',
     'domain-error',
+    'extension',
     'fonts',
     'get-started',
+    'how-it-works',
     'images',
     'impersonate',
     'invite',
     'invites',
+    'issues',
     'login',
     'organization',
     'organizations',
+    'pricing',
     'privacy',
     'profile',
     'register',
     'reset-password',
+    'sample-issue',
     'settings',
     'users',
     'verify-email',

@@ -5,6 +5,7 @@
  */
 @import '../styles/tokens.css';
 @import '../styles/rich-text.css';
+@import '../styles/brain.css';
 
 @layer base {
   :root {

@@ -58,6 +58,10 @@ model User {
   notificationPreferences NotificationPreference[]
   inAppNotifications      InAppNotification[]
   createdProjects         Project[]                @relation("ProjectCreator")
+  createdBrains           Brain[]                  @relation("BrainCreator")
+  createdSaves            Save[]                   @relation("SaveCreator")
+  apiTokens               ApiToken[]
+  digestPreference        UserDigestPreference?
 
   adminImpersonationAudits AdminImpersonationAudit[] @relation("AdminImpersonationTargetUser")
   quarantinedAudits        AdminQuarantineAudit[]    @relation("QuarantinedUser")
@@ -153,6 +157,9 @@ model Organization {
   notifications           Notification[]
   notificationPreferences NotificationPreference[]
   projects                Project[]
+  brains                  Brain[]
+  saves                   Save[]
+  issues                  Issue[]
 
   @@map("organizations")
 }
@@ -418,4 +425,144 @@ model Project {
   @@index([organizationId, archivedAt])
   @@index([createdById])
   @@map("projects")
+}
+
+// ============================================================================
+// Outside-In Brain
+//
+// A Brain is an organization-scoped inbox of Saves. On the brain's schedule the
+// pipeline turns pending saves (issueId null) into an Issue.
+// ============================================================================
+
+enum DigestFrequency {
+  ONCE
+  TWICE
+}
+
+enum SaveSource {
+  EXTENSION
+  PASTE
+}
+
+enum SaveKind {
+  ARTICLE
+  VIDEO
+  PODCAST
+  PDF
+  POST
+  SNIPPET
+  TEXT
+  IMAGE
+  OTHER
+}
+
+model Brain {
+  id             String          @id @default(uuid())
+  organizationId String          @map("organization_id")
+  createdById    String          @map("created_by_id")
+  name           String
+  slug           String
+  frequency      DigestFrequency @default(TWICE)
+  /// 0 = Sunday … 6 = Saturday, interpreted in `timezone`
+  deliveryDays   Int[]           @default([2, 6]) @map("delivery_days")
+  deliveryHour   Int             @default(7) @map("delivery_hour")
+  timezone       String          @default("UTC")
+  podcastMinutes Int             @default(10) @map("podcast_minutes")
+  lastIssueAt    DateTime?       @map("last_issue_at") @db.Timestamptz(6)
+  archivedAt     DateTime?       @map("archived_at") @db.Timestamptz(6)
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation("BrainCreator", fields: [createdById], references: [id])
+  saves        Save[]
+  issues       Issue[]
+
+  @@unique([organizationId, slug])
+  @@index([organizationId, archivedAt])
+  @@map("brains")
+}
+
+model Save {
+  id             String     @id @default(uuid())
+  organizationId String     @map("organization_id")
+  brainId        String     @map("brain_id")
+  createdById    String     @map("created_by_id")
+  source         SaveSource
+  kind           SaveKind
+  url            String?
+  title          String
+  siteName       String?    @map("site_name")
+  text           String?    @db.Text
+  selection      String?    @db.Text
+  captions       String?    @db.Text
+  note           String?
+  issueId        String?    @map("issue_id")
+  createdAt      DateTime   @default(now()) @db.Timestamptz(6)
+  deletedAt      DateTime?  @map("deleted_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  brain        Brain        @relation(fields: [brainId], references: [id], onDelete: Cascade)
+  createdBy    User         @relation("SaveCreator", fields: [createdById], references: [id])
+  issue        Issue?       @relation(fields: [issueId], references: [id], onDelete: SetNull)
+
+  @@index([brainId, issueId, createdAt])
+  @@index([organizationId])
+  @@index([createdById, createdAt])
+  @@map("saves")
+}
+
+model Issue {
+  id               String   @id @default(uuid())
+  organizationId   String   @map("organization_id")
+  brainId          String   @map("brain_id")
+  number           Int
+  title            String
+  /// IssueContent from @app-starter/shared
+  content          Json
+  /// Storage URL/key of the podcast mp3
+  audioKey         String?  @map("audio_key")
+  audioDurationSec Int?     @map("audio_duration_sec")
+  publishedAt      DateTime @default(now()) @map("published_at") @db.Timestamptz(6)
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  brain        Brain        @relation(fields: [brainId], references: [id], onDelete: Cascade)
+  saves        Save[]
+
+  @@unique([brainId, number])
+  @@index([organizationId, publishedAt])
+  @@map("issues")
+}
+
+model ApiToken {
+  id         String    @id @default(uuid())
+  userId     String    @map("user_id")
+  name       String
+  /// First 8 chars of the token, for display
+  prefix     String
+  /// sha256 hex of the full token; the token itself is never stored
+  tokenHash  String    @unique @map("token_hash")
+  lastUsedAt DateTime? @map("last_used_at") @db.Timestamptz(6)
+  createdAt  DateTime  @default(now()) @db.Timestamptz(6)
+  revokedAt  DateTime? @map("revoked_at") @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("api_tokens")
+}
+
+model UserDigestPreference {
+  id          String  @id @default(uuid())
+  userId      String  @unique @map("user_id")
+  wantsRead   Boolean @default(true) @map("wants_read")
+  wantsListen Boolean @default(true) @map("wants_listen")
+
+  createdAt DateTime @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime @updatedAt @db.Timestamptz(6)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_digest_preferences")
 }
