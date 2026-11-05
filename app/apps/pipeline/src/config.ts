@@ -1,3 +1,10 @@
+// Load apps/pipeline/.env when present (Node >= 21.7). Real env vars win.
+try {
+  process.loadEnvFile('.env');
+} catch {
+  /* no .env file */
+}
+
 export type TtsProvider = 'openai' | 'elevenlabs' | 'none';
 
 function env(name: string, fallback = ''): string {

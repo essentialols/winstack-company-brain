@@ -13,6 +13,7 @@ import { OtpVerificationEmailTemplate } from '../templates/otp-verification.temp
 import { OrganizationInviteVerificationEmailTemplate } from '../templates/organization-invite-verification.template';
 import { OrganizationInvitationInAppTemplate } from '../templates/in-app/invitation-in-app.templates';
 import { OrganizationInvitationAcceptedInAppTemplate } from '../templates/in-app/acceptance-in-app.templates';
+import { BrainIssuePublishedTemplate } from '../templates/brain-issue-published.template';
 
 /**
  * Factory function to create all notification definitions
@@ -125,6 +126,18 @@ export function createNotificationDefinitions(): NotificationDefinitionModel[] {
       displayName: 'Organization Acceptance',
       description: 'Notification when someone joins your organization',
       template: new OrganizationInvitationAcceptedInAppTemplate(),
+    }),
+
+    new NotificationDefinitionModel({
+      name: 'brain-issue-published',
+      type: NotificationType.TRANSACTIONAL,
+      channels: [NotificationChannel.EMAIL, NotificationChannel.IN_APP],
+      severity: NotificationSeverity.NORMAL,
+      mandatory: false,
+      category: NotificationCategory.COLLABORATION,
+      displayName: 'New brain issue',
+      description: 'A new issue of one of your brains was published',
+      template: new BrainIssuePublishedTemplate(),
     }),
   ];
 }

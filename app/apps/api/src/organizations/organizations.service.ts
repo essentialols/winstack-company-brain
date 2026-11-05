@@ -79,6 +79,8 @@ export class OrganizationsService {
       return organization;
     });
 
+    await this.createDefaultBrain(result.id, userId);
+
     return {
       id: result.id,
       name: result.name,
@@ -93,6 +95,25 @@ export class OrganizationsService {
       updatedAt: result.updatedAt,
       userRole: OrgRole.OWNER,
     };
+  }
+
+  /**
+   * Every workspace starts with one brain so the extension has somewhere to
+   * save. Kept outside the org transaction on purpose: a failure here must not
+   * block creating the organization (a brain can be added from the dashboard).
+   */
+  private async createDefaultBrain(organizationId: string, userId: string): Promise<void> {
+    try {
+      await this.prisma.brain.create({
+        data: { organizationId, createdById: userId, name: 'My brain', slug: 'my-brain' },
+      });
+    } catch (error) {
+      this.logger.warn(
+        `Could not create default brain for organization ${organizationId}: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
+    }
   }
 
   /**
