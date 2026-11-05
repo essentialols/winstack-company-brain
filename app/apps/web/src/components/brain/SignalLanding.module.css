@@ -1,0 +1,147 @@
+.page {
+  --ground: #e8e8e8;
+  --ink: #111111;
+  --control: #dcdcdc;
+  --control-on: #111111;
+  --icon-on: #f2f2f2;
+  --icon-off: #555555;
+  --focus: #1d55b4;
+  min-height: 100vh;
+  background: var(--ground);
+  color: var(--ink);
+  font-weight: 400;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+:global(.dark) .page {
+  --ground: #111111;
+  --ink: #f2f2f2;
+  --control: #1c1c1c;
+  --control-on: #f2f2f2;
+  --icon-on: #111111;
+  --icon-off: #a3a3a3;
+  --focus: #8ff3f5;
+}
+
+.main {
+  max-width: 720px;
+  margin-inline: auto;
+  box-sizing: content-box;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 6vw, 48px);
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(32px, 6vw, 48px);
+}
+
+.line {
+  margin: 0;
+  font-size: clamp(32px, 7vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+  text-wrap: balance;
+}
+
+.picture {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.cta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+}
+
+.primary,
+.secondary {
+  display: inline-flex;
+  align-items: center;
+  min-height: 48px;
+  padding: 0 22px;
+  border-radius: 999px;
+  font-size: 18px;
+  text-decoration: none;
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.primary {
+  background: var(--control-on);
+  color: var(--icon-on);
+}
+
+.secondary {
+  background: var(--control);
+  color: var(--ink);
+}
+
+.primary:hover,
+.secondary:hover {
+  opacity: 0.85;
+}
+
+.primary:focus-visible,
+.secondary:focus-visible,
+.theme:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.theme {
+  position: fixed;
+  z-index: 10;
+  top: calc(16px + env(safe-area-inset-top, 0px));
+  right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--control);
+  cursor: pointer;
+}
+
+.theme span {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: var(--icon-off);
+  transition: background-color 0.25s ease, color 0.25s ease;
+}
+
+.theme span.on {
+  background: var(--control-on);
+  color: var(--icon-on);
+}
+
+.theme svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page,
+  .theme span,
+  .primary,
+  .secondary {
+    transition: none;
+  }
+}
