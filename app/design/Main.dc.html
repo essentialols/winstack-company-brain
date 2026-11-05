@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Issue 1</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
+<style>
+:root{--bg:#ffffff;--fg:#23211f;--muted:#6c6862;--rule:#e6e4e1;--accent:#c63f1d;--accent-hover:#a3330f;--hover:#f5f4f3;--chip:#fbeee9;--box:#f0f0f0;--box-line:#d4d4d4;--ink:#23211f;--on-ink:#ece9e4;--on-ink-muted:#b8b3ac;--accent-on-ink:#ff8a66;--ok-bg:#e4f1e7;--ok-fg:#1f6a3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg)}
+a{color:var(--accent);text-underline-offset:2px}a:hover{color:var(--accent-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.pill:hover{border-color:var(--accent) !important;color:var(--accent) !important}
+.tk-row:hover{background:var(--hover)}
+.chap:hover{background:rgba(236,233,228,.08) !important}
+</style>
+</helmet>
+<div style="background: var(--bg); color: var(--fg); min-height: 100vh; font-family: 'Spectral', Georgia, serif;">
+
+  <header style="max-width: 42rem; margin: 0 auto; padding: 1.25rem 1rem 0; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem 1rem;">
+    <a href="Home.dc.html" style="display: inline-flex; align-items: center; gap: .55rem; min-height: 44px; text-decoration: none; color: var(--fg);">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      <span style="font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1.15rem; letter-spacing: -.01em;">Outside-In Brain</span>
+    </a>
+    <div style="display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">Issue 1 · Sat Nov 7, 2026</span>
+      <a href="Dashboard.dc.html" class="pill" style="display: inline-flex; align-items: center; min-height: 44px; box-sizing: border-box; padding: 0 1rem; border: 1px solid var(--rule); border-radius: 999px; font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .85rem; color: var(--fg); text-decoration: none;">Dashboard</a>
+    </div>
+  </header>
+
+  <main style="max-width: 42rem; margin: 0 auto; padding: 2.5rem 1rem 3rem;">
+
+    <p style="margin: 0 0 .9rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">AI tooling · built from 4 things you saved</p>
+    <h1 style="margin: 0 0 1rem; font-family: 'Archivo', sans-serif; font-weight: 800; font-size: clamp(1.9rem, 6vw, 2.6rem); line-height: 1.1; letter-spacing: -.015em;">Governance is the product, and agents need memory</h1>
+    <p style="margin: 0 0 2rem; font-size: 1.125rem; line-height: 1.6;">This week you saved two How I AI episodes, a photo of a talk slide and a Lenny’s Podcast episode. Here is what they add up to.</p>
+
+    <section aria-label="Podcast player" style="background: var(--ink); color: var(--on-ink); border-radius: 12px; padding: 1.4rem 1.25rem 1.25rem; margin: 0 0 2.25rem;">
+      <div style="display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1rem;">
+        <div style="flex: 1 1 16rem; min-width: 0;">
+          <p style="margin: 0 0 .45rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-on-ink);">Listen instead · 10 min</p>
+          <h2 style="margin: 0 0 .35rem; font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1.35rem; line-height: 1.2; letter-spacing: -.01em;">Two models, one week of saves</h2>
+          <p style="margin: 0; font-size: 1rem; line-height: 1.5; color: var(--on-ink-muted);">An AI interviewer questions an AI analyst about this issue.</p>
+        </div>
+        <div style="display: flex; align-items: center;" aria-label="Hosts: interviewer and analyst">
+          <span title="Interviewer" style="width: 2.5rem; height: 2.5rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--accent-on-ink); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .75rem; letter-spacing: .06em; border: 2px solid var(--ink);">IN</span>
+          <span title="Analyst" style="width: 2.5rem; height: 2.5rem; margin-left: -.55rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; background: var(--on-ink); color: var(--ink); font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .75rem; letter-spacing: .06em; border: 2px solid var(--ink);">AN</span>
+        </div>
+      </div>
+
+      <div style="display: flex; align-items: center; gap: .9rem; margin: 1.25rem 0 .9rem;">
+        <button type="button" onClick="{{togglePlay}}" aria-label="{{playLabel}}" style="flex: 0 0 auto; width: 3rem; height: 3rem; border-radius: 999px; border: 0; background: var(--accent-on-ink); color: var(--ink); display: inline-flex; align-items: center; justify-content: center;">
+          <sc-if value="{{isPaused}}" hint-placeholder-val="{{ true }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"><path d="M7 4.5v15l12.5-7.5z" fill="currentColor"></path></svg>
+          </sc-if>
+          <sc-if value="{{isPlaying}}" hint-placeholder-val="{{ false }}">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round"><path d="M8 5v14M16 5v14"></path></svg>
+          </sc-if>
+        </button>
+        <div style="flex: 1 1 auto; min-width: 0;">
+          <div role="progressbar" aria-label="Playback position" aria-valuemin="0" aria-valuemax="600" aria-valuenow="{{elapsedSeconds}}" aria-valuetext="{{elapsedText}}" style="height: 6px; border-radius: 999px; background: rgba(236,233,228,.2); overflow: hidden;">
+            <div style="{{progressStyle}}"></div>
+          </div>
+          <div style="display: flex; justify-content: space-between; margin-top: .4rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .06em; color: var(--on-ink-muted);">
+            <span>{{elapsedText}}</span>
+            <span>10:00</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; flex-wrap: wrap; align-items: center; gap: .4rem; margin: 0 0 1.1rem;" role="group" aria-label="Playback speed">
+        <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-muted); margin-right: .3rem;">Speed</span>
+        <sc-for list="{{speeds}}" as="sp" hint-placeholder-count="3">
+          <button type="button" onClick="{{sp.pick}}" aria-pressed="{{sp.pressed}}" style="{{sp.style}}">{{sp.label}}</button>
+        </sc-for>
+      </div>
+
+      <p style="margin: 0 0 .35rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--on-ink-muted);">Chapters</p>
+      <ol style="list-style: none; margin: 0 0 1.1rem; padding: 0; border-top: 1px solid rgba(236,233,228,.15);">
+        <sc-for list="{{chapters}}" as="ch" hint-placeholder-count="5">
+          <li style="border-bottom: 1px solid rgba(236,233,228,.15);">
+            <button type="button" class="chap" onClick="{{ch.pick}}" aria-current="{{ch.current}}" style="{{ch.style}}">
+              <span style="{{ch.timeStyle}}">{{ch.time}}</span>
+              <span style="{{ch.titleStyle}}">{{ch.title}}</span>
+            </button>
+          </li>
+        </sc-for>
+      </ol>
+
+      <div style="border-radius: 8px; background: rgba(236,233,228,.06); padding: .9rem 1rem;">
+        <p style="margin: 0 0 .6rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent-on-ink);">Now playing · {{nowTitle}}</p>
+        <sc-for list="{{nowLines}}" as="ln" hint-placeholder-count="2">
+          <div style="display: grid; grid-template-columns: 2.2rem 1fr; gap: .6rem; align-items: start; margin: 0 0 .55rem;">
+            <span style="{{ln.badgeStyle}}">{{ln.who}}</span>
+            <p style="margin: 0; font-size: 1rem; line-height: 1.5; color: var(--on-ink);">{{ln.text}}</p>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+
+    <div style="display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem 1rem; padding: 0 0 .75rem; border-bottom: 1px solid var(--rule);">
+      <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">Tap any takeaway for the details</span>
+      <div style="display: flex; gap: .5rem;">
+        <button type="button" class="pill" onClick="{{expandAll}}" style="min-height: 44px; padding: 0 1rem; border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--fg); font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .85rem;">Expand all</button>
+        <button type="button" class="pill" onClick="{{collapseAll}}" style="min-height: 44px; padding: 0 1rem; border: 1px solid var(--rule); border-radius: 999px; background: transparent; color: var(--fg); font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .85rem;">Collapse all</button>
+      </div>
+    </div>
+
+    <h2 style="margin: 1.5rem 0 .5rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">TL;DR · 5 takeaways</h2>
+    <ol style="list-style: none; margin: 0; padding: 0;">
+      <sc-for list="{{takeaways}}" as="item" hint-placeholder-count="5">
+        <li style="border-bottom: 1px solid var(--rule); padding: .35rem 0;">
+          <button type="button" class="tk-row" onClick="{{item.toggle}}" aria-expanded="{{item.expanded}}" aria-controls="{{item.detailId}}" style="{{item.rowStyle}}">
+            <span style="font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1.15rem; color: var(--accent); font-variant-numeric: tabular-nums; line-height: 1.45;">{{item.n}}</span>
+            <span style="font-size: 1.0625rem; line-height: 1.55; color: var(--fg);"><strong style="font-family: 'Spectral', Georgia, serif; font-weight: 600;">{{item.lead}}</strong> {{item.summary}}</span>
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="var(--muted)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="{{item.chevronStyle}}"><path d="M6 9l6 6 6-6"></path></svg>
+          </button>
+          <sc-if value="{{item.open}}" hint-placeholder-val="{{ false }}">
+            <div id="{{item.detailId}}" style="padding: 1rem .5rem 1.4rem 2.75rem;">
+              <h3 style="margin: 0 0 .6rem; font-family: 'Archivo', sans-serif; font-weight: 800; font-size: 1.3rem; line-height: 1.25; letter-spacing: -.01em;">{{item.h3}}</h3>
+              <p style="margin: 0 0 1rem; font-size: 1.0625rem; line-height: 1.6;">{{item.body}}</p>
+
+              <sc-if value="{{item.hasQuote}}" hint-placeholder-val="{{ false }}">
+                <blockquote style="margin: 0 0 1rem; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--accent); font-style: italic; font-size: 1.0625rem; line-height: 1.6; color: var(--fg);">{{item.quote}}</blockquote>
+              </sc-if>
+
+              <sc-if value="{{item.hasTable}}" hint-placeholder-val="{{ false }}">
+                <table style="width: 100%; border-collapse: collapse; margin: 0 0 1.1rem; font-size: 1rem;">
+                  <caption style="text-align: left; padding: 0 0 .45rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">Jev vs LLM</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col" style="text-align: left; padding: .45rem .5rem .45rem 0; border-bottom: 1px solid var(--box-line); font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);">The job</th>
+                      <th scope="col" style="text-align: left; padding: .45rem 0; border-bottom: 1px solid var(--box-line); font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .8rem; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); width: 5rem;">Use</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <sc-for list="{{jevRows}}" as="r" hint-placeholder-count="5">
+                      <tr>
+                        <td style="padding: .5rem .5rem .5rem 0; border-bottom: 1px solid var(--rule); line-height: 1.4;">{{r.job}}</td>
+                        <td style="{{r.useStyle}}">{{r.use}}</td>
+                      </tr>
+                    </sc-for>
+                  </tbody>
+                </table>
+              </sc-if>
+
+              <sc-if value="{{item.hasGrid}}" hint-placeholder-val="{{ false }}">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr)); gap: .6rem; margin: 0 0 1.1rem;">
+                  <sc-for list="{{memTypes}}" as="m" hint-placeholder-count="4">
+                    <div style="border: 1px solid var(--rule); border-radius: 8px; padding: .75rem .9rem;">
+                      <p style="margin: 0 0 .2rem; font-family: 'Archivo', sans-serif; font-weight: 700; font-size: 1rem;">{{m.name}}</p>
+                      <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted);">{{m.what}}</p>
+                    </div>
+                  </sc-for>
+                </div>
+              </sc-if>
+
+              <div style="background: var(--chip); border-radius: 6px; padding: .8rem 1rem; margin: 0 0 .9rem;">
+                <p style="margin: 0 0 .3rem; font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: var(--accent);">What to do with this</p>
+                <p style="margin: 0; font-size: 1.0625rem; line-height: 1.55;">{{item.todo}}</p>
+              </div>
+
+              <p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .06em; color: var(--muted);">Source: <a href="#">{{item.source}}</a></p>
+            </div>
+          </sc-if>
+        </li>
+      </sc-for>
+    </ol>
+
+    <section style="margin: 2.5rem 0 0;">
+      <h2 style="margin: 0 0 .5rem; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">Also saved this week</h2>
+      <ul style="list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule);">
+        <li style="padding: .8rem 0; border-bottom: 1px solid var(--rule); font-size: 1.0625rem; line-height: 1.55;">
+          <a href="#" style="font-family: 'Archivo', sans-serif; font-weight: 700;">Building companies as loops</a>
+          <span style="display: block; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .06em; color: var(--muted); margin: .2rem 0 .3rem;">Lenny’s Podcast · Anish Acharya, a16z</span>
+          <span>Work as cascading loops of agents, with people choosing the next hill.</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <footer style="max-width: 42rem; margin: 0 auto; padding: 1.25rem 1rem 2.5rem; border-top: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: .5rem 1rem; justify-content: space-between; align-items: center;">
+    <span style="font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted);">Next issue Tue</span>
+    <a href="Dashboard.dc.html" style="display: inline-flex; align-items: center; min-height: 44px; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .08em; text-transform: uppercase;">Manage saves</a>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2400}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const playing = !!s.playing;
+    const chapter = typeof s.chapter === "number" ? s.chapter : 0;
+    const speed = s.speed || "1";
+    const open = s.open || { 0: true };
+
+    const starts = [0, 125, 250, 380, 510];
+    const fmt = (sec) => Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+
+    const chapterData = [
+      { title: "Ship governance, not just access", lines: [
+        { who: "IN", text: "Stripe could have bought an AI tool off the shelf. Why build Kai?" },
+        { who: "AN", text: "Because access was the easy part. Giving 10,000+ people AI that follows how Stripe works, with its permissions, costs and sensitive data, was the hard part." }
+      ] },
+      { title: "Projects as a governance layer", lines: [
+        { who: "IN", text: "So what is a project in their setup?" },
+        { who: "AN", text: "A place where a few experts set the default model, tools and skills for everyone doing that job. Anywhere from 5 to 500 people." }
+      ] },
+      { title: "Tool rules per project", lines: [
+        { who: "IN", text: "Why not ask for approval every time a risky tool runs?" },
+        { who: "AN", text: "Because people learn to click yes without reading. Keep approvals for sensitive projects, like HR." }
+      ] },
+      { title: "When to use a decision model", lines: [
+        { who: "IN", text: "When does Jev beat an LLM?" },
+        { who: "AN", text: "When the choices are countable: a score, a yes or no, a pick from a set. Open-ended judgment stays with the LLM." }
+      ] },
+      { title: "Memory is the missing layer", lines: [
+        { who: "IN", text: "The slide calls memory the missing layer. Missing from what?" },
+        { who: "AN", text: "MCP, A2A and RAG connect and fetch. None of them remember, reason over what changed, or adapt." }
+      ] }
+    ];
+
+    const elapsedSeconds = starts[chapter] + (playing ? 15 : 0);
+    const pct = Math.min(100, (elapsedSeconds / 600) * 100);
+
+    const chapters = chapterData.map((c, i) => {
+      const active = i === chapter;
+      return {
+        time: fmt(starts[i]),
+        title: c.title,
+        current: active ? "true" : "false",
+        pick: () => this.setState({ chapter: i, playing: true }),
+        style: "width: 100%; min-height: 44px; display: grid; grid-template-columns: 3.2rem 1fr; gap: .6rem; align-items: center; text-align: left; padding: .45rem .6rem; border: 0; border-radius: 6px; color: var(--on-ink); background: " + (active ? "rgba(236,233,228,.1)" : "transparent") + ";",
+        timeStyle: "font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .74rem; letter-spacing: .06em; font-variant-numeric: tabular-nums; color: " + (active ? "var(--accent-on-ink)" : "var(--on-ink-muted)") + ";",
+        titleStyle: "font-family: 'Archivo', sans-serif; font-weight: " + (active ? "700" : "600") + "; font-size: .95rem; color: " + (active ? "var(--accent-on-ink)" : "var(--on-ink)") + ";"
+      };
+    });
+
+    const nowLines = chapterData[chapter].lines.map((l) => ({
+      who: l.who,
+      text: l.text,
+      badgeStyle: "width: 2.2rem; height: 2.2rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: .7rem; letter-spacing: .06em; color: var(--ink); background: " + (l.who === "IN" ? "var(--accent-on-ink)" : "var(--on-ink)") + ";"
+    }));
+
+    const speeds = ["1", "1.5", "2"].map((v) => {
+      const on = v === speed;
+      return {
+        label: v + "×",
+        pressed: on ? "true" : "false",
+        pick: () => this.setState({ speed: v }),
+        style: "min-height: 44px; min-width: 3.2rem; padding: 0 .85rem; border-radius: 999px; font-family: 'Archivo', sans-serif; font-weight: 600; font-size: .85rem; border: 1px solid " + (on ? "var(--accent-on-ink)" : "rgba(236,233,228,.3)") + "; background: " + (on ? "var(--accent-on-ink)" : "transparent") + "; color: " + (on ? "var(--ink)" : "var(--on-ink)") + ";"
+      };
+    });
+
+    const data = [
+      {
+        lead: "Ship governance, not just access.",
+        summary: "The hard part of company-wide AI is copying how the company works: permissions, costs and sensitive data. Build those guardrails so people can just use AI and trust it.",
+        h3: "Why Stripe built Kai",
+        body: "Stripe built its company agent, Kai, because handing out AI was never the hard part. Giving 10,000+ employees AI that follows how Stripe already works was. The episode gives four reasons to build rather than buy: governance, context, security and dogfooding.",
+        todo: "List the rules your company already runs on: who sees what data, who can spend how much, and what needs sign-off. Then check whether an off-the-shelf tool can follow those rules.",
+        source: "How I AI · Stripe’s Kai · youtube.com"
+      },
+      {
+        lead: "Use projects as a governance layer.",
+        summary: "A project is where a few experts set the default model, tools, skills and agent backend for everyone doing that job.",
+        h3: "Projects carry the defaults",
+        body: "Projects range from 5 to 500 people. The project owner sets the default model, which skills are in scope (Stripe has about 2,000 skills to choose from) and the tool policies. Everyone else in the project starts from those defaults without setting anything up.",
+        todo: "Pick one team and write down the defaults its expert would set: model, tools, skills and agent backend.",
+        source: "How I AI · Stripe’s Kai · youtube.com"
+      },
+      {
+        lead: "Set tool rules per project, not per person.",
+        summary: "Require human approval for risky tools only in sensitive projects, like HR. Asking for approval everywhere teaches people to click “yes” without reading.",
+        h3: "Approval where it matters",
+        body: "Approval is a project setting, not a personal one. The same tool can run freely in an engineering project and need a human sign-off in HR. Asking everywhere backfires: the prompt turns into noise, and people stop reading it.",
+        todo: "Mark which of your tools are risky, and in which projects they should need a human to approve.",
+        source: "How I AI · Stripe’s Kai · youtube.com"
+      },
+      {
+        lead: "Reach for a decision model when the choices are countable.",
+        summary: "Jev returns scores, yes/no answers and picks from a set; open-ended judgment stays with an LLM.",
+        h3: "Countable choices go to Jev",
+        body: "John Lindquist and Claire Vo walk through where Jev fits. If the answer is a score, a yes or no, or one option from a fixed list, a decision model handles it. If the job is to critique, brainstorm or decide what the action should even be, keep an LLM on it.",
+        hasTable: true,
+        todo: "Pick one feature and write down every action it can take. If the list fits on a page, prototype it on Jev first.",
+        source: "How I AI · Jev use cases with John Lindquist and Claire Vo"
+      },
+      {
+        lead: "Memory is the missing layer for agents.",
+        summary: "Tool protocols (MCP), agent-to-agent links (A2A) and retrieval (RAG) connect and fetch, but don’t remember, reason over change or adapt.",
+        h3: "Four kinds of memory",
+        body: "The slide splits agent memory into four types. It claims memory matters most in high-stakes domains like wealth management, where an agent has to know what happened before and what has changed since.",
+        hasQuote: true,
+        quote: "Memory-Aware Agents: The Missing Layer for Real-World AI",
+        hasGrid: true,
+        todo: "For your brain app, decide which of the four you store today (saves are episodic) and which you would add next.",
+        source: "Photo of a talk slide, pasted"
+      }
+    ];
+
+    const takeaways = data.map((d, i) => {
+      const isOpen = !!open[i];
+      return {
+        n: String(i + 1),
+        lead: d.lead,
+        summary: d.summary,
+        h3: d.h3,
+        body: d.body,
+        todo: d.todo,
+        source: d.source,
+        hasQuote: !!d.hasQuote,
+        quote: d.quote || "",
+        hasTable: !!d.hasTable,
+        hasGrid: !!d.hasGrid,
+        open: isOpen,
+        expanded: isOpen ? "true" : "false",
+        detailId: "takeaway-" + (i + 1),
+        toggle: () => {
+          const cur = (this.state && this.state.open) || { 0: true };
+          const next = Object.assign({}, cur);
+          next[i] = !cur[i];
+          this.setState({ open: next });
+        },
+        rowStyle: "width: 100%; min-height: 44px; display: grid; grid-template-columns: 2.6rem 1fr 1.5rem; gap: .25rem; align-items: start; text-align: left; padding: .7rem .6rem; border-radius: 8px; color: var(--fg); border: 1px solid " + (isOpen ? "var(--box-line)" : "transparent") + ";" + (isOpen ? " background: var(--box);" : " background: transparent;"),
+        chevronStyle: "margin-top: .3rem; transition: transform .2s ease; transform: rotate(" + (isOpen ? "180" : "0") + "deg);"
+      };
+    });
+
+    const jevRows = [
+      { job: "Scores and yes/no answers", use: "Jev" },
+      { job: "Picking from a fixed set", use: "Jev" },
+      { job: "Critiquing a screen", use: "LLM" },
+      { job: "Brainstorming", use: "LLM" },
+      { job: "Deciding what the action should be", use: "LLM" }
+    ].map((r) => ({
+      job: r.job,
+      use: r.use,
+      useStyle: "padding: .5rem 0; border-bottom: 1px solid var(--rule); font-family: 'Archivo', sans-serif; font-weight: 700; font-size: .9rem; color: " + (r.use === "Jev" ? "var(--accent)" : "var(--fg)") + ";"
+    }));
+
+    const memTypes = [
+      { name: "Episodic", what: "Events" },
+      { name: "Semantic", what: "Knowledge" },
+      { name: "Procedural", what: "How-to" },
+      { name: "Temporal links", what: "What changed" }
+    ];
+
+    return {
+      isPlaying: playing,
+      isPaused: !playing,
+      playLabel: playing ? "Pause podcast" : "Play podcast",
+      togglePlay: () => this.setState({ playing: !playing }),
+      progressStyle: "height: 100%; width: " + pct.toFixed(1) + "%; background: var(--accent-on-ink); border-radius: 999px;",
+      elapsedSeconds: String(elapsedSeconds),
+      elapsedText: fmt(elapsedSeconds),
+      speeds: speeds,
+      chapters: chapters,
+      nowTitle: chapterData[chapter].title,
+      nowLines: nowLines,
+      expandAll: () => this.setState({ open: { 0: true, 1: true, 2: true, 3: true, 4: true } }),
+      collapseAll: () => this.setState({ open: {} }),
+      takeaways: takeaways,
+      jevRows: jevRows,
+      memTypes: memTypes
+    };
+  }
+}
+</script>
+</body>
+</html>

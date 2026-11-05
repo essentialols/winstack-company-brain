@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Outside-In Brain",
+  "short_name": "Brain",
+  "version": "0.1.0",
+  "description": "Save the page you are on into your workspace's brain. One click, never automatic.",
+  "action": {
+    "default_title": "Save to Outside-In Brain",
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "options_ui": {
+    "page": "options.html",
+    "open_in_tab": true
+  },
+  "permissions": ["activeTab", "scripting", "storage", "contextMenus"],
+  "optional_host_permissions": ["https://*/*", "http://localhost/*", "http://127.0.0.1/*"],
+  "commands": {
+    "save-page": {
+      "suggested_key": { "default": "Alt+Shift+S" },
+      "description": "Save this page to your last-used brain"
+    }
+  }
+}

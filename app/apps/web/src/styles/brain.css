@@ -1,0 +1,693 @@
+/**
+ * Outside-In Brain editorial styles (ported from design/*.dc.html, tokens from design/BRIEF.md).
+ * Everything is scoped under `.oib` so the starter's shadcn screens keep their own look.
+ * Dark mode follows next-themes (`.dark` on <html>) and the OS preference when no theme class is set.
+ */
+
+.oib {
+  --bg: #ffffff;
+  --fg: #23211f;
+  --muted: #6c6862;
+  --rule: #e6e4e1;
+  --accent: #c63f1d;
+  --accent-hover: #a3330f;
+  --hover: #f5f4f3;
+  --chip: #fbeee9;
+  --box: #f0f0f0;
+  --box-line: #d4d4d4;
+  --ink: #23211f;
+  --on-ink: #ece9e4;
+  --on-ink-muted: #b8b3ac;
+  --accent-on-ink: #ff8a66;
+  --ok-bg: #e4f1e7;
+  --ok-fg: #1f6a3a;
+  --f-display: var(--font-archivo), 'Archivo', system-ui, sans-serif;
+  --f-body: var(--font-spectral), 'Spectral', Georgia, serif;
+  --f-mono: var(--font-plex-mono), 'IBM Plex Mono', ui-monospace, monospace;
+
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+.dark .oib {
+  --bg: #161514;
+  --fg: #ece9e4;
+  --muted: #a39e96;
+  --rule: #33302d;
+  --accent: #ff8a66;
+  --accent-hover: #ffa585;
+  --hover: #232120;
+  --chip: #2c2320;
+  --box: #2a2a2a;
+  --box-line: #444444;
+  --ink: #0d0c0b;
+  --on-ink: #ece9e4;
+  --on-ink-muted: #a39e96;
+  --accent-on-ink: #ff8a66;
+  --ok-bg: #1d3324;
+  --ok-fg: #8fd3a5;
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not(.light):not(.dark) .oib {
+    --bg: #161514;
+    --fg: #ece9e4;
+    --muted: #a39e96;
+    --rule: #33302d;
+    --accent: #ff8a66;
+    --accent-hover: #ffa585;
+    --hover: #232120;
+    --chip: #2c2320;
+    --box: #2a2a2a;
+    --box-line: #444444;
+    --ink: #0d0c0b;
+    --on-ink: #ece9e4;
+    --on-ink-muted: #a39e96;
+    --accent-on-ink: #ff8a66;
+    --ok-bg: #1d3324;
+    --ok-fg: #8fd3a5;
+    color-scheme: dark;
+  }
+}
+
+.oib *,
+.oib *::before,
+.oib *::after {
+  box-sizing: border-box;
+}
+.oib h1,
+.oib h2,
+.oib h3,
+.oib h4 {
+  margin: 0;
+  font-family: var(--f-display);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: inherit;
+}
+.oib p {
+  margin: 0;
+}
+.oib a {
+  color: var(--accent);
+  text-underline-offset: 2px;
+}
+.oib a:hover {
+  color: var(--accent-hover);
+}
+.oib a:focus-visible,
+.oib button:focus-visible,
+.oib input:focus-visible,
+.oib textarea:focus-visible,
+.oib select:focus-visible,
+.oib summary:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+.oib button {
+  font: inherit;
+  cursor: pointer;
+}
+.oib button:disabled {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+.oib details > summary {
+  list-style: none;
+}
+.oib details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.oib-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Containers ---------- */
+.oib-wide {
+  max-width: 64rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+.oib-col {
+  max-width: 42rem;
+  margin: 0 auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+/* ---------- Type ---------- */
+.oib-eyebrow {
+  font-family: var(--f-mono);
+  font-weight: 500;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.oib-meta {
+  font-family: var(--f-mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+.oib .oib-h1 {
+  font-weight: 800;
+  font-size: clamp(1.9rem, 6vw, 2.6rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
+}
+.oib .oib-hero {
+  font-weight: 800;
+  font-size: clamp(2.1rem, 6vw, 3.2rem);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+}
+.oib .oib-h2 {
+  font-weight: 800;
+  font-size: clamp(1.6rem, 4.5vw, 2.1rem);
+  line-height: 1.15;
+  letter-spacing: -0.015em;
+}
+.oib .oib-h2s {
+  font-weight: 800;
+  font-size: 1.3rem;
+  line-height: 1.25;
+}
+.oib-lead {
+  font-size: 1.125rem;
+  line-height: 1.6;
+}
+.oib-muted {
+  color: var(--muted);
+}
+.oib-label {
+  display: block;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  margin-bottom: 0.4rem;
+}
+
+/* ---------- Buttons ---------- */
+.oib-btn,
+.oib-pill,
+.oib-primary,
+.oib-textbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 44px;
+  font-family: var(--f-display);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.oib a.oib-pill,
+.oib .oib-pill {
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--rule);
+  background: transparent;
+  color: var(--fg);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.oib a.oib-pill:hover,
+.oib .oib-pill:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.oib .oib-pill[aria-pressed='true'] {
+  border-color: var(--accent);
+  background: var(--chip);
+  color: var(--accent);
+}
+.oib a.oib-primary,
+.oib .oib-primary {
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  border: none;
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+.oib a.oib-primary:hover,
+.oib .oib-primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  color: var(--bg);
+}
+.oib .oib-primary-lg {
+  min-height: 48px;
+  padding: 0 1.4rem;
+  font-size: 1rem;
+}
+.oib .oib-textbtn {
+  padding: 0 0.25rem;
+  border: none;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.oib .oib-textbtn:hover {
+  color: var(--accent-hover);
+}
+.oib .oib-iconbtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 auto;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--muted);
+}
+.oib .oib-iconbtn:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+
+/* ---------- Inputs ---------- */
+.oib .oib-input,
+.oib .oib-textarea,
+.oib .oib-select {
+  display: block;
+  width: 100%;
+  min-height: 48px;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid var(--box-line);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: 1.0625rem;
+  line-height: 1.5;
+}
+.oib .oib-textarea {
+  resize: vertical;
+}
+.oib .oib-select {
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  width: auto;
+  min-height: 44px;
+}
+
+/* ---------- Marketing nav / footer ---------- */
+.oib-topbar {
+  border-bottom: 1px solid var(--rule);
+}
+.oib-topbar nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem 1rem;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+.oib-navlinks {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0 1.1rem;
+}
+.oib a.oib-navlink {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--fg);
+  text-decoration: none;
+}
+.oib a.oib-navlink:hover,
+.oib a.oib-navlink[aria-current='page'] {
+  color: var(--accent);
+}
+.oib a.oib-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-height: 44px;
+  text-decoration: none;
+  color: var(--fg);
+}
+.oib-wordmark {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: -0.01em;
+}
+.oib-footer {
+  border-top: 1px solid var(--rule);
+}
+.oib-footer > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem 1.5rem;
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+}
+.oib-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+
+/* ---------- Rows, fold-outs ---------- */
+.oib-rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border-top: 1px solid var(--rule);
+}
+.oib-rows > li,
+.oib-rows > details {
+  border-bottom: 1px solid var(--rule);
+}
+.oib-row {
+  border-radius: 8px;
+}
+.oib-row:hover {
+  background: var(--hover);
+}
+.oib .oib-sum {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding: 1rem 0.75rem;
+  min-height: 44px;
+  cursor: pointer;
+  border-radius: 8px;
+  border: 1px solid transparent;
+}
+.oib .oib-sum:hover {
+  background: var(--hover);
+}
+.oib details[open] > .oib-sum {
+  background: var(--box);
+  border-color: var(--box-line);
+}
+.oib-num {
+  flex: 0 0 2.6rem;
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+.oib-detail {
+  padding: 0.75rem 0.75rem 1.5rem 3.35rem;
+}
+.oib-detail h3 {
+  font-size: 1.3rem;
+  line-height: 1.25;
+  margin-bottom: 0.5rem;
+}
+.oib-todo {
+  background: var(--chip);
+  border-radius: 6px;
+  padding: 0.8rem 1rem;
+}
+.oib-todo-label {
+  margin: 0 0 0.3rem;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+.oib blockquote.oib-quote {
+  margin: 0 0 1rem;
+  padding: 0.1rem 0 0.1rem 1rem;
+  border-left: 3px solid var(--accent);
+  font-style: italic;
+  font-size: 1.0625rem;
+  line-height: 1.6;
+}
+
+/* ---------- Dark (ink) blocks ---------- */
+.oib-ink {
+  background: var(--ink);
+  color: var(--on-ink);
+}
+.oib-ink h1,
+.oib-ink h2,
+.oib-ink h3 {
+  color: var(--on-ink);
+}
+.oib a.oib-pill-ink,
+.oib .oib-pill-ink {
+  padding: 0 1.1rem;
+  border-radius: 999px;
+  border: 1px solid var(--on-ink-muted);
+  background: transparent;
+  color: var(--on-ink);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.oib a.oib-pill-ink:hover,
+.oib .oib-pill-ink:hover {
+  border-color: var(--accent-on-ink);
+  color: var(--accent-on-ink);
+}
+.oib a.oib-primary-ink {
+  padding: 0 1.4rem;
+  min-height: 48px;
+  border-radius: 999px;
+  background: var(--accent-on-ink);
+  color: var(--ink);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ---------- Toggle switch ---------- */
+.oib-switch {
+  flex: 0 0 auto;
+  position: relative;
+  display: inline-block;
+  width: 44px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--box-line);
+  transition: background 0.15s;
+}
+.oib-switch::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--bg);
+  transition: transform 0.15s;
+}
+[aria-checked='true'] > .oib-switch,
+[aria-pressed='true'] > .oib-switch {
+  background: var(--accent);
+}
+[aria-checked='true'] > .oib-switch::after,
+[aria-pressed='true'] > .oib-switch::after {
+  transform: translateX(18px);
+}
+
+/* ---------- Segmented control ---------- */
+.oib-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--rule);
+  border-radius: 999px;
+  padding: 3px;
+  gap: 3px;
+}
+.oib .oib-seg button {
+  min-height: 44px;
+  padding: 0 1rem;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--fg);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.85rem;
+}
+.oib .oib-seg button[aria-pressed='true'] {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* ---------- Status / notices ---------- */
+.oib-ok {
+  background: var(--ok-bg);
+  color: var(--ok-fg);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--f-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+.oib-error {
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 6px;
+  padding: 0.6rem 0.8rem;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+.oib-tag {
+  font-family: var(--f-mono);
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  background: var(--box);
+  border-radius: 999px;
+  padding: 0.2rem 0.6rem;
+}
+
+/* ---------- Dashboard shell ---------- */
+.oib-app {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: stretch;
+}
+.oib-side {
+  flex: 1 1 240px;
+  border-right: 1px solid var(--rule);
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.oib-sidenav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.oib .oib-sidelink {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-height: 44px;
+  padding: 0 0.75rem;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--fg);
+  text-decoration: none;
+  text-align: left;
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.oib .oib-sidelink:hover {
+  background: var(--hover);
+  color: var(--accent);
+}
+.oib .oib-sidelink[aria-current='page'] {
+  background: var(--chip);
+  color: var(--accent);
+  font-weight: 700;
+}
+.oib-main {
+  flex: 999 1 560px;
+  min-width: 0;
+  padding: 2rem 1rem 4rem;
+}
+@media (max-width: 820px) {
+  .oib-side {
+    border-right: none;
+    border-bottom: 1px solid var(--rule);
+  }
+}
+
+/* ---------- Visuals ---------- */
+.oib-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 1rem;
+}
+.oib-table caption {
+  text-align: left;
+  padding: 0 0 0.45rem;
+}
+.oib-table th {
+  text-align: left;
+  padding: 0.45rem 0.5rem 0.45rem 0;
+  border-bottom: 1px solid var(--box-line);
+  font-family: var(--f-display);
+  font-weight: 600;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+.oib-table td {
+  padding: 0.5rem 0.5rem 0.5rem 0;
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.4;
+  vertical-align: top;
+}
+
+/* ---------- Login: retheme the starter's shadcn auth card ---------- */
+.oib-auth {
+  --primary-rgb: 198 63 29;
+  --primary-foreground-rgb: 255 255 255;
+  --color-primary-bg: #c63f1d;
+  --color-primary-text: #ffffff;
+  font-family: var(--f-display);
+}
+.dark .oib-auth {
+  --primary-rgb: 255 138 102;
+  --primary-foreground-rgb: 22 21 20;
+  --color-primary-bg: #ff8a66;
+  --color-primary-text: #161514;
+}
+.oib-auth > div {
+  max-width: none;
+  border: none;
+  box-shadow: none;
+  background: transparent;
+}
+.oib-auth button {
+  border-radius: 999px;
+  min-height: 44px;
+}
+.oib-auth input {
+  min-height: 48px;
+  border-radius: 8px;
+}

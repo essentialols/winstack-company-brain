@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Brain Dashboard</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
+<style>
+:root{--bg:#ffffff;--fg:#23211f;--muted:#6c6862;--rule:#e6e4e1;--accent:#c63f1d;--accent-hover:#a3330f;--hover:#f5f4f3;--chip:#fbeee9;--box:#f0f0f0;--box-line:#d4d4d4;--ink:#23211f;--on-ink:#ece9e4;--on-ink-muted:#b8b3ac;--accent-on-ink:#ff8a66;--ok-bg:#e4f1e7;--ok-fg:#1f6a3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg)}
+a{color:var(--accent);text-underline-offset:2px}a:hover{color:var(--accent-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.row:hover{background:var(--hover)}
+.navlink:hover{background:var(--hover)}
+.pill:hover{border-color:var(--accent) !important;color:var(--accent) !important}
+.primary:hover{background:var(--accent-hover) !important;color:var(--bg) !important}
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--bg);color:var(--fg);font-family:Spectral, Georgia, serif;display:flex;flex-wrap:wrap;align-items:stretch;">
+
+  <aside style="flex:1 1 240px;border-right:1px solid var(--rule);padding:1.5rem 1rem;box-sizing:border-box;display:flex;flex-direction:column;gap:1.5rem;">
+    <a href="Home.dc.html" style="display:flex;align-items:center;gap:.6rem;text-decoration:none;color:var(--fg);min-height:44px;padding:0 .5rem;">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      <span style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.15rem;">Outside-In Brain</span>
+    </a>
+
+    <div style="padding:.75rem .5rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);">
+      <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);">WORKSPACE</div>
+      <div style="font-family:Archivo, sans-serif;font-weight:700;font-size:1.05rem;margin:.25rem 0;">Our household</div>
+      <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);">2 members · you&#39;re Owner</div>
+    </div>
+
+    <nav aria-label="Workspace" style="display:flex;flex-direction:column;gap:.15rem;">
+      <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);padding:0 .5rem .35rem;">BRAINS</div>
+      <a href="Dashboard.dc.html" aria-current="page" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;background:var(--chip);color:var(--accent);text-decoration:none;font-family:Archivo, sans-serif;font-weight:700;font-size:.95rem;">AI tooling</a>
+      <a class="navlink" href="#" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">Design</a>
+      <a class="navlink" href="#" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--muted);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">+ New brain</a>
+
+      <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);padding:1rem .5rem .35rem;">WORKSPACE</div>
+      <a class="navlink" href="Main.dc.html" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">All issues</a>
+      <a class="navlink" href="#" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">Members</a>
+      <a class="navlink" href="#" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">Notifications</a>
+      <a class="navlink" href="#" style="display:flex;align-items:center;min-height:44px;padding:0 .75rem;border-radius:8px;color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">Settings</a>
+    </nav>
+
+    <div style="border:1px solid var(--rule);border-radius:8px;padding:1rem;">
+      <div style="font-family:Archivo, sans-serif;font-weight:700;font-size:.95rem;margin-bottom:.35rem;">Get the extension</div>
+      <p style="margin:0 0 .5rem;font-size:.95rem;line-height:1.5;color:var(--muted);">Save any page with one click. Nothing is saved unless you click.</p>
+      <a href="Extension.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:Archivo, sans-serif;font-weight:600;font-size:.9rem;">See how it works</a>
+    </div>
+  </aside>
+
+  <main style="flex:999 1 560px;min-width:0;box-sizing:border-box;padding:2rem 1rem 4rem;">
+    <div style="max-width:42rem;margin:0 auto;">
+
+      <header style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:1rem;margin-bottom:2.5rem;">
+        <div style="min-width:0;">
+          <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.75rem;letter-spacing:.08em;color:var(--muted);">BRAIN</div>
+          <h1 style="font-family:Archivo, sans-serif;font-weight:800;font-size:clamp(1.9rem,6vw,2.6rem);line-height:1.1;letter-spacing:-.015em;margin:.3rem 0 .5rem;">AI tooling</h1>
+          <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.75rem;letter-spacing:.08em;color:var(--muted);">{{count}} saved since last issue · next issue {{nextDay}} 7:00</div>
+        </div>
+        <a class="primary" href="Main.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 1.25rem;border-radius:999px;background:var(--accent);color:var(--bg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:700;font-size:.95rem;">Preview next issue</a>
+      </header>
+
+      <section aria-labelledby="add-h" style="margin-bottom:3rem;">
+        <h2 id="add-h" style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.3rem;margin:0 0 .75rem;">Add something</h2>
+        <label for="add-text" style="display:block;font-family:Archivo, sans-serif;font-weight:600;font-size:.9rem;margin-bottom:.4rem;">Paste a link or any text</label>
+        <textarea id="add-text" rows="3" placeholder="https://… or paste notes, a quote, an article" value="{{draft}}" onInput="{{onDraft}}" style="display:block;width:100%;box-sizing:border-box;padding:.75rem;border:1px solid var(--box-line);border-radius:8px;background:var(--bg);color:var(--fg);font-family:Spectral, Georgia, serif;font-size:1.0625rem;line-height:1.5;resize:vertical;"></textarea>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:1rem;margin-top:.75rem;">
+          <button class="primary" type="button" onClick="{{addItem}}" style="min-height:44px;padding:0 1.25rem;border:none;border-radius:999px;background:var(--accent);color:var(--bg);font-family:Archivo, sans-serif;font-weight:700;font-size:.95rem;">Add to brain</button>
+          <span style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);">Or click the extension on any page</span>
+        </div>
+      </section>
+
+      <section aria-labelledby="saved-h" style="margin-bottom:3rem;">
+        <h2 id="saved-h" style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.3rem;margin:0 0 .75rem;">Saved this week</h2>
+        <ul style="list-style:none;margin:0;padding:0;border-top:1px solid var(--rule);">
+          <sc-for list="{{items}}" as="item" hint-placeholder-count="4">
+            <li class="row" style="display:flex;gap:.9rem;align-items:flex-start;padding:.9rem .6rem;border-bottom:1px solid var(--rule);border-radius:8px;">
+              <span style="flex:0 0 auto;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;color:var(--accent);margin-top:.1rem;">
+                <sc-if value="{{item.isVideo}}" hint-placeholder-val="{{ true }}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="3"></rect><path d="M10 9.5v5l4.5-2.5z"></path></svg>
+                </sc-if>
+                <sc-if value="{{item.isImage}}" hint-placeholder-val="{{ false }}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><circle cx="9" cy="10" r="1.8"></circle><path d="M21 16l-5-5-8 9"></path></svg>
+                </sc-if>
+                <sc-if value="{{item.isPodcast}}" hint-placeholder-val="{{ false }}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M5 11a7 7 0 0 0 14 0M12 18v3"></path></svg>
+                </sc-if>
+                <sc-if value="{{item.isText}}" hint-placeholder-val="{{ false }}">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"></path><path d="M14 3v5h5M9 13h7M9 17h5"></path></svg>
+                </sc-if>
+              </span>
+              <div style="flex:1 1 auto;min-width:0;">
+                <div style="font-family:Archivo, sans-serif;font-weight:700;font-size:1.02rem;line-height:1.3;">{{item.title}}</div>
+                <div style="font-size:1rem;line-height:1.5;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{item.line}}</div>
+                <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;margin-top:.35rem;">
+                  <span style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);">{{item.meta}}</span>
+                  <span style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.7rem;letter-spacing:.06em;color:var(--muted);background:var(--box);border-radius:999px;padding:.2rem .6rem;">Waiting for Saturday</span>
+                </div>
+              </div>
+            </li>
+          </sc-for>
+        </ul>
+      </section>
+
+      <section aria-label="Delivery settings" style="display:flex;flex-wrap:wrap;gap:2rem;margin-bottom:3rem;">
+        <div style="flex:1 1 15rem;min-width:0;">
+          <h2 style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.3rem;margin:0 0 .75rem;">Schedule</h2>
+          <div role="group" aria-label="How often" style="display:inline-flex;flex-wrap:wrap;border:1px solid var(--rule);border-radius:999px;padding:3px;gap:3px;">
+            <button type="button" aria-pressed="{{oncePressed}}" onClick="{{setOnce}}" style="{{onceStyle}}">Once a week</button>
+            <button type="button" aria-pressed="{{twicePressed}}" onClick="{{setTwice}}" style="{{twiceStyle}}">Twice a week</button>
+          </div>
+          <p style="margin:.75rem 0 0;font-size:1.0625rem;line-height:1.6;color:var(--muted);">{{deliveryLine}}</p>
+        </div>
+
+        <div style="flex:1 1 15rem;min-width:0;">
+          <h2 style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.3rem;margin:0 0 .5rem;">Format &amp; delivery</h2>
+          <sc-for list="{{toggles}}" as="t" hint-placeholder-count="4">
+            <button type="button" aria-pressed="{{t.pressed}}" onClick="{{t.toggle}}" style="display:flex;width:100%;align-items:center;justify-content:space-between;gap:1rem;min-height:48px;padding:0 .25rem;border:none;border-bottom:1px solid var(--rule);background:transparent;color:var(--fg);text-align:left;">
+              <span style="font-family:Archivo, sans-serif;font-weight:600;font-size:.95rem;">{{t.label}}</span>
+              <span aria-hidden="true" style="{{t.trackStyle}}"><span style="{{t.knobStyle}}"></span></span>
+            </button>
+          </sc-for>
+          <div style="margin-top:1rem;">
+            <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);margin-bottom:.5rem;">PODCAST LENGTH</div>
+            <div role="group" aria-label="Podcast length" style="display:flex;flex-wrap:wrap;gap:.5rem;">
+              <sc-for list="{{lengths}}" as="l" hint-placeholder-count="3">
+                <button class="pill" type="button" aria-pressed="{{l.pressed}}" onClick="{{l.pick}}" style="{{l.style}}">{{l.label}}</button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section aria-labelledby="recent-h">
+        <h2 id="recent-h" style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.3rem;margin:0 0 .75rem;">Recent issues</h2>
+        <a class="row" href="Main.dc.html" style="display:block;padding:.9rem .6rem;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);border-radius:8px;text-decoration:none;color:var(--fg);">
+          <div style="font-family:Archivo, sans-serif;font-weight:700;font-size:1.05rem;line-height:1.3;">Issue 1 · Governance is the product, and agents need memory</div>
+          <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;color:var(--muted);margin-top:.35rem;">Sat · 5 takeaways · 10 min listen</div>
+        </a>
+      </section>
+
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":1700}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const pasted = s.pasted || [];
+    const schedule = s.schedule || "twice";
+    const fmt = Object.assign({ written: true, podcast: true, email: true, inapp: true }, s.fmt || {});
+    const len = s.len || 10;
+
+    const base = [
+      { title: "The enterprise AI stack behind Stripe’s company brain “Kai”", line: "How I AI", meta: "youtube.com · Video · Extension · Mon", type: "Video" },
+      { title: "Jev use cases with John Lindquist and Claire Vo", line: "How I AI", meta: "youtube.com · Video · Extension · Tue", type: "Video" },
+      { title: "Memory-Aware Agents: The Missing Layer for Real-World AI", line: "Photo of a talk slide", meta: "Image · Pasted · Wed", type: "Image" },
+      { title: "Building companies as loops", line: "Lenny’s Podcast · Anish Acharya, a16z", meta: "Podcast · Extension · Wed", type: "Podcast" }
+    ];
+    const all = pasted.slice().reverse().concat(base).map((it) => Object.assign({}, it, {
+      isVideo: it.type === "Video",
+      isImage: it.type === "Image",
+      isPodcast: it.type === "Podcast",
+      isText: it.type === "Text"
+    }));
+
+    const segBase = "min-height:44px;padding:0 1rem;border:none;border-radius:999px;font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem;";
+    const segOn = segBase + "background:var(--accent);color:var(--bg);";
+    const segOff = segBase + "background:transparent;color:var(--fg);";
+
+    const toggleDefs = [
+      ["written", "Written issue"],
+      ["podcast", "Podcast (two voices)"],
+      ["email", "Email"],
+      ["inapp", "In-app"]
+    ];
+    const toggles = toggleDefs.map(([key, label]) => {
+      const on = !!fmt[key];
+      return {
+        label: label,
+        pressed: on ? "true" : "false",
+        trackStyle: "flex:0 0 auto;position:relative;display:inline-block;width:44px;height:26px;border-radius:999px;box-sizing:border-box;transition:background .15s;background:" + (on ? "var(--accent)" : "var(--box-line)") + ";",
+        knobStyle: "position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:var(--bg);transition:transform .15s;transform:translateX(" + (on ? "18px" : "0") + ");",
+        toggle: () => {
+          const next = Object.assign({}, fmt);
+          next[key] = !on;
+          this.setState({ fmt: next });
+        }
+      };
+    });
+
+    const pillBase = "min-height:44px;padding:0 1rem;border-radius:999px;font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem;";
+    const lengths = [5, 10, 15].map((n) => {
+      const on = len === n;
+      return {
+        label: n + " min",
+        pressed: on ? "true" : "false",
+        style: pillBase + (on ? "border:1px solid var(--accent);background:var(--chip);color:var(--accent);" : "border:1px solid var(--rule);background:transparent;color:var(--fg);"),
+        pick: () => this.setState({ len: n })
+      };
+    });
+
+    return {
+      count: 4 + pasted.length,
+      nextDay: schedule === "twice" ? "Tue" : "Sat",
+      deliveryLine: schedule === "twice" ? "Delivered Tuesday and Saturday mornings" : "Delivered Saturday mornings",
+      draft: s.draft || "",
+      onDraft: (e) => this.setState({ draft: e && e.target ? e.target.value : "" }),
+      addItem: () => {
+        const text = (s.draft || "").trim();
+        const line = text ? (text.length > 120 ? text.slice(0, 120) + "…" : text) : "Text you pasted";
+        this.setState({
+          pasted: pasted.concat([{ title: "Pasted just now", line: line, meta: "Text · Pasted · Today", type: "Text" }]),
+          draft: ""
+        });
+      },
+      items: all,
+      oncePressed: schedule === "once" ? "true" : "false",
+      twicePressed: schedule === "twice" ? "true" : "false",
+      onceStyle: schedule === "once" ? segOn : segOff,
+      twiceStyle: schedule === "twice" ? segOn : segOff,
+      setOnce: () => this.setState({ schedule: "once" }),
+      setTwice: () => this.setState({ schedule: "twice" }),
+      toggles: toggles,
+      lengths: lengths
+    };
+  }
+}
+</script>
+</body>
+</html>
