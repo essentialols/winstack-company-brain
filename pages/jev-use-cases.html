@@ -1,0 +1,973 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Jev Use Case Takeaways</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column; numbered takeaways as a scannable list, each opening into its own detail */
+:root {
+  --bg: #ffffff;
+  --fg: #2b2a29;
+  --muted: #6b6662;
+  --rule: #e9e4e0;
+  --accent: #d94f30;
+  --chip: #fbeee9;
+  --box: #f0f0f0;
+  --box-line: #d4d4d4;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Spectral", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1a19; --fg: #ece8e4; --muted: #a8a19b; --rule: #34302d; --accent: #f07a5e; --chip: #2c2320; --box: #2a2a2a; --box-line: #444444;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1a19; --fg: #ece8e4; --muted: #a8a19b; --rule: #34302d; --accent: #f07a5e; --chip: #2c2320; --box: #2a2a2a; --box-line: #444444;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1.125rem; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2.5rem 4rem;
+}
+.wrap { max-width: 42rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.75rem; }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.1; margin: .35rem 0 0; text-wrap: balance; letter-spacing: -.01em; }
+.lead { margin: 0; }
+.lead em { font-style: italic; }
+.toolbar { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; border-block: 1px solid var(--rule); padding-block: .75rem; }
+.toolbar span { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); margin-right: auto; font-variant-numeric: tabular-nums; }
+button.tb {
+  font-family: var(--font-display); font-weight: 600; font-size: .85rem;
+  background: transparent; color: var(--fg); border: 1px solid var(--rule); border-radius: 999px;
+  padding: .4rem .9rem; cursor: pointer;
+}
+button.tb:hover { border-color: var(--accent); color: var(--accent); }
+button.tb:focus-visible, summary:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+ol.ideas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ol.ideas > li { border-bottom: 1px solid var(--rule); }
+details > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 2.25rem 1fr 1.5rem; gap: .5rem; padding-block: 1.1rem; }
+details > summary::-webkit-details-marker { display: none; }
+.num { font-family: var(--font-display); font-weight: 800; color: var(--accent); font-size: 1.1rem; line-height: 1.6; font-variant-numeric: tabular-nums; }
+.sum { min-width: 0; }
+.sum strong { font-weight: 600; }
+.chev { width: 1.5rem; height: 1.6rem; display: grid; place-items: center; color: var(--muted); transition: transform .2s ease; }
+.chev svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+details[open] > summary .chev { transform: rotate(180deg); color: var(--accent); }
+ol.ideas details > summary { padding-inline: .75rem; margin-inline: -.75rem; border: 1px solid transparent; border-radius: 8px; transition: background-color .15s ease, border-color .15s ease; }
+ol.ideas details[open] > summary { background: var(--box); border-color: var(--box-line); margin-bottom: 1rem; }
+.group { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding-block: 1.75rem .5rem; }
+ol.ideas > li.group:first-child { padding-top: .25rem; }
+.hint { display: block; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; color: var(--muted); margin-top: .35rem; }
+
+.detail { padding: 0 0 1.5rem 2.75rem; display: flex; flex-direction: column; gap: .9rem; min-width: 0; }
+.detail h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.detail p { margin: 0; }
+.detail ul, .detail ol { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+blockquote { margin: 0 0 0 .25rem; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--accent); font-style: italic; }
+blockquote cite { display: block; font-style: normal; color: var(--muted); font-size: .95rem; margin-top: .2rem; }
+blockquote cite a { font-family: var(--font-mono); font-size: .78rem; }
+.todo { background: var(--chip); border-radius: 6px; padding: .75rem 1rem; }
+.todo b { font-family: var(--font-display); font-weight: 600; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .2rem; }
+.tablebox { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 1rem; }
+th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+td { font-variant-numeric: tabular-nums; }
+
+.ref { border-top: 1px solid var(--rule); }
+.ref + .ref { margin-top: -1.75rem; }
+.ref > summary { grid-template-columns: 1fr 1.5rem; }
+.ref h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin: 0; }
+.ref .detail { padding-left: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+.note { font-size: .95rem; color: var(--muted); }
+.transcript { display: flex; flex-direction: column; gap: .35rem; font-size: 1rem; line-height: 1.5; }
+.transcript h3 { font-size: 1rem; margin-top: 1.1rem; }
+.transcript h3:first-child { margin-top: 0; }
+.transcript p { display: grid; grid-template-columns: 3rem 1fr; gap: .5rem; }
+.transcript span { min-width: 0; overflow-wrap: anywhere; }
+.transcript a { font-family: var(--font-mono); font-size: .75rem; line-height: 1.5rem; font-variant-numeric: tabular-nums; }
+@media (max-width: 480px) {
+  .detail { padding-left: 0; }
+  details > summary { grid-template-columns: 1.9rem 1fr 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .chev, ol.ideas details > summary { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">How I AI · John Lindquist · Jev use cases</div>
+    <h1>27 ideas from John Lindquist and Claire Vo's Jev episode</h1>
+  </header>
+  <p class="lead">This episode of <em>How I AI</em> walks through real demos built on Jev, a very fast, very cheap model from TypeSafe AI. Host Claire Vo talks with John Lindquist, creator of egghead.io, who is now building mega.dev. Their thesis: Jev outputs decisions instead of text. Its speed and low cost make model calls worthwhile for work that never justified them.</p>
+
+  <div class="toolbar">
+    <span id="count" aria-live="polite">0 of 27 expanded</span>
+    <button class="tb" id="expandAll" type="button">Expand all</button>
+    <button class="tb" id="collapseAll" type="button">Collapse all</button>
+  </div>
+
+  <ol class="ideas">
+    <li class="group">Decide where Jev fits</li>
+    <li><details>
+      <summary><span class="num">1</span><span class="sum"><strong>Reach for Jev when the choices are countable.</strong> Jev returns scores, yes/no answers and picks from a set. If your problem reduces to a limited set of actions, it fits. If you need open-ended thinking, use an LLM.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Many problems that feel infinite are a short list of options</h3>
+        <p><strong>What changes.</strong> LLMs take text in and give text out. Jev takes messy text and data in and gives structured data out. That lets people talk to your functions and APIs however they like.</p>
+        <p><strong>Examples from the episode:</strong></p>
+        <ul>
+          <li><strong>Web pages.</strong> A mouse can land on any pixel, but a page might have about 10 clickable buttons.</li>
+          <li><strong>Games.</strong> Tetris comes down to four shape options and about 10 positions left or right.</li>
+          <li><strong>3D games.</strong> The character seems free, but the input is still the buttons on a controller.</li>
+        </ul>
+        <blockquote>"whenever you have constrained inputs like that are interacting with apps it's Jev is a good thing to reach for." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1582s" target="_blank" rel="noopener">26:22</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Pick one feature and write down every action it can take. If the list fits on a page, prototype that feature on Jev first.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">2</span><span class="sum"><strong>Send open-ended judgment to an LLM.</strong> Critiquing a screen, brainstorming and deciding what the action should even be all stay with generative models. Check for a Jev fit only once the actions are set.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Know which questions Jev can't answer</h3>
+        <p><strong>John's contrast.</strong> Ask a model what on a web page might confuse a user. It needs to look at the image, then weigh layout, color and contrast, and discuss what it finds.</p>
+        <blockquote>"what on our product or website might be confusing to a user. That's not a Jev thing." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1595s" target="_blank" rel="noopener">26:35</a></cite></blockquote>
+        <p><strong>The rough test:</strong></p><ul><li><strong>Actions are known:</strong> look for a Jev first.</li><li><strong>You don't know the action yet:</strong> use an LLM.</li><li><strong>You don't know if any action is needed:</strong> use an LLM.</li></ul>
+        <blockquote>"it's time to look for a Jev first I would say whereas the LLMs are much more I don't I have no idea what I want the action to be" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1433s" target="_blank" rel="noopener">23:53</a></cite></blockquote>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">3</span><span class="sum"><strong>Reopen the data you wrote off as too expensive to check.</strong> John and Claire both describe running models over data they would never have sent to an LLM. The cost of finding out dropped to almost nothing.<span class="hint">Details · table · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Low-value questions are now worth asking</h3>
+        <p><strong>The old barrier was cost and time.</strong> Claire says some data wasn't worth her time even to see if anything was there. Now she runs discovery over it.</p>
+        <div class="tablebox"><table>
+          <thead><tr><th>What John ran</th><th>Cost he reported</th></tr></thead>
+          <tbody>
+            <tr><td>Hundreds of demos, all in</td><td>73 cents</td></tr>
+            <tr><td>About 20,000 records</td><td>4 cents</td></tr>
+            <tr><td>5 GB of JSON, in about a couple of minutes</td><td>40 cents</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>List price.</strong> Claire recalls about 4 cents per million input tokens, with free output. TypeSafe's launch post lists $0.042. She also says it was free through Vercel AI Gateway at the time of recording.</p>
+        <blockquote>"I think of all the time I've spent on this and the hundreds of demos I made, I think I've spent 73 cents on it." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=160s" target="_blank" rel="noopener">2:40</a></cite></blockquote>
+        
+        <blockquote>"allows you to do discovery over data in a way that feels like it's opening up my opportunities and allowing me to like look at things that I thought weren't high ROI before." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=251s" target="_blank" rel="noopener">4:11</a></cite></blockquote>
+        <p class="note"><strong>A check on the 5 GB figure (this page's arithmetic, not the episode's).</strong> At list price, 40 cents buys about 9.5 million input tokens. That is one token per roughly 500 bytes of a 5 GB file, far fewer tokens than JSON normally takes. The whole file probably didn't go through at list price. Test on your own data before you budget.</p>
+        <div class="todo"><b>What to do with this</b>List three datasets you have never analyzed because it wasn't worth the cost. Run a small sample of one through Jev and read the actual bill.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">4</span><span class="sum"><strong>Work through the ideas you shelved as not worth it.</strong> Claire separates two piles: new things LLMs let her create, and useful things that were too slow or costly. Jev clears the second pile, and it's the bigger one.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The bigger opportunity may be the boring pile</h3>
+        <blockquote>"Jev I feel like allows me to do all the things I wanted to do, but they felt too cost, ineffective, too slow, and not really worth it." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1905s" target="_blank" rel="noopener">31:45</a></cite></blockquote>
+        <blockquote>"there are a lot more a lot more things for me on that pile than there are on my like 3D gaming idea pile." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1912s" target="_blank" rel="noopener">31:52</a></cite></blockquote>
+        <p><strong>Why it matters.</strong> Generative models let her do things she never imagined, like building a 3D game. Jev helps with things she always wanted but could never justify.</p>
+        <div class="todo"><b>What to do with this</b>Write down five automations you rejected on cost or speed. Rerun the math at Jev's price, and pick the one that now clears the bar.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">5</span><span class="sum"><strong>Treat speed as a product feature.</strong> Faster responses change how a product feels. Claire expects competition on latency to heat up.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Cost gets the attention, but latency changes the experience</h3>
+        <p><strong>Claire's background.</strong> As a young product manager she ran conversion tests and growth work. She saw speed matter in many user experiences, especially consumer ones.</p>
+        <blockquote>"10x faster is not incremental and so it really does unlock this concept of real time" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1325s" target="_blank" rel="noopener">22:05</a></cite></blockquote>
+        <blockquote>"I think we're going to start to see like latency wars really heat up as well" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1357s" target="_blank" rel="noopener">22:37</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Find the moment in your product where people wait on a model. Ask what you would redesign if that wait disappeared.</div>
+      </div>
+    </details></li>
+    <li class="group">Design the decision chain</li>
+    <li><details>
+      <summary><span class="num">6</span><span class="sum"><strong>Design with Jev by finding your if-statements.</strong> Every place code would branch is a place for a Jev call. Break the problem into those moments, then chain them.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Think in conditions instead of prompts</h3>
+        <p><strong>The mental model.</strong> Claire asked how the calls chain together. John's answer: picture a program running line by line, and mark each spot where something goes into one bucket or another.</p>
+        <blockquote>"just think of all the conditions the if else the the moments where it either needs to be put into this bucket or that bucket" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=560s" target="_blank" rel="noopener">9:20</a></cite></blockquote>
+        <p><strong>The chain in his voice to-do app:</strong></p>
+        <ol>
+          <li>Is this a valid dictation?</li>
+          <li>Which task on the list does it match?</li>
+          <li>Which operation does the person want on that task?</li>
+        </ol>
+        <p><strong>Debugging feels different.</strong> With an LLM, John says, you often guess at a different sentence. With a decision model, you know all its options and can see which one went wrong.</p>
+        <blockquote>"it just feels like a function that has a lot of intelligence built into it, but it's still a function." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1990s" target="_blank" rel="noopener">33:10</a></cite></blockquote>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">7</span><span class="sum"><strong>Build backwards from the final action, and let scenarios expose the gaps.</strong> John started with the actions at the end, then added the steps in front of them. A strong coding model made it easy to change direction as he went.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Start where the function runs</h3>
+        <p><strong>His order.</strong> First came marking a to-do done, removing it or adding one. Only then did he add selecting a to-do from dictation.</p>
+        <blockquote>"I just kind of built it backwards" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=580s" target="_blank" rel="noopener">9:40</a></cite></blockquote>
+        <blockquote>"it was so easy with the Opus 5.5 recently just to kind of wing it and like take it different directions and go through scenarios" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=586s" target="_blank" rel="noopener">9:46</a></cite></blockquote>
+        <p><strong>His benchmark.</strong> He started from a simple question: could Jev make the to-do management in Siri or Google Assistant actually good?</p>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">8</span><span class="sum"><strong>Start with the smallest demo: plain English to one function name.</strong> John's grocery demo maps "what's in my cart" to a get-cart function. Get this working before you build chains.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The core building block fits in one sentence</h3>
+        <blockquote>"think of like plain English language mapped to a function name and that's one of the core foundational pieces of what Jev does." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=689s" target="_blank" rel="noopener">11:29</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>List five functions your app already has. Write three casual phrasings for each, and see whether Jev picks the right function.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">9</span><span class="sum"><strong>Define your classifications and APIs before you blame the model.</strong> John suspects some bad first impressions come from vague categories or weak APIs. Jev can only choose well from options that are clear.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The options are part of the prompt</h3>
+        <blockquote>"this isn't good enough at classification or they don't like define their classifications or they don't have strong enough APIs" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2304s" target="_blank" rel="noopener">38:24</a></cite></blockquote>
+        <p><strong>How firm this is.</strong> John offers it as a possible explanation for the critics, and he doesn't show a test of it.</p>
+        <div class="todo"><b>What to do with this</b>Before a trial, write a one-line definition for each category. If two definitions overlap, fix that first.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">10</span><span class="sum"><strong>When Jev falls short, add another layer.</strong> John says critics often judge it on a single pass. Passes are cheap, so add one before you give up.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A single pass is an unfair test</h3>
+        <p><strong>Add a pass.</strong> Classify once, then classify the result again. As you collect data on the real flows, compress those steps back down.</p>
+        <blockquote>"because it's fast and free don't worry about adding just another layer and then over time you could compress those down into a single layer" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2309s" target="_blank" rel="noopener">38:29</a></cite></blockquote>
+        <p><strong>Weigh the evidence accordingly.</strong> Asked whether Jev had ever failed him, John said not yet, and noted it had been out for only days. Both speakers are enthusiastic early users. Their claims need testing on your own work.</p>
+        <div class="todo"><b>What to do with this</b>Before your first Jev trial, write down what counts as good enough. Allow at least two extra passes before you judge it.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">11</span><span class="sum"><strong>Test different decision types for the same problem.</strong> Your first framing may be wrong. Try the same decision as a yes/no question, a choice between options, and a score.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The question format affects accuracy</h3>
+        <p><strong>Claire's experience.</strong> A few times her first idea of how to classify something wasn't the right one. Other times she had to layer one type on top of another.</p>
+        <ul><li>A yes/no question</li><li>A choice between options</li><li>A score</li></ul>
+        <blockquote>"you may say, I think this is a yes no question. and you may run it and you may be like actually it's a choice question or actually it's a score question." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2353s" target="_blank" rel="noopener">39:13</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Take one decision that's underperforming. Run it in all three forms on the same examples, and compare the results.</div>
+      </div>
+    </details></li>
+    <li class="group">Live voice</li>
+    <li><details>
+      <summary><span class="num">12</span><span class="sum"><strong>Let live voice act while people keep talking.</strong> Have Jev keep asking whether it has heard enough to act. When it has, fire the function and start a fresh window of text.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>"Do I have enough to act?" is its own classification</h3>
+        <p><strong>The demo.</strong> John says "book dentist appointment remove, buy oat milk complete, review pull request low priority" in one breath. He never pauses or hits enter, and the list updates as he speaks.</p>
+        <blockquote>"you notice that entire time I was talking I never paused. I never hit enter." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=471s" target="_blank" rel="noopener">7:51</a></cite></blockquote>
+        <p><strong>How it works, as John recalls it.</strong> He says he can't remember the exact logic, so treat this as a sketch:</p>
+        <ol>
+          <li>Add each new word to the current text.</li>
+          <li>Classify whether there's now enough to take an action.</li>
+          <li>Turn the text into a payload and send it to the function.</li>
+          <li>Chop off that window and start a new one.</li>
+        </ol>
+        <blockquote>"it is like concatenating each word until it reaches a point where it can take an action" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2154s" target="_blank" rel="noopener">35:54</a></cite></blockquote>
+      <div class="todo"><b>What to do with this</b>Pick one list in your product with a few clear operations. Dictate commands at it without pausing, and count how often it acts on the wrong item.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">13</span><span class="sum"><strong>Use Jev as a live checklist for talks and interviews.</strong> John's presentation coach holds your talking points and checks them off as you speak. It helps anyone who goes off on tangents under a clock.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A coach that listens for what you still owe</h3>
+        <blockquote>"it listens through everything I say and then starts checking the boxes to make sure that I covered everything." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2047s" target="_blank" rel="noopener">34:07</a></cite></blockquote>
+        <p><strong>Ways to extend it:</strong></p><ul><li><strong>John:</strong> flash a warning when time is short and points remain.</li><li><strong>Claire:</strong> check off speaker notes as you go.</li><li><strong>Claire:</strong> advance the slide when you've finished its points.</li></ul>
+        <p><strong>Claire's test.</strong> She ran through the demo's checklist for their own conversation and found they had covered where Jev falls short only a little.</p>
+        <div class="todo"><b>What to do with this</b>Pick a short checklist you use out loud, like a meeting agenda. Build this before higher-stakes voice features, since a wrong check mark costs little.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">14</span><span class="sum"><strong>Put a voice layer over functions you already have.</strong> The to-do list is only an example. If your calendar or other tools sit behind function calls or MCPs, the same dictation layer can reach them.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Dictation on top, your tools underneath</h3>
+        <blockquote>"you could integrate your calendar into this you could integrate it because they're all behind function calls right or MCPs" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=613s" target="_blank" rel="noopener">10:13</a></cite></blockquote>
+        <p><strong>The cost, as John sees it.</strong> He says anyone could build this cheaply, because the live inference on top costs so little.</p>
+        <div class="todo"><b>What to do with this</b>Choose the one tool you update most often by hand. List its three most common actions, and expose those first.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">15</span><span class="sum"><strong>Log each structured action so people can undo it.</strong> Since Jev turns speech into structured data, every action can be stored. That gives you a history, and a way to take back a misheard command.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Structured output makes mistakes reversible</h3>
+        <blockquote>"it's in the history like you could have undo and whatever because they turn unstructured into structured data." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2165s" target="_blank" rel="noopener">36:05</a></cite></blockquote>
+        <p><strong>Why it matters here.</strong> A voice app acts without waiting for you to hit enter. That makes a way back more important.</p>
+      </div>
+    </details></li>
+    <li class="group">Clean and group data</li>
+    <li><details>
+      <summary><span class="num">16</span><span class="sum"><strong>Clean messy records with a confidence threshold, then audit the result.</strong> Compare records in pairs and merge only above a score you choose. Then have a smarter model review a sample of the merges.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A four-step cleanup with a knob you control</h3>
+        <p><strong>The demo.</strong> "Cedar Grove Office Products" matches "Cedar Grove Office." "Ridgeway Data" matches "Ridgeway Analytics." "Northstar Clinic" and "Northstar Clinic Services" are the harder call.</p>
+        <ol>
+          <li><strong>Compare in pairs.</strong> Ask whether each record is close enough to another to be the same thing.</li>
+          <li><strong>Set the threshold.</strong> Choose how confident a match must be before it merges.</li>
+          <li><strong>Audit.</strong> Send a smarter LLM a random sample or the full set, and ask it to confirm the work.</li>
+          <li><strong>Explain.</strong> Have a cheap model say why each pair matched, so people can review it.</li>
+        </ol>
+        <blockquote>"you want them only to merge if you're like 99% or more confident you can you can set those parameters in there." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=837s" target="_blank" rel="noopener">13:57</a></cite></blockquote>
+        <blockquote>"you can get sort of a a quantitative matching and then a like qualitative explanation with two relatively cheap models once you've narrowed that down." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=894s" target="_blank" rel="noopener">14:54</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Export one messy table, such as contacts or companies. Run it at a high threshold and propose merges without applying them. Review the explanations before you change any data.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">17</span><span class="sum"><strong>Group anything by comparing it in pairs.</strong> Claire calls this her favorite Jev use case. She used it to find which pull requests covered the same product area or theme.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Pairs that used to cost too much</h3>
+        <blockquote>"like my favorite use case of Jev, which is like pair-wise comparison of a lot of data to create grouping and clusters." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=768s" target="_blank" rel="noopener">12:48</a></cite></blockquote>
+        <blockquote>"when you have 60,000 or 600,000 things, those pairs feel very expensive until you use something like this." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=812s" target="_blank" rel="noopener">13:32</a></cite></blockquote>
+        <p><strong>Other targets.</strong> Claire also thinks it could have sped up cleaning about 2,000 messy entries in her password manager, using their metadata.</p>
+        <div class="todo"><b>What to do with this</b>Pick a pile with no categories, such as support tickets or pull requests. Compare a sample in pairs, and see what groups appear.</div>
+      </div>
+    </details></li>
+    <li class="group">Routing and navigation</li>
+    <li><details>
+      <summary><span class="num">18</span><span class="sum"><strong>Make one text box route people deep into your app.</strong> Build your smallest tools first, then add a Jev layer that picks between them. Infer as many steps as you can from one sentence.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Navigation becomes a chain of fast decisions</h3>
+        <p><strong>The demo.</strong> A user types into a command bar and can't recall what the to-do app is called. Jev still finds it. They could go further: open the to-do app and mark all the pull requests low priority.</p>
+        <blockquote>"you can build your smallest tools and then build another abstraction of Jev around them where it can pick which of the smallest tools to use." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=978s" target="_blank" rel="noopener">16:18</a></cite></blockquote>
+        <p><strong>The layers can stack.</strong> The same shape applies to MCPs, with a layer that picks which one to call. John says you can build as many layers as you want.</p>
+        <blockquote>"route as far down the user journey as I can infer from these like structured options." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1039s" target="_blank" rel="noopener">17:19</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Write the 10 most common things people do in your app as function names. Test whether Jev maps plain-English requests to the right one before you build any new UI.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">19</span><span class="sum"><strong>Route each request to the right model and tool up front.</strong> Claire mentions people building Jev-powered coding harnesses. A fast first decision picks the model and tool, so a chain can be built and run at once.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Plan the chain, then execute it</h3>
+        <blockquote>"given the first input, let's route to the right model, let's pick the right tool" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1051s" target="_blank" rel="noopener">17:31</a></cite></blockquote>
+        <blockquote>"I can actually just build the chain and then execute it." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1064s" target="_blank" rel="noopener">17:44</a></cite></blockquote>
+        <p><strong>Why it helps.</strong> A slower approach takes one step, thinks, then takes the next. Fast decisions let you lay out the steps in advance.</p>
+        <div class="todo"><b>What to do with this</b>Review your recent agent tasks and sort them by the model they actually needed. Use those groups as your first routing categories.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">20</span><span class="sum"><strong>Reduce browser automation to the clickable elements on the page.</strong> Treat a web page as a short list of buttons instead of a screen full of pixels. That turns navigation into a fast series of choices.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The page is a list once you read the DOM</h3>
+        <blockquote>"if you actually look at the DOM there's probably like 10 clickable buttons on a page." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1490s" target="_blank" rel="noopener">24:50</a></cite></blockquote>
+        <blockquote>"to us in our human brains, it looks like an infinite canvas of pixels, but to to a model like this, it can just be a set of decisions." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1511s" target="_blank" rel="noopener">25:11</a></cite></blockquote>
+        <p><strong>Source of this one.</strong> Claire is explaining browser demos she has seen. John didn't show this working in the episode.</p>
+        <div class="todo"><b>What to do with this</b>Take one repetitive web task. Write the button choices at each step, and test whether Jev picks correctly from that list.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">21</span><span class="sum"><strong>Plan for latency in real-time search.</strong> Jev is fast but scoring every result one at a time isn't. Group results into batches, score the batches and cache what you can.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The slick demos hide some architecture</h3>
+        <p><strong>Claire's warning.</strong> The demos on social media can hide embeddings and other supporting work. She wanted to show what's underneath.</p>
+        <blockquote>"it actually isn't super fast to like search over all of these results and say like yes, no, this is a good result and rank it." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1112s" target="_blank" rel="noopener">18:32</a></cite></blockquote>
+        <p><strong>Her workaround.</strong> With 4,000 YouTube comments, she grouped them into batches of about 30 to 60, then scored and ranked the batches.</p>
+        <p><strong>John's addition.</strong> Search is easy when everything is cached locally and you can go over the full set.</p>
+        <blockquote>"It is fast, it is efficient, but it's not like completely latency free." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1145s" target="_blank" rel="noopener">19:05</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Before you commit to a design, find a Jev search demo you like. Read its code on GitHub and see how it gets its speed, as Claire suggests.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">22</span><span class="sum"><strong>Spend the speed on looking ahead, then escalate.</strong> In the chess demo, Jev ranks moves and checks the next step in under a second. A smarter model could then decide from the short list.<span class="hint">Details · table · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Being 10x faster gives you room for more passes</h3>
+        <blockquote>"it ranks the highest three moves and then it thinks through all the next possible moves from there and based on that two-step reasoning picks the best next move." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1215s" target="_blank" rel="noopener">20:15</a></cite></blockquote>
+        <div class="tablebox"><table>
+          <thead><tr><th>Measure</th><th>Result in John's demo</th></tr></thead>
+          <tbody>
+            <tr><td>Time per decision</td><td>Under 1 second</td></tr>
+            <tr><td>Average move vs. the LLM</td><td>10 times faster</td></tr>
+            <tr><td>Cost vs. the LLM</td><td>4 times cheaper</td></tr>
+            <tr><td>Moves ranked, then explored</td><td>Top 3, two steps</td></tr>
+            <tr><td>Game clock</td><td>1 minute (blitz)</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>Read this as a demo.</strong> The opponent was a free, low-reasoning model from OpenRouter with a tiny context window. John says stronger LLMs would get there eventually at a much higher cost. Nothing here was tested against one.</p>
+        <p><strong>Claire's extension.</strong> Use the saved time to bring in a smarter model once the strategies are narrowed.</p>
+        <blockquote>"because it's 10 times faster, you could apply another model on top at that point, a more intelligent model at that point with kind of like a narrowed set of strategies" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1391s" target="_blank" rel="noopener">23:11</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Find an LLM decision in your product with a known set of options. Have Jev cut the list to three, and send only those three to the larger model.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">23</span><span class="sum"><strong>Give Jev a destination and let it crawl there.</strong> John's Wikipedia demo starts from any person or topic and works toward the Philosophy page. Each page is one more choice about which link to follow.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Goal-seeking as a series of small choices</h3>
+        <blockquote>"mapping routes as well like giving it a final destination and it can crawl its way there." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1736s" target="_blank" rel="noopener">28:56</a></cite></blockquote>
+        <p><strong>How the demo works.</strong> It looks at the whole page through the Wikipedia API and maps a route from the starting person to philosophy.</p>
+        <div class="todo"><b>What to do with this</b>Look for a linked data source you know well, such as internal docs. Give Jev a target page, and check whether its route makes sense.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">24</span><span class="sum"><strong>Check parallel agents at every step so they don't collide.</strong> Jev is cheap enough to run on every tick. Use it to steer agents just in time, instead of asking one big model for a perfect plan up front.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Brute-force checking is now affordable</h3>
+        <p><strong>The demo.</strong> A simulated workplace has three workers. The job brief: deliver the fragile blue bin to staging, bring medicine to the board and inspect the spill. Each tick, Jev moves them toward their tasks without any two landing on the same space.</p>
+        <p><strong>The application is still a projection.</strong> John suggests using this to keep coding agents from touching the same files. He showed the grid demo, not a working setup for code.</p>
+        <blockquote>"It doesn't have to plan out the entire thing ahead of time. we can do just in time." <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1806s" target="_blank" rel="noopener">30:06</a></cite></blockquote>
+        <p><strong>Claire's name for this.</strong> Mapping every route and double-checking each one is wasteful but accurate. Before, you would hand the problem to a big LLM and hope it thought hard enough.</p>
+        <blockquote>"Jev unlocks efficient inefficiency, which is like it is kind of like inefficient to map out all possible routes, rank them, double check that they're not going to collide." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1828s" target="_blank" rel="noopener">30:28</a></cite></blockquote>
+      </div>
+    </details></li>
+    <li class="group">Beyond Jev: from the lightning round</li>
+    <li><details>
+      <summary><span class="num">25</span><span class="sum"><strong>Turn machine cleanup into reusable skills.</strong> Claire keeps a pinned Codex chat for clearing disk space, with two skills she runs regularly. Agent work on media fills up even a new computer.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Let an agent do the housekeeping agents create</h3>
+        <ol><li><strong>Move media.</strong> Find MP4s across the computer and organize them on an SSD.</li><li><strong>Find leftovers.</strong> Locate work trees still running local servers, and clear some caches.</li></ol>
+        <blockquote>"One is move media files onto the hard drive." <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2470s" target="_blank" rel="noopener">41:10</a></cite></blockquote>
+        <blockquote>"it goes like in the crevices of my computer and finds work trees that are like still running local servers" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2483s" target="_blank" rel="noopener">41:23</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>The next time you clean up your machine by hand, have an agent write down the steps as a skill.</div>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">26</span><span class="sum"><strong>Move heavy agent work off your main computer.</strong> Multimedia and 3D work with the latest models is straining laptops. John spreads work across extra drives and Mac minis, and Claire runs her code on a stack of them.<span class="hint">Details · quote</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Both of them ran out of laptop</h3>
+        <blockquote>"I set up the stack of Mac minis as remote codeex machines to run all my all my code on" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2509s" target="_blank" rel="noopener">41:49</a></cite></blockquote>
+        <p><strong>A real tradeoff.</strong> John expects everyone may end up in the cloud. He still says he likes working locally on desktop apps.</p>
+      </div>
+    </details></li>
+    <li><details>
+      <summary><span class="num">27</span><span class="sum"><strong>Organize agents like a team, with roles.</strong> John sees a shift from projects and files to a list of agents you bring together. Claire says org and role design are the skills to apply.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Agents on top, code underneath</h3>
+        <p><strong>John's version.</strong> Skip thinking about file structure first. For a task, bring a research agent and a code review agent into a group chat. He cites Grok Bot and similar tools.</p>
+        <blockquote>"you just have a list of agents and then you can bring them into a group chat" <cite>— John Lindquist · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2568s" target="_blank" rel="noopener">42:48</a></cite></blockquote>
+        <p><strong>Claire's version.</strong> She says she is running 40 of these bots across her business, and that she covered seven in an earlier episode.</p>
+        <blockquote>"this concept of like org design and role design and like you can put those skills to use when crafting crafting your agents" <cite>— Claire Vo · <a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2623s" target="_blank" rel="noopener">43:43</a></cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Write a one-line job description for each agent you run. If two overlap, merge them or narrow their roles.</div>
+      </div>
+    </details></li>
+  </ol>
+
+  <details class="ref">
+    <summary><h2>Glossary</h2><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+    <div class="detail"><div class="tablebox"><table>
+      <thead><tr><th>Term</th><th>Meaning here</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Jev</strong></td><td>TypeSafe AI's fast, cheap model that returns decisions and scores instead of text</td></tr>
+        <tr><td><strong>Decision model</strong></td><td>John and Claire's term for a model like Jev, which picks from options</td></tr>
+        <tr><td><strong>LLM</strong></td><td>Large language model, the familiar kind that takes text in and gives text out</td></tr>
+        <tr><td><strong>Generative</strong></td><td>Creating new content, such as prose, images or a game</td></tr>
+        <tr><td><strong>Structured data</strong></td><td>Output in a fixed shape that software can use directly</td></tr>
+        <tr><td><strong>Type safe</strong></td><td>The output is guaranteed to match the format the code expects</td></tr>
+        <tr><td><strong>Classification</strong></td><td>Putting an input into one of a set of buckets</td></tr>
+        <tr><td><strong>Confidence score</strong></td><td>How sure the model is about a match or decision</td></tr>
+        <tr><td><strong>Function call</strong></td><td>Running a specific piece of code, chosen from the input</td></tr>
+        <tr><td><strong>Payload</strong></td><td>The structured data sent to a function so it can act</td></tr>
+        <tr><td><strong>Window</strong></td><td>The current stretch of live speech being analyzed, cut off after an action</td></tr>
+        <tr><td><strong>Pair-wise comparison</strong></td><td>Comparing two items at a time to decide if they belong together</td></tr>
+        <tr><td><strong>Deduplication</strong></td><td>Finding and merging records that describe the same thing</td></tr>
+        <tr><td><strong>Router</strong></td><td>Something that sends an input to the right tool, model or screen</td></tr>
+        <tr><td><strong>Multi-step classification</strong></td><td>Several classification passes in a row, each narrowing the answer</td></tr>
+        <tr><td><strong>Command bar</strong></td><td>A text box, often opened with Command-K, for jumping around an app</td></tr>
+        <tr><td><strong>MCP</strong></td><td>Model Context Protocol, a standard way to connect tools to AI agents</td></tr>
+        <tr><td><strong>Coding harness</strong></td><td>The software around a model that makes it a coding agent</td></tr>
+        <tr><td><strong>DOM</strong></td><td>The structure of a web page, including its clickable elements</td></tr>
+        <tr><td><strong>Browser use</strong></td><td>Having a model navigate and operate websites</td></tr>
+        <tr><td><strong>Work tree</strong></td><td>An extra working copy of a code project, often left behind by coding agents</td></tr>
+        <tr><td><strong>Grok Bot</strong></td><td>An agent tool John cites and Claire runs, organized around agents with roles</td></tr>
+        <tr><td><strong>Latency</strong></td><td>The delay between a request and its response</td></tr>
+        <tr><td><strong>Low reasoning</strong></td><td>A model setting that spends little effort thinking before it answers</td></tr>
+        <tr><td><strong>Just in time</strong></td><td>Deciding at each step instead of planning everything up front</td></tr>
+      </tbody>
+    </table></div></div>
+  </details>
+
+  <details class="ref">
+    <summary><h2>Sources</h2><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+    <div class="detail">
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=dAIIaepNhQM" target="_blank" rel="noopener">Jev: 8 real use cases this fast, cheap model</a>, How I AI on YouTube. All quotes come from its auto-generated transcript.</li>
+        <li><a href="https://www.howiaipod.com" target="_blank" rel="noopener">How I AI</a>, the show's site</li>
+        <li><a href="https://www.chatprd.ai/how-i-ai/john-lindquist-jev-workflows" target="_blank" rel="noopener">John Lindquist's 6 Jev Workflows</a>, the show's write-up</li>
+        <li>Workflow guides: <a href="https://www.chatprd.ai/how-i-ai/workflows/jev-voice-controlled-todo-app" target="_blank" rel="noopener">voice to-do app</a>, <a href="https://www.chatprd.ai/how-i-ai/workflows/jev-data-deduplication" target="_blank" rel="noopener">deduplication</a>, <a href="https://www.chatprd.ai/how-i-ai/workflows/jev-smart-command-bar-app-router" target="_blank" rel="noopener">command bar and router</a></li>
+        <li><a href="https://typesafe.ai/blog/introducing-system-one-models-and-jev" target="_blank" rel="noopener">Introducing System One Models &amp; Jev</a>, TypeSafe AI's launch post and source for the list price</li>
+        <li>Tools named: <a href="https://vercel.com/docs/ai-gateway" target="_blank" rel="noopener">Vercel AI Gateway</a>, <a href="https://openrouter.ai" target="_blank" rel="noopener">OpenRouter</a>, <a href="https://www.anthropic.com/claude-opus-5-5" target="_blank" rel="noopener">Claude Opus 5.5</a></li>
+        <li>People: <a href="https://mega.dev/" target="_blank" rel="noopener">mega.dev</a>, <a href="https://egghead.io/" target="_blank" rel="noopener">egghead.io</a> and <a href="https://x.com/johnlindquist" target="_blank" rel="noopener">John Lindquist on X</a>; <a href="https://clairevo.com/" target="_blank" rel="noopener">Claire Vo</a> and <a href="https://www.chatprd.ai/" target="_blank" rel="noopener">ChatPRD</a></li>
+      </ul>
+      <p class="note"><strong>Spelling.</strong> The captions garble several names. This page uses Jev (captions also say Jeb, Jeff and JV), John Lindquist (Linquist, Sean), TypeSafe AI (Typesafe) and Vercel (Versel). Elsewhere it uses Codex (codeex) and Grok Bot (Grock, Grockbot, "graph bots"), the latter from the show's write-up. Quotes use the corrected "Jev"; everything else in them follows the captions, minus "um" and "uh."</p>
+      <p class="note"><strong>Speakers.</strong> The captions have no speaker labels. Speakers were assigned from context, so check the timestamp link if an attribution matters.</p>
+      <p class="note"><strong>Unclear in the captions.</strong> The chess opponent is "a KI or something," and John wasn't sure of it himself. Two other captions couldn't be resolved: a phrase in the chess benchmark ("space money alphas") and a Jev call type ("nule"). This page leaves them out.</p>
+      <p class="note"><strong>Left out.</strong> The Vanta sponsor read and the small talk. Prices and free access reflect the episode's September 2026 release and may have changed.</p>
+    </div>
+  </details>
+  <details class="ref">
+    <summary><h2>Raw transcript</h2><span class="chev"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+    <div class="detail">
+      <p class="note">YouTube's auto-generated captions, unedited. Misspelled names, "[music]" tags and the Vanta sponsor read are all still here. There are no speaker labels. The chapter headings come from YouTube, and each timestamp links to that moment in the video.</p>
+      <div class="transcript">
+<h3>John Lindquist returns for Jev week</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=0s" target="_blank" rel="noopener">0:00</a><span>In some ways, managers are really at risk. This concept of like org design and role design, you can put those</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=6s" target="_blank" rel="noopener">0:06</a><span>skills to use when crafting your [music] agents, which is why I am currently running, no joke, 40 Grock bots right</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=13s" target="_blank" rel="noopener">0:13</a><span>now. Whenever you have constrained inputs that are interacting with apps, it's Jev is a [music] good thing to reach for.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=18s" target="_blank" rel="noopener">0:18</a><span>This one is is a favorite of mine because it represents like a workplace where you have multiple agents that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=24s" target="_blank" rel="noopener">0:24</a><span>could all have their own tasks and avoiding collisions so that they never end up on [music] the same space at each step. It's going to be able to control</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=31s" target="_blank" rel="noopener">0:31</a><span>these different agents and make sure that they get to their specific task as quickly as possible and that they never</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=38s" target="_blank" rel="noopener">0:38</a><span>collide or interfere with the other agents. This one's really fun to me because [music] it's a presentation</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=43s" target="_blank" rel="noopener">0:43</a><span>coach. I click the microphone, I'd start talking. I'd have a list of bullet points in either a podcast or something</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=48s" target="_blank" rel="noopener">0:48</a><span>that I want to make sure I cover or an interview or anything. It listens through everything I say and then [music] starts checking the boxes to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=54s" target="_blank" rel="noopener">0:54</a><span>make sure that I covered everything. This model, which is basically free and incredibly fast, allows you to do</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=62s" target="_blank" rel="noopener">1:02</a><span>discovery over data in a way that feels like it's opening up my opportunities</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=67s" target="_blank" rel="noopener">1:07</a><span>and allowing me to like look at things that I thought weren't high ROI before.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=74s" target="_blank" rel="noopener">1:14</a><span>[music] Welcome back to How I AI. I'm Claire, product leader and AI obsessive here on</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=80s" target="_blank" rel="noopener">1:20</a><span>a mission to help you build better with these new tools. Today I have repeat guest John Linquist who has done one of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=86s" target="_blank" rel="noopener">1:26</a><span>our most popular episodes to date on the podcast. And here he is joining us on</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=91s" target="_blank" rel="noopener">1:31</a><span>Jev Week at How I AI to talk about our favorite new model and all the amazing</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=97s" target="_blank" rel="noopener">1:37</a><span>product facing use cases that he's discovered testing Jev from Typesafe AI.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=102s" target="_blank" rel="noopener">1:42</a><span>Let's get to it. Sean, welcome back to How I AI. I have to say this is Jev week</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=110s" target="_blank" rel="noopener">1:50</a><span>on how I AI. And the reason it's Jev week is a lot of models have come out in</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=116s" target="_blank" rel="noopener">1:56</a><span>the past seven days. You and I do a lot of AI things. And yet, when we're DMing</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=123s" target="_blank" rel="noopener">2:03</a><span>back and forth, we're talking about one thing and one thing only, which is which is Jeb. So, you know, folks who maybe</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=130s" target="_blank" rel="noopener">2:10</a><span>listened to my episode earlier this week about why I'm hyped on Jev, I would love to hear why why you're so excited. I you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=138s" target="_blank" rel="noopener">2:18</a><span>know, I'm looking up here. You have 23 demos we could probably look at. So, you are going deep as well. Um what about</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=145s" target="_blank" rel="noopener">2:25</a><span>this model, this framework, this this way of thinking about building has gotten you excited?</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=151s" target="_blank" rel="noopener">2:31</a><span>Fast and free are both amazing. Um, if you've ever been tired uh sending a basic request to an LLM and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=160s" target="_blank" rel="noopener">2:40</a><span>waiting around for a bit just to have it like call a function, this is now essentially instant. And I think of all</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=166s" target="_blank" rel="noopener">2:46</a><span>the time I've spent on this and the hundreds of demos I made, I think I've spent 73 cents on it. And I I love the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=175s" target="_blank" rel="noopener">2:55</a><span>one quote someone said, uh, I think I'm going to pass this inheritance of gem on to my children once I die. Yeah, I like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=181s" target="_blank" rel="noopener">3:01</a><span>the one where it was like types safe. Types safe is really taking off. They have to have made double digits in</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=187s" target="_blank" rel="noopener">3:07</a><span>revenue by now. Yes. So, yes, fast and free. Um, I also have</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=193s" target="_blank" rel="noopener">3:13</a><span>had that experience where it ran over like I don't know 20,000 records and I was like I have charged you 4 cents,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=201s" target="_blank" rel="noopener">3:21</a><span>right? And and it it exposes those scenarios where I thought like I had</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=207s" target="_blank" rel="noopener">3:27</a><span>five gigabytes of JSON. I'm like, I had never passed this into an LLM. I just ne like I don't have that budget on and on.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=214s" target="_blank" rel="noopener">3:34</a><span>I'm like, let's see what happens. And it was it was 40 cents, you know, and I I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=220s" target="_blank" rel="noopener">3:40</a><span>wasted it on a really stupid thing like trying to organize this or whatever. Um, but 5 gigabytes of JSON is a lot of text</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=227s" target="_blank" rel="noopener">3:47</a><span>and it went through and did the whole thing in uh probably a couple minutes. That's been my experience too, which is</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=233s" target="_blank" rel="noopener">3:53</a><span>I'm looking at corpuses of data that I would never just dump into an LLM. Both</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=239s" target="_blank" rel="noopener">3:59</a><span>from a cost perspective and honestly from a time perspective. It's like this is not worth my time to even see if</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=246s" target="_blank" rel="noopener">4:06</a><span>something's here. But then this model which is is</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=251s" target="_blank" rel="noopener">4:11</a><span>basically free and incredibly fast allows you to do discovery over data in</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=258s" target="_blank" rel="noopener">4:18</a><span>a way that feels like it's opening up my opportunities and allowing me to like look at things that I thought weren't</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=264s" target="_blank" rel="noopener">4:24</a><span>high ROI before. Yeah, absolutely. Same. It's just</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=269s" target="_blank" rel="noopener">4:29</a><span>opening doors that weren't were closed before. Yeah. So, just quick reminder for folks, uh Jeb is not like a the LLMs that you're</span></p>
+<h3>What Jev actually outputs</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=277s" target="_blank" rel="noopener">4:37</a><span>used to and love. It does not output text. It outputs basically like decisions and scores and yes no</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=283s" target="_blank" rel="noopener">4:43</a><span>probabilities. And so you kind of put information in out in and then you get out very structured type safe very</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=290s" target="_blank" rel="noopener">4:50</a><span>structured limited set of options but the ways you can use this are almost</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=297s" target="_blank" rel="noopener">4:57</a><span>unlimited. And so John's going to walk us through some of his favorite demos of how he's using it. Hopefully, we'll get</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=302s" target="_blank" rel="noopener">5:02</a><span>a combination of inspiration on where a real time fast cheap model can build</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=308s" target="_blank" rel="noopener">5:08</a><span>cool things and a little insight of like what else is around this because what I found is I see a lot of these like shiny</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=313s" target="_blank" rel="noopener">5:13</a><span>demos on the timeline and then you're like you're hiding your, you know, your</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=319s" target="_blank" rel="noopener">5:19</a><span>embeddings and you're hiding like how this is actually working. And so I think if you can lift the veil for us on how</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=325s" target="_blank" rel="noopener">5:25</a><span>some of this works and where it's dev alone, where it's dev plus, that would be awesome. Yeah, I would just just to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=331s" target="_blank" rel="noopener">5:31</a><span>add to your definition of Jev of it being type safe. I think of LLMs being unstructured to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=338s" target="_blank" rel="noopener">5:38</a><span>unstructured where you put text in, you get text out. And this one is similar.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=343s" target="_blank" rel="noopener">5:43</a><span>You put in unstructured sentences and data, but then you get structured data out. And the power there is it's humans</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=352s" target="_blank" rel="noopener">5:52</a><span>talking to machines. And there the scenarios where you have functions and APIs and everything set up, but I want</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=358s" target="_blank" rel="noopener">5:58</a><span>to communicate with them using unstructured data. And uh we're so used to chat bots and it's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=366s" target="_blank" rel="noopener">6:06</a><span>just not a chatbot anymore. You need services, you need functions, you need things you want to throw data at first,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=371s" target="_blank" rel="noopener">6:11</a><span>but you can talk to it however you want, which is incredible. Yep. Well, let's talk about talking to it.</span></p>
+<h3>Demo: real-time voice to-do app</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=377s" target="_blank" rel="noopener">6:17</a><span>All right. Yeah. Uh so let's go ahead and try this out right away. Uh so</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=382s" target="_blank" rel="noopener">6:22</a><span>traditional to-do app, we have a list of to-dos. And the fascinating thing here which I'll try right away is I'll just</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=390s" target="_blank" rel="noopener">6:30</a><span>say something like book dentist appointment remove.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=396s" target="_blank" rel="noopener">6:36</a><span>Buy oat milk complete. Review pull request low priority.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=406s" target="_blank" rel="noopener">6:46</a><span>Now the speed there was all done through Jev. It does a few passes of looking</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=412s" target="_blank" rel="noopener">6:52</a><span>through the text where it ensures that it lines up. If there's any like dictation mistakes and you say it</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=419s" target="_blank" rel="noopener">6:59</a><span>doesn't get oatmeal quite right, it'll go through and see does does this quite match up with something or do I need to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=424s" target="_blank" rel="noopener">7:04</a><span>do a different do I need to categorize this into something that exists like a a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=429s" target="_blank" rel="noopener">7:09</a><span>confidence score like it's all a lot of confidence scores there. um it matches it with the thing in the list and then</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=435s" target="_blank" rel="noopener">7:15</a><span>it matches it with the function that it's going to call right based on based on the way that uh the operation that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=441s" target="_blank" rel="noopener">7:21</a><span>you want to perform on top of that data. So it's it's multiple layers of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=446s" target="_blank" rel="noopener">7:26</a><span>analyze the dictation itself to see if that's like a valid dictation then analyze if it matches up with a task and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=452s" target="_blank" rel="noopener">7:32</a><span>then analyze if it matches up with the operation you want to perform on the task. And it can do that all live. And</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=459s" target="_blank" rel="noopener">7:39</a><span>it even while you're dictating it classifies if you've spoken to a point</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=465s" target="_blank" rel="noopener">7:45</a><span>where it can take an action. So as the words come in, it's like is now a time where I can or have enough data to make</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=471s" target="_blank" rel="noopener">7:51</a><span>a function call where I can reliably keep on talking because you notice that entire time I was talking I never</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=476s" target="_blank" rel="noopener">7:56</a><span>paused. I never hit enter. It was able to classify is this a moment where I have enough information to take action.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=484s" target="_blank" rel="noopener">8:04</a><span>So, it's just showing all these pieces of Jev fitting together to give you this real time like give me kind of streaming</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=491s" target="_blank" rel="noopener">8:11</a><span>data in like unstructured streaming data in and I'll start putting it in all the places it needs to go.</span></p>
+<h3>How sequential Jev calls chain together</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=497s" target="_blank" rel="noopener">8:17</a><span>I have a question for for folks that have just have no idea how to actually</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=502s" target="_blank" rel="noopener">8:22</a><span>put this into place and want more of the tactics, which is are those, you know, are those like sequential JV calls? Are</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=509s" target="_blank" rel="noopener">8:29</a><span>you like yes, no, it's time to analyze. Yes. No. It's um this is a good</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=514s" target="_blank" rel="noopener">8:34</a><span>transcript score. Here's the top task that relates to it and score. This is the top tool call that relates to it.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=522s" target="_blank" rel="noopener">8:42</a><span>You know, is this like because people are trying I'm sure trying to put in their mental model like like a tool call where you get all that structured data</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=528s" target="_blank" rel="noopener">8:48</a><span>back like you know how how have you set this up so people can kind of understand how they chain these Jeb pools together.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=536s" target="_blank" rel="noopener">8:56</a><span>My mental model is uh remember back when we used to write code by hand.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=541s" target="_blank" rel="noopener">9:01</a><span>there is no conditions if if else switch statements all these things that were the moment of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=548s" target="_blank" rel="noopener">9:08</a><span>classification and if you just think of a uh a line by line program where things</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=553s" target="_blank" rel="noopener">9:13</a><span>execute you think of where do I need those conditions and so as you're breaking the problem apart whatever the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=560s" target="_blank" rel="noopener">9:20</a><span>thing is that you're building just think of all the conditions the if else the the moments where um it either needs to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=566s" target="_blank" rel="noopener">9:26</a><span>be put into this bucket or that bucket and so as I was going through this I built a lot of it backwards because I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=573s" target="_blank" rel="noopener">9:33</a><span>started with when I was building it marking the to-do as either done or removing it or adding a new one and such</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=580s" target="_blank" rel="noopener">9:40</a><span>and I'm like oh wait no now I want the dictation to be able to select it and so I just kind of built it backwards and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=586s" target="_blank" rel="noopener">9:46</a><span>with it was so easy with the Opus 5.5 recently just to kind of wing it and like take it different directions and go</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=593s" target="_blank" rel="noopener">9:53</a><span>through scenarios and see see the cases that that were exposed because I had that final idea of I just want to if</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=601s" target="_blank" rel="noopener">10:01</a><span>you've ever used a Siri or a Google Assistant or any of those and you tried to manage like add to my to-do list and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=607s" target="_blank" rel="noopener">10:07</a><span>they're all terrible and like how can I build like does Jev enable this to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=613s" target="_blank" rel="noopener">10:13</a><span>actually be good and I think it I think it does like it's one of the most common things like managing you could integrate</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=618s" target="_blank" rel="noopener">10:18</a><span>your calendar into this you could integrate it because they're all behind function calls right or MCPs or however</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=624s" target="_blank" rel="noopener">10:24</a><span>you want to build it out you could integrate anything with this and just have this top dictation live inference running and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=632s" target="_blank" rel="noopener">10:32</a><span>it's something anyone could build cheap and free like it's amazing amazing yeah</span></p>
+<h3>Demo: plain English to function name (grocery cart)</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=638s" target="_blank" rel="noopener">10:38</a><span>okay so you and I both did live voice apps mine was much more emo which was just talking to the screen and getting a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=645s" target="_blank" rel="noopener">10:45</a><span>color and an inspirational quote yours is much more practical which maybe reflects our different personalities uh</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=651s" target="_blank" rel="noopener">10:51</a><span>let let's see what other use cases you have and what I like about what you're showing us is I talked a lot about like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=656s" target="_blank" rel="noopener">10:56</a><span>internal data analysis and clustering and all this stuff. You have such great inspiration for how you can use this</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=662s" target="_blank" rel="noopener">11:02</a><span>inside products or to do things that were previously really tedious. So, I'd love to see another one of your favorite</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=669s" target="_blank" rel="noopener">11:09</a><span>demos. Yeah, let's let's dive in. So, so this one kind of breaks it down into its smallest pieces. Um, if you think of a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=675s" target="_blank" rel="noopener">11:15</a><span>grocery store and if you think of I have a function call like get cart if we remember programming and you type in</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=683s" target="_blank" rel="noopener">11:23</a><span>something like what's in my cart and that's how if you think of classification of regular text to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=689s" target="_blank" rel="noopener">11:29</a><span>functions like this is just demoing back if if the previous demo didn't make enough sense think of like plain English</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=697s" target="_blank" rel="noopener">11:37</a><span>language mapped to a function name and that's one of the core foundational</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=702s" target="_blank" rel="noopener">11:42</a><span>pieces of what Jeff does. That's that demo. Um, classifying documents sounds</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=708s" target="_blank" rel="noopener">11:48</a><span>like you kind of covered that. This This one I think is incredible because if</span></p>
+<h3>Demo: data deduplication and record merging</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=713s" target="_blank" rel="noopener">11:53</a><span>you've ever run a scenario in I use Google contacts and often you put in the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=718s" target="_blank" rel="noopener">11:58</a><span>the same contact twice and you've probably gone through the process of like merging them together. uh very</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=724s" target="_blank" rel="noopener">12:04</a><span>common scenario where you have messy data of someone typed in something wrong and they hit submit and now you have two</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=731s" target="_blank" rel="noopener">12:11</a><span>uh company entries in your database or whatever. This can go through and go through all of the records and kind of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=738s" target="_blank" rel="noopener">12:18</a><span>merge those records together. So let's click on that and it can go through and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=743s" target="_blank" rel="noopener">12:23</a><span>say this one wants to merge. So Cedar Grove office products obviously matches</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=749s" target="_blank" rel="noopener">12:29</a><span>with Cedar Grove office. Ridgeway data is Ridgeway Analytics and it can go</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=754s" target="_blank" rel="noopener">12:34</a><span>through and apply those merges for you by matching together and classifying is this one close enough to that one. And</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=761s" target="_blank" rel="noopener">12:41</a><span>again it's huge data sets merged together in uh milliseconds. This is</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=768s" target="_blank" rel="noopener">12:48</a><span>like my favorite use case of Jev, which is like pair-wise comparison of a lot of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=773s" target="_blank" rel="noopener">12:53</a><span>data to create grouping and clusters. And so in the episode that I just did,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=779s" target="_blank" rel="noopener">12:59</a><span>we I I did that over PRs. I were like, were these PRs on the same product area or the same thing or the same theme?</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=785s" target="_blank" rel="noopener">13:05</a><span>But you could do data reconciliation, I think, is a really useful one. I went</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=790s" target="_blank" rel="noopener">13:10</a><span>through recently and I had like 2,000 passwords in my one password. And you know how like whenever you do your one</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=796s" target="_blank" rel="noopener">13:16</a><span>password, it's like update, save, make, new, and I'm just like all over the place had a whole bunch of different</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=801s" target="_blank" rel="noopener">13:21</a><span>ones. And like I was just thinking how much faster it would have been to use Jev and some of the metadata to just</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=807s" target="_blank" rel="noopener">13:27</a><span>pair those up and merge them. Um, absolutely. And again, it's not like you're you're</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=812s" target="_blank" rel="noopener">13:32</a><span>giving an example where there's like six, you know, things. you're talking about when you have 60,000 or 600,000</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=819s" target="_blank" rel="noopener">13:39</a><span>things, those pairs feel very expensive until you use something like this.</span></p>
+<h3>Confidence scores and multi-model validation</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=825s" target="_blank" rel="noopener">13:45</a><span>And and something we haven't shown is that there is a confidence score that comes back. So if there is a Northstar</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=831s" target="_blank" rel="noopener">13:51</a><span>clinic and there's Northstar clinic services and it's not and they don't</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=837s" target="_blank" rel="noopener">13:57</a><span>quite line up like if you want you want them only to merge if you're like 99% or</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=843s" target="_blank" rel="noopener">14:03</a><span>more confident you can you can set those parameters in there. So that that that is a knob you can turn if as you go</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=848s" target="_blank" rel="noopener">14:08</a><span>through a few checks and I think like you mentioned before is after you do this pass you can send a smarter LLM</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=855s" target="_blank" rel="noopener">14:15</a><span>against the result and say we were the data did look like this please you know</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=861s" target="_blank" rel="noopener">14:21</a><span>either random sampling or the entire data set ensure that this was done correctly and then you can gain more and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=867s" target="_blank" rel="noopener">14:27</a><span>more confidence over time as you run more and more uh you know large data runs. One other thing you can do on that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=874s" target="_blank" rel="noopener">14:34</a><span>in addition to validating the data pairs is you can describe them. And so what I've done is do the pairs and then run</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=881s" target="_blank" rel="noopener">14:41</a><span>it doesn't even have to be an expensive model but say like we've decided these two are the same explain to me why and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=888s" target="_blank" rel="noopener">14:48</a><span>it can give a short kind of like it's the same because they both say services and you know whatever it is. Um, and so</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=894s" target="_blank" rel="noopener">14:54</a><span>you can get sort of a a quantitative matching and then a like qualitative</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=900s" target="_blank" rel="noopener">15:00</a><span>explanation with two relatively cheap models once you've narrowed that down.</span></p>
+<h3>Demo: Jev as a multi-level app router</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=906s" target="_blank" rel="noopener">15:06</a><span>Yeah. Yeah. Great stuff. Okay. Great stuff. We are just psyched about. I was like, I can watch all of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=913s" target="_blank" rel="noopener">15:13</a><span>these. Th This one's fun. It's kind of hard to to show off, but essentially if you think</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=918s" target="_blank" rel="noopener">15:18</a><span>of having uh your entire application and so you have go back going back to the to-do</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=925s" target="_blank" rel="noopener">15:25</a><span>list and say that's one part of your much larger app, you can build</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=930s" target="_blank" rel="noopener">15:30</a><span>additional abstractions around that so that if on your landing page someone comes up and either has a command bar</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=936s" target="_blank" rel="noopener">15:36</a><span>like a command K or other demos or sorry other other parts omniar any place to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=944s" target="_blank" rel="noopener">15:44</a><span>put in uh text and they start typing in the uh dictate or voice or something.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=952s" target="_blank" rel="noopener">15:52</a><span>They can't remember what the to-do app was called. And you notice this is to-do to-do and I typed in to-do. it's able to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=959s" target="_blank" rel="noopener">15:59</a><span>go in and match against the tool and then you could uh type additional things</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=967s" target="_blank" rel="noopener">16:07</a><span>where you'd say go to the to-do app and then take this action like I I would</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=972s" target="_blank" rel="noopener">16:12</a><span>know in my head oh yeah there was that pull request and and then take all the pull requests and um mark those as low</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=978s" target="_blank" rel="noopener">16:18</a><span>priority and so if you think of this multi-step uh multi-step classification where you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=985s" target="_blank" rel="noopener">16:25</a><span>can build your smallest tools and then build another abstraction of Jev around them where it can pick which of the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=991s" target="_blank" rel="noopener">16:31</a><span>smallest tools to use. Um, this kind of goes back if you if people have set up MCPs where there's uh abstractions</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=998s" target="_blank" rel="noopener">16:38</a><span>around them, I think executor and others where it picks which MCP to use. There's the tool itself and then there's a layer</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1005s" target="_blank" rel="noopener">16:45</a><span>where you're picking which tool to use and you can build that as um as many layers of that as you want. That that's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1011s" target="_blank" rel="noopener">16:51</a><span>what this is kind of talking about. It's it's difficult to show off but just imagine saying go to the to app do this</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1018s" target="_blank" rel="noopener">16:58</a><span>and yeah what I would say is like Jev is a router is maybe like what's helpful very very</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1026s" target="_blank" rel="noopener">17:06</a><span>fast router and so you know this use case you're saying like as I have text route</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1032s" target="_blank" rel="noopener">17:12</a><span>to the right tool and then if I can infer from the text the job to do in the tool I might as well infer that and like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1039s" target="_blank" rel="noopener">17:19</a><span>route as far down the user journey as I can infer from these like structured</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1045s" target="_blank" rel="noopener">17:25</a><span>options. other practical use cases of things. A lot of people start to build these like jev powered coding harnesses</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1051s" target="_blank" rel="noopener">17:31</a><span>where it's like given the first input, let's route to the right model, let's pick the right tool, all this kind of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1057s" target="_blank" rel="noopener">17:37</a><span>stuff. And so you can imagine very fast configuration, very fast routing, very</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1064s" target="_blank" rel="noopener">17:44</a><span>fast like I don't just have to take the first step and then think and take the next step. I can actually just build the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1069s" target="_blank" rel="noopener">17:49</a><span>chain and then execute it. Um, and so I think these these decision models like Jev, if they remain fast and cheap, can</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1077s" target="_blank" rel="noopener">17:57</a><span>be a new way to think about navigation of your user experience, whether that's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1083s" target="_blank" rel="noopener">18:03</a><span>a kind of like front-end experience or a dev tool or whatever it might be.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1089s" target="_blank" rel="noopener">18:09</a><span>Yeah, even search to a certain extent of um search for a long time has been has</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1096s" target="_blank" rel="noopener">18:16</a><span>had a lot of really expensive options out there and I don't know how far you could push this into</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1102s" target="_blank" rel="noopener">18:22</a><span>replacing certain search engines. But yeah, you know, I gave an example um when I</span></p>
+<h3>Architecting around Jev</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1107s" target="_blank" rel="noopener">18:27</a><span>did this like I had 4,000 YouTube comments and I was trying to do live search through this and I want to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1112s" target="_blank" rel="noopener">18:32</a><span>demystify some stuff for folks because it actually isn't super fast to like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1119s" target="_blank" rel="noopener">18:39</a><span>search over all of these results and say like yes, no, this is a good result and rank it. But you can like cluster like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1126s" target="_blank" rel="noopener">18:46</a><span>groups of like 30 or 50 or 60 and score them and rank them. Um, and that is a much faster way to build quoteunquote</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1133s" target="_blank" rel="noopener">18:53</a><span>real-time search with Jev. So, you know, for folks, again, I just want to like give people a little bit more specifics</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1139s" target="_blank" rel="noopener">18:59</a><span>about what you're seeing on the timeline, which is you do have to think about how you're going to architect</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1145s" target="_blank" rel="noopener">19:05</a><span>around Jev. It is fast, it is efficient, but it's not like completely latency free. And so you may</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1153s" target="_blank" rel="noopener">19:13</a><span>need to go go look around, see how people have done search, and then if you find one you like, go into GitHub,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1158s" target="_blank" rel="noopener">19:18</a><span>figure out how they actually made that surf search super performant because I I've seen a couple different strategies</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1164s" target="_blank" rel="noopener">19:24</a><span>out there to how to do this. Yeah. And caching and all that stuff. Alling. Yeah, it's easy when</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1171s" target="_blank" rel="noopener">19:31</a><span>everything's locally cached and just go over the the full corpus. Let's talk about games</span></p>
+<h3>Demo: Jev vs. traditional LLM at chess (speed and cost benchmarks)</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1177s" target="_blank" rel="noopener">19:37</a><span>because this is something All right. I haven't covered yet, but I think is a really cool demonstration of some of the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1185s" target="_blank" rel="noopener">19:45</a><span>um ideas inside Jev. Yeah, I built this one because I wanted to show off Jev versus a traditional</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1191s" target="_blank" rel="noopener">19:51</a><span>model. I picked a free model in open router. This is like a a low reasoning model. I I think it's a KI or something.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1196s" target="_blank" rel="noopener">19:56</a><span>I'm not sure. But and for people that aren't watching, it's it's playing chess. Yes, this this is playing a game of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1203s" target="_blank" rel="noopener">20:03</a><span>chess and Jev are white pieces. The LLM are the black pieces. And here this is</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1210s" target="_blank" rel="noopener">20:10</a><span>set so that um Jev is able to uh think</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1215s" target="_blank" rel="noopener">20:15</a><span>through all the possible moves and then it ranks the highest three moves and then it thinks through all the next</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1222s" target="_blank" rel="noopener">20:22</a><span>possible moves from there and based on that two-step reasoning picks the best</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1228s" target="_blank" rel="noopener">20:28</a><span>next move. And so kind of like routering, it's kind of like um spidering into the potential best moves</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1237s" target="_blank" rel="noopener">20:37</a><span>um and then coming back to what the next best move would be. And it's still doing this in sub 1 second times and using AI</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1245s" target="_blank" rel="noopener">20:45</a><span>and inference. Whereas if you pass the same data set to an LLM, the amount of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1251s" target="_blank" rel="noopener">20:51</a><span>reasoning it takes, this this is playing blitz chess, so there's a one minute timer. Jev would be able to complete</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1257s" target="_blank" rel="noopener">20:57</a><span>this entire game and beat it. and the LLMs would eventually get there, they'd</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1262s" target="_blank" rel="noopener">21:02</a><span>be much more expensive and they might not even perform better because in scenarios like this where it's focused</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1269s" target="_blank" rel="noopener">21:09</a><span>on routing and the next best thing to happen, the like the amount of data that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1275s" target="_blank" rel="noopener">21:15</a><span>you can crawl into and find the the next best move can kind of balance out</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1281s" target="_blank" rel="noopener">21:21</a><span>between these two. Mhm. Um, unless you're getting like really super high level like creative chess where you're trying to stump someone by</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1287s" target="_blank" rel="noopener">21:27</a><span>fainting certain moves or whatever, but I'm not a I'm decent at chess. Um, I can</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1293s" target="_blank" rel="noopener">21:33</a><span>beat my kids. I'm perfect for now. Sometimes for now. Um and if you look at</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1299s" target="_blank" rel="noopener">21:39</a><span>the um it has some benchmarks over here that Jev was 10 times faster in the average move and it was four times</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1306s" target="_blank" rel="noopener">21:46</a><span>cheaper and this was a very um space money alphas on low reasoning. So with</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1313s" target="_blank" rel="noopener">21:53</a><span>very very tiny context windows. Yeah. What what I think this demonstrates is one there are scenarios</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1320s" target="_blank" rel="noopener">22:00</a><span>in which speed is a is an advantage. um this is this is putting in the context</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1325s" target="_blank" rel="noopener">22:05</a><span>of a game but um it's very obvious how much I mean 10x faster is not</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1331s" target="_blank" rel="noopener">22:11</a><span>incremental and so it really does unlock this concept of real time and I do think</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1338s" target="_blank" rel="noopener">22:18</a><span>about uh going back to uh when I was a a young a young product</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1343s" target="_blank" rel="noopener">22:23</a><span>manager and did a lot of like conversion testing and and growth work and like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1349s" target="_blank" rel="noopener">22:29</a><span>speed did matter in a lot of user experiences especially especially consumer on what one. And so I do think,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1357s" target="_blank" rel="noopener">22:37</a><span>you know, we we hear a lot on the coding side about model optimization from a cost perspective. But I think we're</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1363s" target="_blank" rel="noopener">22:43</a><span>going to start to see like latency wars really heat up as well, which is like the faster the response, the more like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1370s" target="_blank" rel="noopener">22:50</a><span>more magic you can unlock that feels like an if else statement, the the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1375s" target="_blank" rel="noopener">22:55</a><span>better. And so I think this is showing one where speed really matters. I think the other thing it's demonstrating is</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1383s" target="_blank" rel="noopener">23:03</a><span>this like multi-step routing that we talked about where you can think through turn one, turn two, turn three, and then</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1391s" target="_blank" rel="noopener">23:11</a><span>because it's 10 times faster, you could apply another model on top at that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1396s" target="_blank" rel="noopener">23:16</a><span>point, a more intelligent model at that point with kind of like a narrowed set of strategies and probably make a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1403s" target="_blank" rel="noopener">23:23</a><span>stronger decision faster, right? And I I think this also demonstrates the again to the concept of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1410s" target="_blank" rel="noopener">23:30</a><span>router. There are a limited set of options in chess and other games. Yeah, there's a lot of options but but it's a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1416s" target="_blank" rel="noopener">23:36</a><span>limited set and you can pick from the most likely set and narrow it down and optimize you know cost and everything</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1422s" target="_blank" rel="noopener">23:42</a><span>and data structures and your APIs are all the same. Like they all have a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1428s" target="_blank" rel="noopener">23:48</a><span>limited set of things you can do even though it might seem infinite to you because you know you never know what</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1433s" target="_blank" rel="noopener">23:53</a><span>somebody's going to type or do in your application. uh this handles those when you have those scenarios it's it's time</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1440s" target="_blank" rel="noopener">24:00</a><span>to look for a Jev first I would say whereas the LLMs are much more um I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1446s" target="_blank" rel="noopener">24:06</a><span>don't I have no idea what I want the action to be or I don't even know if I want it to take an action or things</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1453s" target="_blank" rel="noopener">24:13</a><span>where it's much more brainstorming and creative and finding uh finding what you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1458s" target="_blank" rel="noopener">24:18</a><span>want to do but once the actions are set and you have that limited scope um that's where uh a decision vision model</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1466s" target="_blank" rel="noopener">24:26</a><span>can really excel at least from from what I've experienced so far and I I think this can demystify too</span></p>
+<h3>DOM interactions as a decision set, not an infinite canvas</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1473s" target="_blank" rel="noopener">24:33</a><span>some of the other kind of fun eyepopping use cases that I have seen like browser</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1479s" target="_blank" rel="noopener">24:39</a><span>use right if you look like at a at a website navigating it with a mouse feels</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1484s" target="_blank" rel="noopener">24:44</a><span>like an infinite set of possibilities right you can like move it anywhere any pixel on the screen is where your mouse can go and click</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1490s" target="_blank" rel="noopener">24:50</a><span>but if you actually look at the DOM there's probably like 10 clickable buttons on a page. And so if you can very</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1498s" target="_blank" rel="noopener">24:58</a><span>quickly say there's 10 clickable buttons on this page, which one do I click? Like which one do I want to click? That that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1505s" target="_blank" rel="noopener">25:05</a><span>demystifies that concept of browser use through Jev because you're really just taking a limited set of interactions</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1511s" target="_blank" rel="noopener">25:11</a><span>available. Um to us in our human brains, it looks like an infinite canvas of pixels, but to to a model like this, it</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1518s" target="_blank" rel="noopener">25:18</a><span>can just be a set of decisions. You know, I've also seen on gaming um you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1523s" target="_blank" rel="noopener">25:23</a><span>know, Jev plays Tetris. It's because Tetris is four options of your shape and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1528s" target="_blank" rel="noopener">25:28</a><span>then like 10 options left or right. That's all you that's all you have. And so, um you know, these like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1535s" target="_blank" rel="noopener">25:35</a><span>horizontal scroller games are just you can like jump, you can walk, you can do, you know, any of those things. And so because these decisions can happen so</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1542s" target="_blank" rel="noopener">25:42</a><span>fast, if the interaction of your app, even if it's a game that feels complex</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1547s" target="_blank" rel="noopener">25:47</a><span>or a web app that feels complex, it probably can be distilled down to a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1552s" target="_blank" rel="noopener">25:52</a><span>dozen choices and then you can explore those choices and because Jeff is so fast, it almost</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1558s" target="_blank" rel="noopener">25:58</a><span>feels instantaneous to chain those together. Yeah. I'd almost say in like you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1563s" target="_blank" rel="noopener">26:03</a><span>mentioned in a game in a platformer or in a 3D game you might be thinking about all the things the character could do</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1570s" target="_blank" rel="noopener">26:10</a><span>but the input is actually the controller and so that the limited amount of</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1575s" target="_blank" rel="noopener">26:15</a><span>options you have are all the buttons you could press how you could press in various ways which is still a lot but</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1582s" target="_blank" rel="noopener">26:22</a><span>there's a very constrained input there and whenever you have constrained inputs like uh that are interacting with apps</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1589s" target="_blank" rel="noopener">26:29</a><span>it's Jev is a good thing to reach for. And and to contrast the the DOM example,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1595s" target="_blank" rel="noopener">26:35</a><span>if you think of taking a screenshot of a web page and saying what on the screenshot or what on our do what on our</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1602s" target="_blank" rel="noopener">26:42</a><span>product or website might be confusing to a user. That's not a Jev thing. That's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1608s" target="_blank" rel="noopener">26:48</a><span>an LLM that can look through an image. It can compare it to all the images and products in the past. It can say it can</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1614s" target="_blank" rel="noopener">26:54</a><span>look through the layouts and the colors and the contrasts and all those sorts of things and come up with a discussion for</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1621s" target="_blank" rel="noopener">27:01</a><span>you of here's here's some points that might be uh because the fonts are</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1626s" target="_blank" rel="noopener">27:06</a><span>gnarly or whatever. And so that that's where trying to delineate between the two when when to go which way.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1632s" target="_blank" rel="noopener">27:12</a><span>As AI adoption grows, so do your company's security risks and requirements. New frameworks, [music]</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1638s" target="_blank" rel="noopener">27:18</a><span>audits, and vendors keep piling on, but your team isn't getting any bigger. Most compliance tools promise automation, but</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1645s" target="_blank" rel="noopener">27:25</a><span>you're really stuck doing all the work by [music] hand, chasing screenshots, validating controls, and playing catch-up when audit season comes around</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1652s" target="_blank" rel="noopener">27:32</a><span>again. Vanta works differently. Their Agentic [music] Trust platform is built to scale with you, not slow you down.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1659s" target="_blank" rel="noopener">27:39</a><span>With over 1,400 automated [music] tests across 400 plus integrations, Vanta</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1664s" target="_blank" rel="noopener">27:44</a><span>collects evidence and monitors your controls year round, [music] cutting your audit prep by 82%. Plus, you can</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1671s" target="_blank" rel="noopener">27:51</a><span>access the Vant agent everywhere you work. Whether your team is in Vant everyday or living in tools [music] like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1676s" target="_blank" rel="noopener">27:56</a><span>Quad or Cursor. Want proof? Over 16,000 fast growing companies like Ramp,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1682s" target="_blank" rel="noopener">28:02</a><span>Writer, and Harvey. Save time and resources while scaling fast with Vanta.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1687s" target="_blank" rel="noopener">28:07</a><span>My listeners can get $1,000 off by going to vanta.com/howi</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1693s" target="_blank" rel="noopener">28:13</a><span>ai. [music] That's v a nta.com/howi</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1699s" target="_blank" rel="noopener">28:19</a><span>ai for $1,000 off. Okay, let's let's do one more. Do you have a a last favorite</span></p>
+<h3>Demo: Wikipedia “path to philosophy” route mapper</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1706s" target="_blank" rel="noopener">28:26</a><span>one? Um I love I know there's so many</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1711s" target="_blank" rel="noopener">28:31</a><span>this I'll run this is super fast. Okay. on Wikipedia there's every page leads to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1717s" target="_blank" rel="noopener">28:37</a><span>philosophy uh if you've ever done that so you can put in any person in the world or any topic</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1723s" target="_blank" rel="noopener">28:43</a><span>so like the bron or whatever run to philosophy so you give it an end goal and it looks at the entire page and uh</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1730s" target="_blank" rel="noopener">28:50</a><span>it's going through the Wikipedia API and mapping that route</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1736s" target="_blank" rel="noopener">28:56</a><span>and finding from the person to philosophy um so mapping routes as well like giving it a final destination and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1742s" target="_blank" rel="noopener">29:02</a><span>it can crawl its way there. This one is is a favorite of mine because it represents if you think of a like a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1749s" target="_blank" rel="noopener">29:09</a><span>workplace where you have multiple agents that could be doing multiple uh they could all have their own tasks and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1755s" target="_blank" rel="noopener">29:15</a><span>avoiding collisions so that they never end up on the the same space. Um so this</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1761s" target="_blank" rel="noopener">29:21</a><span>is going to the job brief is deliver the fragile blue bin to staging, bring medicine to the board and inspect the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1766s" target="_blank" rel="noopener">29:26</a><span>spill. But then you have three people that you can assign to. So this can move one tick and you can see at each step</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1774s" target="_blank" rel="noopener">29:34</a><span>it's going to be able to control these different agents and make sure that they get to their specific task as quickly as</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1781s" target="_blank" rel="noopener">29:41</a><span>possible and that they never collide or interfere with the other agents. So if</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1786s" target="_blank" rel="noopener">29:46</a><span>you think of this in like agentic programming or any sort of parallel work you'd be doing to ensure that uh you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1793s" target="_blank" rel="noopener">29:53</a><span>have things running and you want to like analyze to help steer them in different directions so they never collide or</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1800s" target="_blank" rel="noopener">30:00</a><span>disrupt each other or touch the same files or whatever you can ask Jev to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1806s" target="_blank" rel="noopener">30:06</a><span>take in like every single it's fine if it goes in every single step and it checks. It doesn't have to plan out the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1812s" target="_blank" rel="noopener">30:12</a><span>entire thing ahead of time. we can do just in time. Obviously, planning out ahead of time with a decent route</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1817s" target="_blank" rel="noopener">30:17</a><span>probably helps it out. But I I think as we get more and more parallel agents and swarms and whatever words you want to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1823s" target="_blank" rel="noopener">30:23</a><span>use for that, uh this this concept will become even more and more important.</span></p>
+<h3>Demo: multi-agent coordination and collision avoidance</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1828s" target="_blank" rel="noopener">30:28</a><span>Well, and what you know this has made me think is Jev unlocks efficient</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1834s" target="_blank" rel="noopener">30:34</a><span>inefficiency, which is like it is kind of like inefficient to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1840s" target="_blank" rel="noopener">30:40</a><span>map out all possible routes, rank them, double check that they're not going to collide. Like that is actually pretty</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1846s" target="_blank" rel="noopener">30:46</a><span>inefficient. It's effect. It's an effective way to solve the problem. Like it's an accurate way to solve the problem, but it feels inefficient. And</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1853s" target="_blank" rel="noopener">30:53</a><span>in the past, we were just like kind of like tossing these problems. In the past, last week we were tossing these problems to these like big brainy LLMs</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1860s" target="_blank" rel="noopener">31:00</a><span>and being like, "Think really hard. Just think really hard and come back with a plan." And instead here, you can really</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1867s" target="_blank" rel="noopener">31:07</a><span>very quickly evaluate all those options, stack rank them, and go through the sort</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1873s" target="_blank" rel="noopener">31:13</a><span>of like inefficient universe of options and come to the right kind of like the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1878s" target="_blank" rel="noopener">31:18</a><span>right right conclusions. very this is why I'm like very excited about this model because it's all these things that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1885s" target="_blank" rel="noopener">31:25</a><span>in the past I think with maybe with regular regular LLMs you know we're trying to do this delineation it felt it</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1893s" target="_blank" rel="noopener">31:33</a><span>feels like you can do things you never imagined before right like I can create</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1898s" target="_blank" rel="noopener">31:38</a><span>a 3D video game I can like generate images out of words like these LMS are generative and they allow you to create</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1905s" target="_blank" rel="noopener">31:45</a><span>things you never be a for create before Jeff I feel like allows me to do all the things I wanted to do, but they felt too</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1912s" target="_blank" rel="noopener">31:52</a><span>cost, ineffective, too slow, and not really worth it. And there are a lot</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1917s" target="_blank" rel="noopener">31:57</a><span>more a lot more things for me on that pile than there are on my like 3D gaming idea</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1923s" target="_blank" rel="noopener">32:03</a><span>pile. And so that's why maybe as a builder, I'm so excited about this particular model.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1929s" target="_blank" rel="noopener">32:09</a><span>Yeah, I love that. I 100% agree. It's even like I have so many APIs and so</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1935s" target="_blank" rel="noopener">32:15</a><span>many apps and so many things available. How could I? And the exploring with this</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1940s" target="_blank" rel="noopener">32:20</a><span>is quick and the turnaround is quick and it's exciting to see like you feel you feel progress as you're working with it.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1947s" target="_blank" rel="noopener">32:27</a><span>Whereas with with generative and I I I feel you almost because if you're a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1952s" target="_blank" rel="noopener">32:32</a><span>developer you understand the APIs, you understand the reasoning, you understand classification. Whereas with the LLMs, a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1959s" target="_blank" rel="noopener">32:39</a><span>lot of it is guessing. And if something goes wrong, you need to think of a different sentence to say. with decision</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1966s" target="_blank" rel="noopener">32:46</a><span>models, you can you can think through the decisions of made. You're like, "Oh, well, let's take this different route." It feels much more like programming to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1972s" target="_blank" rel="noopener">32:52</a><span>be honest, where you're you have I feel much more in control when I see something goes wrong because I know all</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1978s" target="_blank" rel="noopener">32:58</a><span>of its options and I know what I want. And it's fun. It's just so fun.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1985s" target="_blank" rel="noopener">33:05</a><span>It's so fun. And I love that you say it it feels like program. It feels like the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1990s" target="_blank" rel="noopener">33:10</a><span>smartest function. like it just feels like a function that has a lot of intelligence built into it, but it's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=1996s" target="_blank" rel="noopener">33:16</a><span>still a function. Like it's still I input specific things and I get out very specific things. I can just um reason</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2003s" target="_blank" rel="noopener">33:23</a><span>with it a lot more. Okay. So, if you if you've stayed with this podcast this long, it's just John Claire, two Jeff</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2011s" target="_blank" rel="noopener">33:31</a><span>Boys excited about excited about welcome to the club. Yeah. Decision decision models. John. Okay.</span></p>
+<h3>Demo: real-time presentation coach</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2018s" target="_blank" rel="noopener">33:38</a><span>I'm going to give you because you we're at we're at example nine of 23. I'm going to give you one last chance to</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2024s" target="_blank" rel="noopener">33:44</a><span>pick a a favorite from your remaining demos before we do lightning round and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2029s" target="_blank" rel="noopener">33:49</a><span>kind of get you get you out of here. Th this one's really fun to me because</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2036s" target="_blank" rel="noopener">33:56</a><span>it it's a presentation coach. And so I I click the microphone, I'd start talking,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2042s" target="_blank" rel="noopener">34:02</a><span>and as I was talking, I'd have a list of bullet points in either a podcast or something that I want to make sure I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2047s" target="_blank" rel="noopener">34:07</a><span>cover or an interview or anything. And as I start talking, it it listens</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2052s" target="_blank" rel="noopener">34:12</a><span>through everything I say and then starts checking the boxes to make sure that I covered everything. And so it's a this</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2059s" target="_blank" rel="noopener">34:19</a><span>this real time uh as someone who likes to go off on tangents, you know, I'll get passionate about something, I'll go a different</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2066s" target="_blank" rel="noopener">34:26</a><span>way. You're under the clock and Jev can be your uh stay on track. And I think</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2072s" target="_blank" rel="noopener">34:32</a><span>it's kind of a almost a life coach of like you need to make sure you hit all these things. I'm going to watch every</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2077s" target="_blank" rel="noopener">34:37</a><span>single thing you do, every single word you say, and make sure that and you could start doing like red flashing</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2083s" target="_blank" rel="noopener">34:43</a><span>lights of, you know, you have limited time left. You still need to say all this sort of stuff. So, this this one</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2088s" target="_blank" rel="noopener">34:48</a><span>speaks to me as a a teacher, presenter, workshop giver. I love this. I just did Lenny's Lenny's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2097s" target="_blank" rel="noopener">34:57</a><span>um summit recently and and gave the kind of like opening talk and I hate those</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2103s" target="_blank" rel="noopener">35:03</a><span>monitor because they're like, "Okay, you can only have three bullet points on here." I'm like, "That's fine, whatever." But then I like to ramble. I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2108s" target="_blank" rel="noopener">35:08</a><span>like to work the crowd. I don't know if I've said that that bullet point or not. And so imagine you speaker notes could</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2115s" target="_blank" rel="noopener">35:15</a><span>check off as you go and then even progress your slide for you like you're done here. Let's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2121s" target="_blank" rel="noopener">35:21</a><span>let's move on. Um and and does this just take in I I do</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2127s" target="_blank" rel="noopener">35:27</a><span>have a question about your real time again because I like to make this very tactical for people and I'm curious how you approach this on these real time</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2134s" target="_blank" rel="noopener">35:34</a><span>voice ones. Are you constantly putting in the long stream of text to to the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2142s" target="_blank" rel="noopener">35:42</a><span>moment? Like are you or or are you doing like a moving window of snippets? I'm just curious how you're doing.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2148s" target="_blank" rel="noopener">35:48</a><span>Yeah, it's it's doing a I can't remember exactly the logic, but it is analyzing</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2154s" target="_blank" rel="noopener">35:54</a><span>what you've said up until then. it is like concatenating each word until it reaches a point where it can</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2159s" target="_blank" rel="noopener">35:59</a><span>take an action and it essentially transforms that into the payload that it's going to send over to the function.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2165s" target="_blank" rel="noopener">36:05</a><span>And so that one is it's stored in the it's in the history like you could have undo and whatever because they turn</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2171s" target="_blank" rel="noopener">36:11</a><span>unstructured into structured data. Y um but yeah, it's a window which then gets chopped off and then you start your</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2178s" target="_blank" rel="noopener">36:18</a><span>new well and window of text. This is a good moment to tell people exactly how much this thing costs. I I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2185s" target="_blank" rel="noopener">36:25</a><span>feel like last time I checked it was like 4 cents per million input tokens and nothing for output tokens unless you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2192s" target="_blank" rel="noopener">36:32</a><span>like me are using Versel AI gateway right now and then it's completely free completely free. [laughter]</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2199s" target="_blank" rel="noopener">36:39</a><span>Um so so again like I can talk I can yap but I don't know if I can yap a million</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2206s" target="_blank" rel="noopener">36:46</a><span>tokens quite yet. So [laughter] challenge accepted right? Yeah exactly. It's pretty pretty</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2212s" target="_blank" rel="noopener">36:52</a><span>amazing. Well, these have been such good use cases. We've had a lot of real-time voice use cases, sort of like pairing,</span></p>
+<h3>Quick recap</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2219s" target="_blank" rel="noopener">36:59</a><span>dduplication use cases, routing and navigation and like multi-turn,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2225s" target="_blank" rel="noopener">37:05</a><span>multi-path kind of scoring, which I think is awesome. And then this one,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2231s" target="_blank" rel="noopener">37:11</a><span>which is like just keeping you on track. Did you do the things you said you would</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2236s" target="_blank" rel="noopener">37:16</a><span>do while you're while you're talking? Did you present the the monitor, right? the thing that's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2242s" target="_blank" rel="noopener">37:22</a><span>always watching you and making sure you're love it. Um, let's let's double check. Did we do it? Did we We covered what Jev</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2248s" target="_blank" rel="noopener">37:28</a><span>is, why speed, what it costs, does the app stay in? Where does it fall short?</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2254s" target="_blank" rel="noopener">37:34</a><span>Did we call Did we talk about where it falls short? A little bit about where you'd want to pull in an LLM, but have</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2260s" target="_blank" rel="noopener">37:40</a><span>you ever tried to throw Jeb at something and didn't do a good job?</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2265s" target="_blank" rel="noopener">37:45</a><span>Uh, not yet. I don't think I've spent enough time since it's been out for a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2271s" target="_blank" rel="noopener">37:51</a><span>matter of days um really analyzing how smart it is versus</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2278s" target="_blank" rel="noopener">37:58</a><span>what I I would say there there's times it falls short where I add another layer of classification in. So I do multi-step</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2285s" target="_blank" rel="noopener">38:05</a><span>and I've seen people critique it where they only do a single pass and they think that's not good enough. I'm not going to use this anymore.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2291s" target="_blank" rel="noopener">38:11</a><span>Yeah. When I run into those scenarios, I'll do multipass where I'll do one classification layer and then another</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2298s" target="_blank" rel="noopener">38:18</a><span>then another. So I think there might be a disconnect there between some people who try it out first and they're like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2304s" target="_blank" rel="noopener">38:24</a><span>this isn't good enough at classification or they don't like define their classifications or they don't have</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2309s" target="_blank" rel="noopener">38:29</a><span>strong enough APIs or so I I think just when it falls short um because it's fast</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2316s" target="_blank" rel="noopener">38:36</a><span>and free don't worry about adding just another layer and then uh over time you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2322s" target="_blank" rel="noopener">38:42</a><span>could compress those down into a single layer as you get more and more data that reinforces what the exact flows are that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2329s" target="_blank" rel="noopener">38:49</a><span>you need to go from from step to step. Again, it's all so brand new that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2334s" target="_blank" rel="noopener">38:54</a><span>Yeah. And it's getting smarter. Like they they said, we these models are as you know,</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2340s" target="_blank" rel="noopener">39:00</a><span>they're they're as dumb as will ever be. Yep. And even these models will get much much smarter. Well, and I I'll give folks one other</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2347s" target="_blank" rel="noopener">39:07</a><span>tactical piece of advice, which is you may use a specific type of Jev call like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2353s" target="_blank" rel="noopener">39:13</a><span>a like a nule, and you may say, I think this is a yes no question. and you may run it and you may be like actually it's</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2359s" target="_blank" rel="noopener">39:19</a><span>a choice question or actually it's a score question. And so you can also test different ways to ask for different</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2365s" target="_blank" rel="noopener">39:25</a><span>types of decisions to get a more accurate. Um so I've I've had that experience a couple times where like my</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2371s" target="_blank" rel="noopener">39:31</a><span>first concept of how I would classify or make a decision was just ultimately like not the right one or I had to layer one</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2377s" target="_blank" rel="noopener">39:37</a><span>and then then the other. So that's something else for people to look at. Okay. Oh, as as you said, we could just</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2384s" target="_blank" rel="noopener">39:44</a><span>I could go on truly forever about this, but I won't. I will spare our audience. Um, let's get to lightning round and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2390s" target="_blank" rel="noopener">39:50</a><span>then you and I will go back to just classifying all the things for zero dollars. Sure.</span></p>
+<h3>Lightning round and final thoughts</h3>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2395s" target="_blank" rel="noopener">39:55</a><span>It has been I don't know a I was reflecting it's been almost a year since we last chatted. It was so cute. We were</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2402s" target="_blank" rel="noopener">40:02</a><span>talking about claude code and like aliases to dangerously skip permissions and just like babes in the wood and now</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2410s" target="_blank" rel="noopener">40:10</a><span>life is completely different. You know what what are you other than Jev? What are you really into these days? What has</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2416s" target="_blank" rel="noopener">40:16</a><span>changed for you in terms of AI engineering? What are the big big moves in the last year? Some of the funniest</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2422s" target="_blank" rel="noopener">40:22</a><span>stuff recently with the latest models when it gets into multimedia and you're</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2428s" target="_blank" rel="noopener">40:28</a><span>working with video and 3D and everything is buying extra hard drives and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2433s" target="_blank" rel="noopener">40:33</a><span>distributing work between Mac minis and such which is not a pro like it's a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2438s" target="_blank" rel="noopener">40:38</a><span>problem. It's a real you're it's a problem and like man having AIs like watch my</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2446s" target="_blank" rel="noopener">40:46</a><span>dis space on my laptop being like bro it's time to hand some over to the SSD that anyway</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2453s" target="_blank" rel="noopener">40:53</a><span>um um hold on I have to pause you and I are okay exactly the same person because truly</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2459s" target="_blank" rel="noopener">40:59</a><span>yesterday I put the SSD in I have a pinned codeex chat and the pinned codeex</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2464s" target="_blank" rel="noopener">41:04</a><span>chat is clear up disc space and it has two um skills in it I call on</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2470s" target="_blank" rel="noopener">41:10</a><span>a regular basis. One is move media files onto the hard drive. So it's like it</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2476s" target="_blank" rel="noopener">41:16</a><span>takes it finds all the places I store all my MP4s and it goes finds them all in different places and then it organizes them on my SSD. And the other</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2483s" target="_blank" rel="noopener">41:23</a><span>one is it goes like in the crevices of my computer and finds work trees that are like still running local servers and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2490s" target="_blank" rel="noopener">41:30</a><span>like clear like some of the cash clears I like I was at a client's uh office and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2496s" target="_blank" rel="noopener">41:36</a><span>they saw my computer like freeze up and you're out of memory and it's like they were like can I buy you like a new</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2501s" target="_blank" rel="noopener">41:41</a><span>computer? I was like dude this is a new computer. This is just the problem. And then I set up uh I killed the open claws</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2509s" target="_blank" rel="noopener">41:49</a><span>rip. But then I set up the stack of Mac minis as remote codeex machines to run</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2516s" target="_blank" rel="noopener">41:56</a><span>all my all my code on because I Yeah, it's it is a real problem.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2522s" target="_blank" rel="noopener">42:02</a><span>It's a problem. I I'm sure I'm sure we'll all just we'll go to the cloud, right? I I like all this stuff, but [snorts]</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2530s" target="_blank" rel="noopener">42:10</a><span>I like local I like working on desktop apps. I don't Jev is going to unlock so many things though with like removing UI</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2538s" target="_blank" rel="noopener">42:18</a><span>that I don't know pushing UI later and stuff but I don't know I I would say the</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2545s" target="_blank" rel="noopener">42:25</a><span>the other thing the most fascinating thing to me right now are the paradigms around if you've seen Grockbot at all</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2551s" target="_blank" rel="noopener">42:31</a><span>and and similar tools where the traditionally as developers we think in</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2557s" target="_blank" rel="noopener">42:37</a><span>term of in terms of projects and file structure and co and code and files and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2563s" target="_blank" rel="noopener">42:43</a><span>marketing and assigning agents roles and</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2568s" target="_blank" rel="noopener">42:48</a><span>tasks where you don't worry about any of that stuff and you just have a list of agents and then you can bring them into</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2576s" target="_blank" rel="noopener">42:56</a><span>a group chat where you have oh I have this task and I wanted this like</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2581s" target="_blank" rel="noopener">43:01</a><span>research guy and this uh and this little code review person and this other agent</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2587s" target="_blank" rel="noopener">43:07</a><span>and you bring them all in to a group. It's kind of inverted the concept of agents being the top layer and now they</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2595s" target="_blank" rel="noopener">43:15</a><span>care about the the the structures and the code and git and versioning and all</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2601s" target="_blank" rel="noopener">43:21</a><span>that. And it's I think it's a really big turning point in like our relationships</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2606s" target="_blank" rel="noopener">43:26</a><span>with our tools uh as we stop thinking about uh everything we thought about</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2612s" target="_blank" rel="noopener">43:32</a><span>before other than buying more hard discs for our agents to use. [laughter] But I'm</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2618s" target="_blank" rel="noopener">43:38</a><span>uh yeah I I completely agree and I say like you know in some ways in some ways managers</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2623s" target="_blank" rel="noopener">43:43</a><span>are really at risk like the job that you did people don't want you to and in some ways this this concept of like org</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2630s" target="_blank" rel="noopener">43:50</a><span>design and role design and like you can put those skills to use when crafting</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2635s" target="_blank" rel="noopener">43:55</a><span>crafting your agents which is why I am currently running no joke 40 graph bots</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2641s" target="_blank" rel="noopener">44:01</a><span>right now. Wow. AC across the business. I will I will do an updated episode on all of them. I</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2646s" target="_blank" rel="noopener">44:06</a><span>covered seven in my last episode. So, we'll get to the the remainder in another one. John, this has been so so</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2652s" target="_blank" rel="noopener">44:12</a><span>fun. Jeb has I agree been so so fun. So, I really appreciate you coming on</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2658s" target="_blank" rel="noopener">44:18</a><span>showing us some of your examples. Where can we find you and how can we be helpful to you?</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2663s" target="_blank" rel="noopener">44:23</a><span>Oh, my my next big stop I don't sharing the screen still. Uh about mega mega.dev</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2668s" target="_blank" rel="noopener">44:28</a><span>is me and Theo and Kent and Angie. We're all doing this big thing in a couple of months. um if people want to check that</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2674s" target="_blank" rel="noopener">44:34</a><span>out. All of my effort for the next couple months is going into this. Um so I'm putting everything else on pause</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2680s" target="_blank" rel="noopener">44:40</a><span>just to make this the best experience possible. And I'm going to hype you up a little bit. It is I'm going to say it's it's a</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2686s" target="_blank" rel="noopener">44:46</a><span>kind of like course slashprogramshop um to teach you how to turn agents I'm</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2693s" target="_blank" rel="noopener">44:53</a><span>going to read the the landing page. Turn agents into leverage. You can reason about price, debug, and ship. So be an</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2698s" target="_blank" rel="noopener">44:58</a><span>incredible AI engineer. also hottest website on the internet right</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2703s" target="_blank" rel="noopener">45:03</a><span>now. I saw it the other day and it's just it's real lovely. Um, love it. So, check it out. Check out John. Check out</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2709s" target="_blank" rel="noopener">45:09</a><span>mega.dev. Really cool program. And John, we'll have you back maybe in another year. And</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2716s" target="_blank" rel="noopener">45:16</a><span>who knows, we won't we won't have hardware or hard hardware at all. Maybe we'll just be carrying around our little</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2722s" target="_blank" rel="noopener">45:22</a><span>Metamuse keychains and and talking to the little fuzzy yeti who's doing all our coding for us.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2728s" target="_blank" rel="noopener">45:28</a><span>be embedded into your brain at that point. I think sounds the year is too far away.</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2735s" target="_blank" rel="noopener">45:35</a><span>All right, thanks for joining How I AI again. Thanks so much for watching. If you</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2740s" target="_blank" rel="noopener">45:40</a><span>enjoyed this show, please like and subscribe here on YouTube or even better, leave us a comment with your thoughts. You can also find this podcast</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2747s" target="_blank" rel="noopener">45:47</a><span>[music] on Apple Podcasts, Spotify, or your favorite podcast app. Please</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2752s" target="_blank" rel="noopener">45:52</a><span>consider leaving us a rating and review which will help others find the show. You can see all our episodes and learn</span></p>
+<p><a href="https://www.youtube.com/watch?v=dAIIaepNhQM&amp;t=2759s" target="_blank" rel="noopener">45:59</a><span>more about the show at howiipod.com. See you next time.</span></p>
+      </div>
+    </div>
+  </details>
+</div>
+
+<script>
+(function () {
+  var items = Array.prototype.slice.call(document.querySelectorAll('ol.ideas details'));
+  var count = document.getElementById('count');
+  function update() {
+    var open = items.filter(function (d) { return d.open; }).length;
+    count.textContent = open + ' of ' + items.length + ' expanded';
+  }
+  document.getElementById('expandAll').addEventListener('click', function () { items.forEach(function (d) { d.open = true; }); update(); });
+  document.getElementById('collapseAll').addEventListener('click', function () { items.forEach(function (d) { d.open = false; }); update(); });
+  items.forEach(function (d) { d.addEventListener('toggle', update); });
+  update();
+})();
+</script>
+
+</body></html>

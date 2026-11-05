@@ -1,0 +1,319 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Kai Company Brain Takeaways</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;800&family=Spectral:ital,wght@0,400;0,600;1,400&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: one reading column; numbered takeaways as a scannable list, each opening into its own detail */
+:root {
+  --bg: #ffffff;
+  --fg: #2b2a29;
+  --muted: #6b6662;
+  --rule: #e9e4e0;
+  --accent: #e2593b;
+  --chip: #fbeee9;
+  --box: #f0f0f0;
+  --box-line: #d4d4d4;
+  --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-body: "Spectral", Georgia, "Times New Roman", serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #1b1a19; --fg: #ece8e4; --muted: #a8a19b; --rule: #34302d; --accent: #f07a5e; --chip: #2c2320; --box: #2a2a2a; --box-line: #444444;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #1b1a19; --fg: #ece8e4; --muted: #a8a19b; --rule: #34302d; --accent: #f07a5e; --chip: #2c2320; --box: #2a2a2a; --box-line: #444444;
+  color-scheme: dark;
+}
+body {
+  background: var(--bg); color: var(--fg);
+  font-family: var(--font-body); font-size: 1.125rem; line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 2.5rem 4rem;
+}
+.wrap { max-width: 42rem; margin: 0 auto; display: flex; flex-direction: column; gap: 1.75rem; }
+.eyebrow { font-family: var(--font-mono); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(1.9rem, 5vw, 2.6rem); line-height: 1.1; margin: .35rem 0 0; text-wrap: balance; letter-spacing: -.01em; }
+.lead { margin: 0; color: var(--fg); }
+.lead em { font-style: italic; }
+.toolbar { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; border-block: 1px solid var(--rule); padding-block: .75rem; }
+.toolbar span { font-family: var(--font-mono); font-size: .8rem; color: var(--muted); margin-right: auto; }
+button.tb {
+  font-family: var(--font-display); font-weight: 600; font-size: .85rem;
+  background: transparent; color: var(--fg); border: 1px solid var(--rule); border-radius: 999px;
+  padding: .4rem .9rem; cursor: pointer;
+}
+button.tb:hover { border-color: var(--accent); color: var(--accent); }
+button.tb:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+ol.ideas { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; }
+ol.ideas > li { border-bottom: 1px solid var(--rule); }
+details > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 2.25rem 1fr 1.5rem; gap: .5rem; padding-block: 1.1rem; }
+details > summary::-webkit-details-marker { display: none; }
+.num { font-family: var(--font-display); font-weight: 800; color: var(--accent); font-size: 1.1rem; line-height: 1.6; font-variant-numeric: tabular-nums; }
+.sum { min-width: 0; }
+.sum strong { font-weight: 600; }
+.chev { width: 1.5rem; height: 1.6rem; display: grid; place-items: center; color: var(--muted); transition: transform .2s ease; }
+.chev svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; }
+details[open] .chev { transform: rotate(180deg); color: var(--accent); }
+ol.ideas details > summary { padding-inline: .75rem; margin-inline: -.75rem; border: 1px solid transparent; border-radius: 8px; transition: background-color .15s ease, border-color .15s ease; }
+ol.ideas details[open] > summary { background: var(--box); border-color: var(--box-line); margin-top: .6rem; margin-bottom: 1rem; }
+.hint { display: block; font-family: var(--font-mono); font-size: .72rem; letter-spacing: .04em; color: var(--muted); margin-top: .35rem; }
+details[open] .hint { display: none; }
+
+.detail { padding: 0 0 1.5rem 2.75rem; display: flex; flex-direction: column; gap: .9rem; min-width: 0; }
+.detail h3 { font-family: var(--font-display); font-weight: 800; font-size: 1.3rem; line-height: 1.2; margin: 0; text-wrap: balance; }
+.detail p { margin: 0; }
+.detail ul, .detail ol { margin: 0; padding-left: 1.2rem; display: flex; flex-direction: column; gap: .3rem; }
+blockquote { margin: 0; padding: .1rem 0 .1rem 1rem; border-left: 3px solid var(--accent); font-style: italic; color: var(--fg); }
+blockquote cite { font-style: normal; color: var(--muted); font-size: .95rem; }
+.todo { background: var(--chip); border-radius: 6px; padding: .75rem 1rem; }
+.todo b { font-family: var(--font-display); font-weight: 600; font-size: .8rem; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .2rem; }
+.tablebox { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 1rem; }
+th, td { text-align: left; padding: .45rem .6rem; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-display); font-weight: 600; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+td { font-variant-numeric: tabular-nums; }
+
+.ref { border-top: 1px solid var(--rule); }
+.ref > summary { grid-template-columns: 1fr 1.5rem; }
+.ref h2 { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; margin: 0; }
+.ref .detail { padding-left: 0; }
+a { color: var(--accent); text-underline-offset: 2px; }
+.note { font-size: .95rem; color: var(--muted); }
+@media (max-width: 480px) {
+  .detail { padding-left: 0; }
+  details > summary { grid-template-columns: 1.9rem 1fr 1.5rem; }
+}
+@media (prefers-reduced-motion: reduce) { .chev { transition: none; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">How I AI · Stripe · Build your own company brain</div>
+    <h1>10 ideas from Stripe's company agent, Kai</h1>
+  </header>
+  <p class="lead">Stripe built its own company agent because the hard part wasn't giving people AI. It was giving 10,000+ employees AI that follows how Stripe works. These notes come from Sharadh, an engineering manager on the Kai team, talking with Claire Vo on <em>How I AI</em>.</p>
+
+  <div class="toolbar">
+    <span id="count">Tap any idea for the details</span>
+    <button class="tb" id="expandAll" type="button">Expand all</button>
+    <button class="tb" id="collapseAll" type="button">Collapse all</button>
+  </div>
+
+  <ol class="ideas">
+    <li><details>
+      <summary><span class="num">1</span><span class="sum"><strong>Ship governance, not just access.</strong> The hard part of company-wide AI is copying how the company works: permissions, costs and sensitive data. Build those guardrails so people can just use AI and trust it.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>The real problem was how the company works</h3>
+        <p>In early 2026 there was a flood of new AI tools. Stripe's question was how to get AI to everyone. The team quickly saw that this wasn't mainly a technical problem.</p>
+        <blockquote>"It's not about providing AI, it's about providing the correct governance structures so that everyone can just go use AI and know it'll do the right thing for them." <cite>— Sharadh</cite></blockquote>
+        <p><strong>Why build instead of buy.</strong> Four reasons came up:</p>
+        <ul>
+          <li><strong>Governance</strong> that fits Stripe's processes: cost, data sensitivity and approvals.</li>
+          <li><strong>Context:</strong> the agent knows who the user is, their org and their projects.</li>
+          <li><strong>Security:</strong> it runs in the cloud, is always on and sits inside Stripe's security boundaries.</li>
+          <li><strong>Dogfooding:</strong> it uses the same infrastructure Stripe uses to build agents for its customers.</li>
+        </ul>
+        <div class="todo"><b>What to do with this</b>List the rules your company already runs on: who sees what data, who can spend how much, and what needs sign-off. Then check whether an off-the-shelf tool can follow those rules without adding friction.</div>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">2</span><span class="sum"><strong>Use projects as a governance layer.</strong> A project isn't just a folder of chats. It's where a few experts set the default model, tools, skills and even the agent backend for everyone doing that job.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Projects tell the agent what you're trying to do</h3>
+        <p>When a user picks a project, they are telling the agent what job they're doing, and that helps it perform better. Projects range from 5 people to 500.</p>
+        <p><strong>The project's owner (its DRI) sets the defaults:</strong></p>
+        <ul>
+          <li><strong>Default model,</strong> including blocking expensive models when the job doesn't need them.</li>
+          <li><strong>Which skills are in scope.</strong> Stripe has about 2,000 skills, and each project limits the set to the relevant ones.</li>
+          <li><strong>Tool policies</strong> (see idea 3).</li>
+          <li><strong>A custom agent backend.</strong> The People team runs a "super secure version of Kai" with its own back end.</li>
+        </ul>
+        <blockquote>"We should try to minimize the number of people who have to actively make these choices every day and just it should do the right thing for them." <cite>— Sharadh</cite></blockquote>
+        <blockquote>"Kai looks like a single product. It really isn't. It's like the icing on top of a multi-layer cake." <cite>— Sharadh</cite></blockquote>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">3</span><span class="sum"><strong>Set tool rules per project, not per person.</strong> Require human approval for risky tools only in sensitive projects, like HR. Asking for approval everywhere teaches people to click "yes" without reading.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Put the friction only where it's needed</h3>
+        <p>Someone on the HR team handles sensitive data. You don't want the agent to paste it into a Google Doc every employee can open. But banning all tools for that team goes too far.</p>
+        <blockquote>"You really don't want the agent to sort of go rogue and put that sensitive data into some public Google document that all Stripes can access, but you also don't want to tell them, oh, you can't use any tools." <cite>— Sharadh</cite></blockquote>
+        <p><strong>In the demo,</strong> asking Kai to "create a calendar invite for me and Wong tomorrow at 11:00 a.m. Pacific" brought up a human-in-the-loop confirmation. A project can also block a tool outright.</p>
+        <blockquote>"If I showed you this every single session for every single tool, eventually you're going to press the wrong button." <cite>— Sharadh</cite></blockquote>
+        <div class="todo"><b>What to do with this</b>Sort your agent's tools by risk: write actions, external sharing and sending messages. Require approval for those per workspace. Keep read-only tools free of approval steps.</div>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">4</span><span class="sum"><strong>Give the agent limited context that users control.</strong> By default Kai knows who you are and where you sit in the org chart. Users choose whether to connect Drive, Slack and DMs, and can switch them on or off each session.<span class="hint">Details</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Start with low-risk context, and let users opt in to the rest</h3>
+        <ul>
+          <li>Who you are and where you sit in the org chart</li>
+          <li>Basics like the current date and time</li>
+          <li>Your projects, OKRs and recently shipped emails, from Stripe's project system</li>
+        </ul>
+        <p><strong>Sensitive sources are opt-in.</strong> Google Drive, Slack and private messages connect only if you choose to connect them. Sharadh turns his access on and off every session or every day. Others leave everything on because "more context is better."</p>
+        <p><strong>Projects add intent on top of identity.</strong> The org chart says who you are. The project says what you're doing right now.</p>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">5</span><span class="sum"><strong>Get your data layer ready for agents with a set lookup order.</strong> Teach the agent to try existing reports first, then the trusted analytics tables, then the raw data catalog. Make the warehouse sturdy, because "when in doubt an agent will just brute force it."<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A lookup order that data scientists wrote</h3>
+        <p>Dashboards are the first agent almost every company builds. At Stripe, "literally everyone" makes them with Kai. Stripe's data scientists wrote the lookup order into an "ask data" skill:</p>
+        <ol>
+          <li><strong>Existing reports:</strong> reuse reports, dashboards and the queries behind them.</li>
+          <li><strong>Trusted analytics tables:</strong> the curated home of key metrics.</li>
+          <li><strong>Data catalog:</strong> search rated, high-quality datasets and write a new query only as a last resort.</li>
+        </ol>
+        <blockquote>"These investments were made for humans but have held up really well for agents because… they can answer the question, but they have no idea if it was the right query or the right table." <cite>— Sharadh</cite></blockquote>
+        <p><strong>The warehouse has to handle agent traffic.</strong> Stripe made its Trino query layer sturdy long before agents arrived. That's why agents can "slam it like crazy" without bringing it down.</p>
+        <blockquote>"Double the size of your DevX team, double the size of your data team… Good for humans, good for agents." <cite>— Claire Vo</cite></blockquote>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">6</span><span class="sum"><strong>Expect agents to make every existing failure worse.</strong> At Stripe, agents nearly took down core systems. Label agent traffic so your systems can prioritize it and drop it first under load.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Agents make existing problems bigger</h3>
+        <blockquote>"It turns out that agents just like dial up all your failure modes… it just multiplies the amplitude of problems you can get." <cite>— Sharadh</cite></blockquote>
+        <p>Stripe had "agents that went rogue" and agents that "may have almost taken down core systems." The team caught them in time and made those systems sturdier.</p>
+        <p><strong>Agent identity is the fix.</strong> Stripe is working on marking each request as coming from an agent, along with what the agent is trying to do. Systems can then decide which requests come first and drop agent traffic when under stress. Sharadh said this isn't solved yet.</p>
+        <div class="todo"><b>What to do with this</b>Tag every agent call with who is calling and why. Treat agent traffic as its own group in rate limits. Test what happens when an agent goes rogue against your most critical systems.</div>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">7</span><span class="sum"><strong>Give everyone a secure sandbox, and keep improving the same artifacts.</strong> A private cloud workspace for each session lets non-engineers have the agent write code for their own data work. Dashboards get refined over many turns instead of rebuilt.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A sandbox lets anyone build small apps for their own work</h3>
+        <p>Kai runs in the cloud, so sessions can't "eat each other." The agent has tools to send data into the sandbox, run code there and pull results out. Users never need to know the sandbox exists.</p>
+        <p>Every workflow is different. A dashboard for every need would mean "a gazillion dashboards" nobody can maintain. Instead, people have the agent build small apps for their own job.</p>
+        <blockquote>"The fact that they have a sandbox that anybody regardless whether they're an engineer or not can get the agent to write code for them and do whatever the heck they want with the data. It's really powerful." <cite>— Sharadh</cite></blockquote>
+        <p><strong>Artifacts stick around.</strong> In the demo, a follow-up prompt added a new section to the same dashboard. That uses fewer tokens than regenerating it. Some conversations run for hundreds of turns over several weeks. Sharadh now makes a dashboard for every meeting he runs.</p>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">8</span><span class="sum"><strong>Turn a good session into a skill you can share.</strong> A built-in skill creator packages what worked into a repeatable workflow. Anyone can keep the skill private, share it with a team or publish it company-wide.<span class="hint">Details · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>How a one-off becomes a workflow you trust</h3>
+        <ol>
+          <li>Kai writes the skill from the session, in an open skill format other agent tools can also use.</li>
+          <li>It fills in a description of when to use the skill. That text is how Kai finds the skill later.</li>
+          <li>The author keeps it private, shares it with a team space or publishes it.</li>
+          <li>A simple editor lets anyone test and adjust the draft.</li>
+        </ol>
+        <p><strong>The payoff:</strong> "Give me the latest Kai adoption dashboard" picked up the brand-new skill automatically.</p>
+        <blockquote>"You can just go in and start using Kai and it knows what to do. This is how it knows." <cite>— Sharadh</cite></blockquote>
+        <p><strong>Finding the right skill is harder at work than in code.</strong> A coding agent can use folder structure to find skills. At work there's no such structure, and one task often touches five systems.</p>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">9</span><span class="sum"><strong>Maintain the skill library like a product.</strong> With about 2,000 skills, Stripe tracks usage and suggests improvements to keep quality up. Too many unrelated skills fill up the agent's context, so having fewer is part of quality.<span class="hint">Details · table · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>Most skills are used by a few people</h3>
+        <p>Anyone can publish a shared skill, so keeping quality up is the platform's job. Kai automatically suggests improvements to every skill author.</p>
+        <div class="tablebox"><table>
+          <thead><tr><th>Group</th><th>About how many</th><th>Used by</th></tr></thead>
+          <tbody>
+            <tr><td>Core</td><td>~50</td><td>Used heavily every day across the company</td></tr>
+            <tr><td>Long tail</td><td>~100–150</td><td>Parts of the org chart</td></tr>
+            <tr><td>Niche</td><td>Many more</td><td>Teams of two or three people</td></tr>
+          </tbody>
+        </table></div>
+        <p>Usage data shows which skills to add to everyone's default set and which narrow ones to take out so they stop crowding the agent's context.</p>
+        <blockquote>"You can't separate quality and quantity… the more unrelated context you throw into the AI, the less good your results become." <cite>— Sharadh</cite></blockquote>
+        <p><strong>Claire's add-on:</strong> a retirement rule. If nobody uses a skill for about 30 days, the owner gets a notice. If they don't respond, it's marked for retirement and deleted about two weeks later.</p>
+      </div>
+    </details></li>
+
+    <li><details>
+      <summary><span class="num">10</span><span class="sum"><strong>Ship a cheap first version, pilot it with an eager team, then demo it to everyone.</strong> Kai's first version took 1.5 engineers two weeks. A pilot with the go-to-market team proved it worked, and a company-wide demo drove the big jump in use.<span class="hint">Details · table · quotes</span></span><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+      <div class="detail">
+        <h3>A demo convinced people faster than explaining</h3>
+        <p>It was hard to argue for a company agent when coding agents already seemed powerful. Once people could see the first version, the questions answered themselves.</p>
+        <div class="tablebox"><table>
+          <thead><tr><th>Stage</th><th>Team</th><th>Users</th></tr></thead>
+          <tbody>
+            <tr><td>First version (v0)</td><td>~1.5 engineers, 2 weeks</td><td>The builders</td></tr>
+            <tr><td>Pilot (~1 month)</td><td>2.5–3 people</td><td>200–300, mostly go-to-market</td></tr>
+            <tr><td>After company demo</td><td>Fewer than 10 core</td><td>10,000+ weekly · 86%+ of the company</td></tr>
+          </tbody>
+        </table></div>
+        <p><strong>Pick a pilot team that's eager, not just willing.</strong> Stripe's go-to-market team was looking for any edge to reach more customers.</p>
+        <p><strong>A small team can do this with help.</strong> Coding agents, Stripe's in-house developer tools and its existing infrastructure did much of the work.</p>
+        <blockquote>"It sounds like we figured this all out. We absolutely haven't… we are in the earliest parts of this journey." <cite>— Sharadh</cite></blockquote>
+      </div>
+    </details></li>
+  </ol>
+
+  <details class="ref">
+    <summary><h2>Glossary</h2><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+    <div class="detail"><div class="tablebox"><table>
+      <thead><tr><th>Term</th><th>Meaning here</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Kai</strong></td><td>Stripe's internal company agent, its "company brain." The spelling comes from the auto-captions.</td></tr>
+        <tr><td><strong>Harness</strong></td><td>The software around a model, such as tools, skills and a sandbox, that turns the model into an agent</td></tr>
+        <tr><td><strong>Tool</strong></td><td>An action the agent can take, such as running a query or creating an invite</td></tr>
+        <tr><td><strong>Skill</strong></td><td>A packaged set of instructions for one kind of task, loaded when it's relevant</td></tr>
+        <tr><td><strong>Skill routing</strong></td><td>How the agent picks the right skill, based on each skill's description</td></tr>
+        <tr><td><strong>Project</strong></td><td>Kai's way of setting rules for a group: default model, skills, tool rules and an optional custom backend</td></tr>
+        <tr><td><strong>DRI</strong></td><td>Directly responsible individual, the person who sets up a project</td></tr>
+        <tr><td><strong>Tool policy</strong></td><td>A rule in a project that allows a tool, blocks it or requires approval</td></tr>
+        <tr><td><strong>Human in the loop</strong></td><td>The agent pauses for a person to confirm before it acts</td></tr>
+        <tr><td><strong>Sandbox</strong></td><td>A private cloud workspace for each session, where the agent runs code</td></tr>
+        <tr><td><strong>Artifact</strong></td><td>A lasting output, like a dashboard, that gets improved over many turns</td></tr>
+        <tr><td><strong>Last-mile data</strong></td><td>Analysis specific to one workflow that no standard dashboard covers</td></tr>
+        <tr><td><strong>Hubble</strong></td><td>Stripe's internal tool for querying data</td></tr>
+        <tr><td><strong>Trino</strong></td><td>An open-source SQL query engine that Stripe uses on its data warehouse</td></tr>
+        <tr><td><strong>Analytics layer</strong></td><td>Curated, trusted tables for key metrics</td></tr>
+        <tr><td><strong>Data catalog</strong></td><td>A searchable list of datasets with quality ratings</td></tr>
+        <tr><td><strong>Agent identity</strong></td><td>Marking requests as coming from an agent, with its purpose</td></tr>
+        <tr><td><strong>Load shedding</strong></td><td>Dropping low-priority traffic under stress to keep core systems up</td></tr>
+        <tr><td><strong>Telemetry</strong></td><td>Usage data: which skills and tools get used and where they fail</td></tr>
+        <tr><td><strong>GTM</strong></td><td>Go-to-market: sales, marketing and related teams</td></tr>
+      </tbody>
+    </table></div></div>
+  </details>
+
+  <details class="ref">
+    <summary><h2>Sources</h2><span class="chev"><svg viewBox="0 0 14 14"><path d="M2 5l5 5 5-5"/></svg></span></summary>
+    <div class="detail">
+      <ul>
+        <li><a href="https://www.youtube.com/watch?v=AbZODZ_4VaM" target="_blank" rel="noopener">Build your own company brain — How I AI (YouTube)</a>. All quotes come from its auto-generated transcript, lightly cleaned up.</li>
+        <li><a href="https://howiaipod.com" target="_blank" rel="noopener">How I AI podcast</a>, the show's home page</li>
+        <li><a href="https://trino.io" target="_blank" rel="noopener">Trino</a>, the query engine Stripe uses</li>
+      </ul>
+      <p class="note">The captions spell the guest's name several ways ("Sherrod," "Shared," "Sharadh"). This page uses Sharadh, from the chapter title. The sponsor segments are left out.</p>
+    </div>
+  </details>
+</div>
+
+<script>
+(function () {
+  var items = Array.prototype.slice.call(document.querySelectorAll('ol.ideas details'));
+  var count = document.getElementById('count');
+  function update() {
+    var open = items.filter(function (d) { return d.open; }).length;
+    count.textContent = open === 0 ? 'Tap any idea for the details' : open + ' of ' + items.length + ' expanded';
+  }
+  document.getElementById('expandAll').addEventListener('click', function () { items.forEach(function (d) { d.open = true; }); update(); });
+  document.getElementById('collapseAll').addEventListener('click', function () { items.forEach(function (d) { d.open = false; }); update(); });
+  items.forEach(function (d) { d.addEventListener('toggle', update); });
+})();
+</script>
+
+</body></html>
