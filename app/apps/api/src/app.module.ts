@@ -18,6 +18,10 @@ import { ShortLinksModule } from './features/short-links/short-links.module';
 import { AdminImpersonationModule } from './admin-impersonation/admin-impersonation.module';
 import { AdminDashboardModule } from './admin-dashboard/admin-dashboard.module';
 import { ProjectsModule } from './projects/projects.module';
+import { ApiTokensModule } from './api-tokens/api-tokens.module';
+import { BrainsModule } from './brains/brains.module';
+import { DigestPreferencesModule } from './digest-preferences/digest-preferences.module';
+import { InternalModule } from './internal/internal.module';
 
 @Module({
   imports: [
@@ -52,6 +56,10 @@ import { ProjectsModule } from './projects/projects.module';
     AdminImpersonationModule,
     AdminDashboardModule,
     ProjectsModule,
+    ApiTokensModule,
+    BrainsModule,
+    DigestPreferencesModule,
+    InternalModule,
   ],
   controllers: [AppController],
   providers: [

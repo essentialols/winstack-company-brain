@@ -84,7 +84,7 @@ export class InternalService {
           brainId: brain.id,
           number: (last?.number ?? 0) + 1,
           title: payload.title,
-          content: payload.content as Prisma.InputJsonValue,
+          content: payload.content as unknown as Prisma.InputJsonValue,
           audioKey,
           audioDurationSec: audioKey ? (payload.audioDurationSec ?? null) : null,
           publishedAt: requestTime,

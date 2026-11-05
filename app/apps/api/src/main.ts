@@ -69,7 +69,8 @@ async function bootstrap() {
 
   // Configure body parser limits to prevent DoS attacks
   // Note: For file uploads, multer handles the limits separately
-  app.use(json({ limit: '1mb' }));
+  // 6mb: extension saves carry full page text and captions (contract allows ~5 MB)
+  app.use(json({ limit: '6mb' }));
   app.use(urlencoded({ limit: '10mb', extended: true })); // Increased for multipart form data
 
   // Serve static files from uploads directory
@@ -92,6 +93,24 @@ async function bootstrap() {
     );
   }
 
+  // Chrome extension origins. EXTENSION_ORIGINS unset or "*" → any
+  // chrome-extension:// origin; otherwise a comma-separated allowlist of
+  // exact origins (chrome-extension://<extension-id>).
+  const extensionOrigins = (configService.get<string>('EXTENSION_ORIGINS', '') || '')
+    .split(',')
+    .map((value) => value.trim())
+    .filter(Boolean);
+  const isAllowedExtensionOrigin = (origin: string): boolean => {
+    if (!origin.startsWith('chrome-extension://')) {
+      return false;
+    }
+    return (
+      extensionOrigins.length === 0 ||
+      extensionOrigins.includes('*') ||
+      extensionOrigins.includes(origin)
+    );
+  };
+
   const staticAllowedOrigins: (string | RegExp)[] = staticOrigins.map((origin) => {
     if (origin.includes('*')) {
       // Escape special characters except *
@@ -107,6 +126,11 @@ async function bootstrap() {
     origin: async (origin, callback) => {
       // If no origin (e.g. same-origin request or server-to-server), allow it
       if (!origin) {
+        callback(null, true);
+        return;
+      }
+
+      if (isAllowedExtensionOrigin(origin)) {
         callback(null, true);
         return;
       }

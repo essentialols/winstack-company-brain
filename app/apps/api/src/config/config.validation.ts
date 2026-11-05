@@ -136,6 +136,21 @@ class EnvironmentVariables {
   @IsString()
   @IsOptional()
   R2_PUBLIC_URL?: string;
+
+  /** Shared secret the digest pipeline sends as X-Pipeline-Secret. Unset disables /internal. */
+  @IsString()
+  @IsOptional()
+  PIPELINE_SECRET?: string;
+
+  /** Public web app URL used in issue emails; falls back to FRONTEND_URL. */
+  @IsUrl({ require_tld: false })
+  @IsOptional()
+  WEB_URL?: string;
+
+  /** Comma-separated chrome-extension:// origins; unset or "*" allows any extension. */
+  @IsString()
+  @IsOptional()
+  EXTENSION_ORIGINS?: string;
 }
 
 /**
