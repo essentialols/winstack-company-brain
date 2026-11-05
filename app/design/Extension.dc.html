@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Extension Popup</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
+<style>
+:root{--bg:#ffffff;--fg:#23211f;--muted:#6c6862;--rule:#e6e4e1;--accent:#c63f1d;--accent-hover:#a3330f;--hover:#f5f4f3;--chip:#fbeee9;--box:#f0f0f0;--box-line:#d4d4d4;--ink:#23211f;--on-ink:#ece9e4;--on-ink-muted:#b8b3ac;--accent-on-ink:#ff8a66;--ok-bg:#e4f1e7;--ok-fg:#1f6a3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg)}
+a{color:var(--accent);text-underline-offset:2px}a:hover{color:var(--accent-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+.pill:hover{border-color:var(--accent) !important;color:var(--accent) !important}
+.iconbtn:hover{background:var(--hover) !important}
+.primary:hover{background:var(--accent-hover) !important}
+</style>
+</helmet>
+<div style="width:380px;height:600px;box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column;background:var(--bg);color:var(--fg);padding:14px 20px 12px;box-shadow:0 2px 10px rgba(0,0,0,.08);font-family:Spectral, Georgia, serif">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--rule)">
+    <div style="display:flex;align-items:center;gap:9px">
+      <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+      <span style="font-family:Archivo, sans-serif;font-weight:800;font-size:1rem;letter-spacing:-.01em">Outside-In Brain</span>
+    </div>
+    <button type="button" class="iconbtn" aria-label="Settings" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:0;border-radius:8px;background:transparent;color:var(--muted);margin-right:-10px">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"></path></svg>
+    </button>
+  </div>
+
+  <sc-if value="{{showForm}}" hint-placeholder-val="{{ true }}">
+    <div style="display:flex;flex-direction:column;gap:14px;padding-top:14px">
+
+      <div style="background:var(--box);border:1px solid var(--box-line);border-radius:8px;padding:12px 14px">
+        <div style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">This page · youtube.com</div>
+        <div style="font-family:Archivo, sans-serif;font-weight:700;font-size:.98rem;line-height:1.3;margin:6px 0 10px">The enterprise AI stack behind Stripe&#8217;s company brain &#8220;Kai&#8221;</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <span style="font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--bg);border:1px solid var(--box-line);color:var(--muted)">Video</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--ok-bg);color:var(--ok-fg)">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+            Captions found
+          </span>
+        </div>
+      </div>
+
+      <div>
+        <div id="saveto-label" style="font-family:Archivo, sans-serif;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:8px">Save to</div>
+        <div role="group" aria-labelledby="saveto-label" style="display:flex;flex-wrap:wrap;gap:8px">
+          <sc-for list="{{brains}}" as="b" hint-placeholder-count="2">
+            <button type="button" class="{{b.cls}}" aria-pressed="{{b.pressed}}" onClick="{{b.pick}}" style="{{b.style}}">{{b.name}}</button>
+          </sc-for>
+          <button type="button" class="pill" style="min-height:44px;padding:0 14px;border-radius:999px;border:1px dashed var(--rule);background:transparent;color:var(--muted);font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem">+ New brain</button>
+        </div>
+      </div>
+
+      <div>
+        <label for="note" style="display:block;font-family:Archivo, sans-serif;font-weight:600;font-size:.8rem;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);margin-bottom:6px">Note (optional)</label>
+        <textarea id="note" rows="2" placeholder="Why did this catch your eye?" style="width:100%;box-sizing:border-box;resize:none;padding:10px 12px;border:1px solid var(--rule);border-radius:8px;background:var(--bg);color:var(--fg);font-family:Spectral, Georgia, serif;font-size:1rem;line-height:1.5"></textarea>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <button type="button" class="primary" onClick="{{save}}" style="width:100%;min-height:48px;border:0;border-radius:999px;background:var(--accent);color:var(--bg);font-family:Archivo, sans-serif;font-weight:700;font-size:1rem">Save to brain</button>
+        <div style="text-align:center;font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.04em;color:var(--muted)">Alt+Shift+S saves without opening this</div>
+      </div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;padding:0 8px">
+      <div style="width:56px;height:56px;border-radius:999px;background:var(--accent);color:var(--bg);display:flex;align-items:center;justify-content:center">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"></path></svg>
+      </div>
+      <div role="status" style="font-family:Archivo, sans-serif;font-weight:800;font-size:1.35rem;letter-spacing:-.015em;line-height:1.2">Saved to {{brainName}}</div>
+      <p style="margin:0;font-family:Spectral, Georgia, serif;font-size:1.0625rem;line-height:1.6;max-width:18rem">It goes into Saturday&#8217;s issue with everything else you save this week.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:6px">
+        <a href="Dashboard.dc.html" class="pill" style="display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--rule);color:var(--fg);text-decoration:none;font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem">Open dashboard</a>
+        <button type="button" onClick="{{undo}}" style="min-height:44px;padding:0 12px;border:0;background:transparent;color:var(--accent);font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem;text-decoration:underline;text-underline-offset:2px">Undo</button>
+      </div>
+    </div>
+  </sc-if>
+
+  <div style="margin-top:auto;padding-top:10px;border-top:1px solid var(--rule);font-family:'IBM Plex Mono', monospace;font-weight:500;font-size:.72rem;letter-spacing:.06em;color:var(--muted);text-align:center">4 saved this week · next issue Sat 7:00</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":380,"height":600}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    const saved = !!s.saved;
+    const selected = s.brain || 'ai';
+    const list = [
+      { id: 'ai', name: 'AI tooling' },
+      { id: 'design', name: 'Design' }
+    ];
+    const base = 'min-height:44px;padding:0 14px;border-radius:999px;font-family:Archivo, sans-serif;font-weight:600;font-size:.85rem;';
+    const brains = list.map((b) => {
+      const on = b.id === selected;
+      return {
+        name: b.name,
+        pressed: on ? 'true' : 'false',
+        cls: on ? '' : 'pill',
+        style: base + (on
+          ? 'border:1px solid var(--accent);background:var(--accent);color:var(--bg);'
+          : 'border:1px solid var(--rule);background:transparent;color:var(--fg);'),
+        pick: () => this.setState({ brain: b.id })
+      };
+    });
+    const current = list.find((b) => b.id === selected) || list[0];
+    return {
+      saved: saved,
+      showForm: !saved,
+      brains: brains,
+      brainName: current.name,
+      save: () => this.setState({ saved: true }),
+      undo: () => this.setState({ saved: false })
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Outside-In Brain</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800&amp;family=Spectral:ital,wght@0,400;0,600;1,400&amp;family=IBM+Plex+Mono:wght@500&amp;display=swap">
+<style>
+:root{--bg:#ffffff;--fg:#23211f;--muted:#6c6862;--rule:#e6e4e1;--accent:#c63f1d;--accent-hover:#a3330f;--hover:#f5f4f3;--chip:#fbeee9;--box:#f0f0f0;--box-line:#d4d4d4;--ink:#23211f;--on-ink:#ece9e4;--on-ink-muted:#b8b3ac;--accent-on-ink:#ff8a66;--ok-bg:#e4f1e7;--ok-fg:#1f6a3a}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#161514;--fg:#ece9e4;--muted:#a39e96;--rule:#33302d;--accent:#ff8a66;--accent-hover:#ffa585;--hover:#232120;--chip:#2c2320;--box:#2a2a2a;--box-line:#444444;--ink:#0d0c0b;--on-ink:#ece9e4;--on-ink-muted:#a39e96;--accent-on-ink:#ff8a66;--ok-bg:#1d3324;--ok-fg:#8fd3a5;color-scheme:dark}
+body{margin:0;background:var(--bg);color:var(--fg)}
+a{color:var(--accent);text-underline-offset:2px}a:hover{color:var(--accent-hover)}
+a:focus-visible,button:focus-visible,input:focus-visible,textarea:focus-visible,summary:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+button{font:inherit;cursor:pointer}
+details>summary{list-style:none}
+details>summary::-webkit-details-marker{display:none}
+details[open]>summary.sum{background:var(--box);border-color:var(--box-line)}
+.sum:hover{background:var(--hover)}
+.navlink:hover{color:var(--accent)}
+.pill:hover{border-color:var(--accent);color:var(--accent)}
+.primary:hover{background:var(--accent-hover);color:var(--bg)}
+.pill-ink:hover{border-color:var(--accent-on-ink);color:var(--accent-on-ink)}
+</style>
+</helmet>
+<div style="min-height:100vh;background:var(--bg);color:var(--fg);font-family:'Spectral',Georgia,serif">
+
+  <header style="border-bottom:1px solid var(--rule)">
+    <nav aria-label="Main" style="max-width:64rem;margin:0 auto;padding:.5rem 1rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem 1rem">
+      <a href="Home.dc.html" aria-current="page" style="display:inline-flex;align-items:center;gap:.6rem;min-height:44px;text-decoration:none;color:var(--fg)">
+        <svg width="28" height="28" viewBox="0 0 28 28" aria-hidden="true"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+        <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:1.15rem;letter-spacing:-.01em">Outside-In Brain</span>
+      </a>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:0 1.1rem">
+        <a class="navlink" href="HowItWorks.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.9rem;color:var(--fg);text-decoration:none">How it works</a>
+        <a class="navlink" href="Pricing.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.9rem;color:var(--fg);text-decoration:none">Pricing</a>
+        <a class="navlink" href="Main.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.9rem;color:var(--fg);text-decoration:none">Sample issue</a>
+        <a class="navlink" href="SignIn.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.9rem;color:var(--fg);text-decoration:none">Sign in</a>
+        <a class="primary" href="SignIn.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 1.1rem;border-radius:999px;background:var(--accent);color:var(--bg);font-family:'Archivo',sans-serif;font-weight:700;font-size:.9rem;text-decoration:none;box-sizing:border-box">Add to Chrome</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section style="max-width:64rem;margin:0 auto;padding:4rem 1rem 3.5rem;display:flex;flex-wrap:wrap;gap:3rem;align-items:center">
+      <div style="flex:1 1 22rem;min-width:0">
+        <p style="margin:0 0 1rem;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.78rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Save anything · hear it later</p>
+        <h1 style="margin:0 0 1.25rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(2.1rem,6vw,3.2rem);line-height:1.08;letter-spacing:-.015em">Save it while you browse. Get the brief on Saturday.</h1>
+        <p style="margin:0 0 2rem;font-size:1.125rem;line-height:1.6;max-width:34rem">One click in the Chrome extension saves the article, video or post you are looking at. Or paste a link or any text on the site. On your schedule, everything you saved comes back as one issue: five takeaways you can unfold, plus a podcast with two hosts talking it through.</p>
+        <div style="display:flex;flex-wrap:wrap;align-items:center;gap:.75rem 1rem">
+          <a class="primary" href="SignIn.dc.html" style="display:inline-flex;align-items:center;gap:.5rem;min-height:48px;padding:0 1.4rem;border-radius:999px;background:var(--accent);color:var(--bg);font-family:'Archivo',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;box-sizing:border-box">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>
+            Add to Chrome
+          </a>
+          <a class="pill" href="Dashboard.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 1.1rem;border-radius:999px;border:1px solid var(--rule);background:transparent;color:var(--fg);font-family:'Archivo',sans-serif;font-weight:600;font-size:.85rem;text-decoration:none;box-sizing:border-box">Paste a link instead</a>
+          <a href="Main.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.9rem">See a sample issue</a>
+        </div>
+      </div>
+
+      <!-- Hero visual: browser mock + extension popup -->
+      <div aria-hidden="true" style="flex:1 1 20rem;min-width:0;position:relative;padding:2.25rem 0 1rem">
+        <div style="border:1px solid var(--box-line);border-radius:10px;background:var(--bg);overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.06)">
+          <div style="display:flex;align-items:center;gap:.6rem;padding:.6rem .75rem;background:var(--box);border-bottom:1px solid var(--box-line)">
+            <div style="display:flex;gap:.35rem">
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--box-line);display:block"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--box-line);display:block"></span>
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--box-line);display:block"></span>
+            </div>
+            <div style="flex:1;min-width:0;background:var(--bg);border:1px solid var(--rule);border-radius:999px;padding:.3rem .75rem;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.72rem;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">youtube.com/watch?v=…</div>
+            <div style="width:26px;height:26px;border-radius:6px;background:var(--fg);display:flex;align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 28 28"><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.6" stroke-linecap="round"></path></svg>
+            </div>
+          </div>
+          <div style="padding:1rem">
+            <div style="aspect-ratio:16/9;border-radius:6px;background:var(--hover);display:flex;align-items:center;justify-content:center">
+              <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M10 8l6 4-6 4z"></path></svg>
+            </div>
+            <div style="height:14px;width:80%;border-radius:4px;background:var(--box);margin:1rem 0 .55rem"></div>
+            <div style="height:10px;width:45%;border-radius:4px;background:var(--hover);margin-bottom:.4rem"></div>
+            <div style="height:10px;width:60%;border-radius:4px;background:var(--hover)"></div>
+          </div>
+        </div>
+        <!-- Extension popup -->
+        <div style="position:absolute;top:0;right:0;width:min(15rem,78%);background:var(--bg);border:1px solid var(--box-line);border-radius:10px;padding:.9rem 1rem;box-shadow:0 6px 18px rgba(0,0,0,.10);box-sizing:border-box">
+          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.7rem">
+            <svg width="20" height="20" viewBox="0 0 28 28"><rect x="2" y="2" width="24" height="24" rx="7" fill="var(--fg)"></rect><path d="M8 11h12M8 15h8M8 19h5" stroke="var(--accent)" stroke-width="2.2" stroke-linecap="round"></path></svg>
+            <span style="font-family:'Archivo',sans-serif;font-weight:800;font-size:.85rem">Outside-In Brain</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:.5rem;background:var(--ok-bg);color:var(--ok-fg);border-radius:6px;padding:.5rem .6rem;font-family:'Archivo',sans-serif;font-weight:700;font-size:.85rem">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"></path></svg>
+            Saved to AI tooling
+          </div>
+          <div style="margin-top:.6rem;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)">Video · captions pulled</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works list -->
+    <section aria-labelledby="steps-h" style="max-width:42rem;margin:0 auto;padding:2rem 1rem 3rem">
+      <p style="margin:0 0 .5rem;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">How it works</p>
+      <h2 id="steps-h" style="margin:0 0 1.5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(1.6rem,4.5vw,2.1rem);line-height:1.15;letter-spacing:-.015em">How it works, in four steps</h2>
+      <div style="border-top:1px solid var(--rule)">
+
+        <details style="border-bottom:1px solid var(--rule)">
+          <summary class="sum" style="display:flex;align-items:baseline;gap:.5rem;padding:1rem .75rem;min-height:44px;box-sizing:border-box;cursor:pointer;border-radius:8px;border:1px solid transparent">
+            <span style="flex:0 0 2.6rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums">1</span>
+            <span style="flex:1;min-width:0;font-size:1.0625rem;line-height:1.55"><strong style="font-weight:600">Click save on anything.</strong> The extension button works on the page you are on.</span>
+            <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Details</span>
+          </summary>
+          <div style="padding:.75rem .75rem 1.5rem 3.35rem">
+            <h3 style="margin:0 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem;line-height:1.25">Articles, videos, PDFs, posts, highlights</h3>
+            <p style="margin:0;font-size:1.0625rem;line-height:1.6">Save an article, a YouTube video, a podcast page, a PDF, a social post, or just the text you highlighted. For videos, captions are pulled from the page, so the brain has the words, not only the link. You can pick a folder like "AI tooling" or leave it in the main brain.</p>
+          </div>
+        </details>
+
+        <details style="border-bottom:1px solid var(--rule)">
+          <summary class="sum" style="display:flex;align-items:baseline;gap:.5rem;padding:1rem .75rem;min-height:44px;box-sizing:border-box;cursor:pointer;border-radius:8px;border:1px solid transparent">
+            <span style="flex:0 0 2.6rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums">2</span>
+            <span style="flex:1;min-width:0;font-size:1.0625rem;line-height:1.55"><strong style="font-weight:600">Or paste it.</strong> No extension needed on your phone or a work laptop.</span>
+            <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Details</span>
+          </summary>
+          <div style="padding:.75rem .75rem 1.5rem 3.35rem">
+            <h3 style="margin:0 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem;line-height:1.25">A link or raw text, on the site</h3>
+            <p style="margin:0;font-size:1.0625rem;line-height:1.6">Open your brain on the website and paste a link, or paste any text: meeting notes, a newsletter, a thread someone sent you. It is saved the same way as a click from the extension.</p>
+          </div>
+        </details>
+
+        <details style="border-bottom:1px solid var(--rule)">
+          <summary class="sum" style="display:flex;align-items:baseline;gap:.5rem;padding:1rem .75rem;min-height:44px;box-sizing:border-box;cursor:pointer;border-radius:8px;border:1px solid transparent">
+            <span style="flex:0 0 2.6rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums">3</span>
+            <span style="flex:1;min-width:0;font-size:1.0625rem;line-height:1.55"><strong style="font-weight:600">It waits in your brain.</strong> Nothing pings you after each save.</span>
+            <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Details</span>
+          </summary>
+          <div style="padding:.75rem .75rem 1.5rem 3.35rem">
+            <h3 style="margin:0 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem;line-height:1.25">Saves pile up quietly</h3>
+            <p style="margin:0;font-size:1.0625rem;line-height:1.6">Items are not processed one by one. They collect until your next issue is due, so the digest can see everything together and connect what belongs together.</p>
+          </div>
+        </details>
+
+        <details style="border-bottom:1px solid var(--rule)">
+          <summary class="sum" style="display:flex;align-items:baseline;gap:.5rem;padding:1rem .75rem;min-height:44px;box-sizing:border-box;cursor:pointer;border-radius:8px;border:1px solid transparent">
+            <span style="flex:0 0 2.6rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.25rem;color:var(--accent);font-variant-numeric:tabular-nums">4</span>
+            <span style="flex:1;min-width:0;font-size:1.0625rem;line-height:1.55"><strong style="font-weight:600">Your issue arrives once or twice a week.</strong> You choose the day and time.</span>
+            <span style="flex:0 0 auto;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)">Details</span>
+          </summary>
+          <div style="padding:.75rem .75rem 1.5rem 3.35rem">
+            <h3 style="margin:0 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem;line-height:1.25">Five takeaways and a two-voice podcast</h3>
+            <p style="margin:0;font-size:1.0625rem;line-height:1.6">An agent groups related saves into five takeaways. Each one unfolds into about a page of detail, with "What to do with this" and links back to what you saved. It also writes a conversation for two voices: an interviewer asks, an analyst answers. You get it by email, in the app, or both.</p>
+          </div>
+        </details>
+
+      </div>
+    </section>
+
+    <!-- Read it / Listen to it -->
+    <section aria-label="Two ways to take in an issue" style="max-width:64rem;margin:0 auto;padding:1rem 1rem 3.5rem">
+      <div style="display:flex;flex-wrap:wrap;gap:1.25rem">
+        <div style="flex:1 1 18rem;min-width:0;background:var(--chip);border-radius:10px;padding:1.75rem 1.5rem;box-sizing:border-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4h7a3 3 0 0 1 3 3v13a2 2 0 0 0-2-2H2z"></path><path d="M22 4h-7a3 3 0 0 0-3 3v13a2 2 0 0 1 2-2h8z"></path></svg>
+          <h2 style="margin:.75rem 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.01em">Read it</h2>
+          <p style="margin:0;font-size:1.0625rem;line-height:1.6">Five TL;DR lines you can scan in a minute. Open the ones that matter for about a page of detail, a chart where it helps, and the saved sources it came from.</p>
+        </div>
+        <div style="flex:1 1 18rem;min-width:0;background:var(--ink);color:var(--on-ink);border-radius:10px;padding:1.75rem 1.5rem;box-sizing:border-box">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-on-ink)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14v-2a9 9 0 0 1 18 0v2"></path><path d="M21 15a2 2 0 0 1-2 2h-1v-6h1a2 2 0 0 1 2 2zM3 15a2 2 0 0 0 2 2h1v-6H5a2 2 0 0 0-2 2z"></path></svg>
+          <h2 style="margin:.75rem 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.5rem;letter-spacing:-.01em;color:var(--on-ink)">Listen to it</h2>
+          <p style="margin:0;font-size:1.0625rem;line-height:1.6;color:var(--on-ink)">About ten minutes of two hosts: an interviewer who asks the questions you would ask, and an analyst who has read everything you saved. Good for a walk or the commute.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why click -->
+    <section aria-labelledby="why-h" style="max-width:42rem;margin:0 auto;padding:1rem 1rem 4rem">
+      <div style="border-top:1px solid var(--rule);padding-top:2rem;display:flex;gap:1rem;align-items:flex-start">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex:0 0 auto;margin-top:.2rem"><rect x="4" y="11" width="16" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+        <div>
+          <h2 id="why-h" style="margin:0 0 .5rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:1.3rem">Why click, not automatic</h2>
+          <p style="margin:0;font-size:1.0625rem;line-height:1.6">The extension does not watch your browsing. Only what you choose to save leaves your browser, one click at a time. Everything else stays where it is.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA band -->
+    <section style="background:var(--ink);color:var(--on-ink)">
+      <div style="max-width:64rem;margin:0 auto;padding:3.5rem 1rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:1.5rem">
+        <h2 style="margin:0;flex:1 1 20rem;font-family:'Archivo',sans-serif;font-weight:800;font-size:clamp(1.6rem,4.5vw,2.2rem);line-height:1.15;letter-spacing:-.015em;color:var(--on-ink)">Start a brain before your next tab spiral.</h2>
+        <div style="display:flex;flex-wrap:wrap;gap:.75rem;align-items:center">
+          <a href="SignIn.dc.html" style="display:inline-flex;align-items:center;min-height:48px;padding:0 1.4rem;border-radius:999px;background:var(--accent-on-ink);color:var(--ink);font-family:'Archivo',sans-serif;font-weight:700;font-size:1rem;text-decoration:none;box-sizing:border-box">Add to Chrome</a>
+          <a class="pill-ink" href="Main.dc.html" style="display:inline-flex;align-items:center;min-height:44px;padding:0 1.1rem;border-radius:999px;border:1px solid var(--on-ink-muted);color:var(--on-ink);font-family:'Archivo',sans-serif;font-weight:600;font-size:.85rem;text-decoration:none;box-sizing:border-box">See a sample issue</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer style="border-top:1px solid var(--rule)">
+    <div style="max-width:64rem;margin:0 auto;padding:1.5rem 1rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem 1.5rem">
+      <p style="margin:0;font-family:'IBM Plex Mono',monospace;font-weight:500;font-size:.75rem;letter-spacing:.08em;color:var(--muted)">Outside-In Brain · Company Brain Hackathon</p>
+      <div style="display:flex;flex-wrap:wrap;gap:0 1.1rem">
+        <a href="HowItWorks.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.85rem">How it works</a>
+        <a href="Pricing.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.85rem">Pricing</a>
+        <a href="Main.dc.html" style="display:inline-flex;align-items:center;min-height:44px;font-family:'Archivo',sans-serif;font-weight:600;font-size:.85rem">Sample issue</a>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1280,"height":2800}}'>
+class Component extends DCLogic {
+  renderVals() {
+    const s = this.state || {};
+    return {};
+  }
+}
+</script>
+</body>
+</html>
