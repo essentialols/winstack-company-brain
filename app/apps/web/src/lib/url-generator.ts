@@ -100,7 +100,7 @@ function belongsToCurrentOrganization(
 }
 
 export function getManagementUrl(path: string): string {
-  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3100';
   // Ensure path starts with /
   const normalizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${appBaseUrl}${normalizedPath}`;
@@ -121,7 +121,7 @@ export function getEntityUrl(
   }
 
   const path = `${pathPrefix}/${idOrSlug}`;
-  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+  const appBaseUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3100';
 
   if (currentDomain) {
     if (belongsToCurrentOrganization(entity, currentOrganizationId)) {

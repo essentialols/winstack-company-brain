@@ -39,7 +39,7 @@ export default async function DomainErrorPage({
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <Link
-              href={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}
+              href={process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3100'}
               className="inline-flex items-center justify-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700"
             >
               Go to App Starter Dashboard

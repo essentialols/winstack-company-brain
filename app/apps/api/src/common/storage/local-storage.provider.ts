@@ -23,14 +23,14 @@ export class LocalStorageProvider implements IStorageProvider {
     // Priority: APP_URL > API_URL > construct from PORT
     const appUrl = this.configService.get<string>('APP_URL');
     const apiUrl = this.configService.get<string>('API_URL');
-    const port = this.configService.get<number>('PORT', 3001);
+    const port = this.configService.get<number>('PORT', 3101);
 
     if (appUrl) {
       this.baseUrl = appUrl;
     } else if (apiUrl) {
       this.baseUrl = apiUrl;
     } else {
-      // Construct from PORT (default to localhost:3001)
+      // Construct from PORT (default to localhost:3101)
       const protocol = process.env.NODE_ENV === 'production' ? 'https' : 'http';
       this.baseUrl = `${protocol}://localhost:${port}`;
     }

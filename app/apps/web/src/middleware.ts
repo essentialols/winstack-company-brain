@@ -168,7 +168,7 @@ export async function middleware(request: NextRequest) {
     // 7. Everything else on a custom domain belongs on the main app. Add an
     // organization-scoped path here when a vertical needs its own branded URL,
     // confirming the record belongs to this organization first.
-    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3000';
+    const frontendUrl = process.env.FRONTEND_URL || 'http://localhost:3100';
     return NextResponse.redirect(new URL(pathname + request.nextUrl.search, frontendUrl), {
       status: 302,
     });
@@ -184,8 +184,8 @@ function isStandardAppDomain(hostname: string): boolean {
   const wildcardHosts: string[] = [];
 
   // Always allow localhost and Vercel/Railway previews
-  allowedHosts.add('localhost:3000');
-  allowedHosts.add('localhost:3000');
+  allowedHosts.add('localhost:3100');
+  allowedHosts.add('localhost:3100');
   allowedHosts.add('127.0.0.1:3000');
 
   // Helper to add host from URL string

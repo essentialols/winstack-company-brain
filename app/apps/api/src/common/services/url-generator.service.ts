@@ -6,7 +6,7 @@ export class UrlGeneratorService {
   constructor(private configService: ConfigService) {}
 
   private getBaseUrl(): string {
-    return this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3000';
+    return this.configService.get<string>('FRONTEND_URL') || 'http://localhost:3100';
   }
 
   private hasMatchingDomain(entityOrganizations: any[], currentDomain?: string): boolean {

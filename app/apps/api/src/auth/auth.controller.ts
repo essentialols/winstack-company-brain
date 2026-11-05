@@ -543,7 +543,7 @@ export class AuthController {
     await this.authService.storeResetToken(requestPasswordResetDto.email, resetToken);
 
     // Build reset URL
-    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    const frontendUrl = this.configService.get<string>('FRONTEND_URL', 'http://localhost:3100');
     const resetUrl = `${frontendUrl}/reset-password?email=${encodeURIComponent(requestPasswordResetDto.email)}&token=${resetToken}`;
 
     // Send password reset email using notifications service

@@ -119,7 +119,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Authorization required', imageUrl: null }, { status: 401 });
   }
 
-  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+  const apiBase = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101';
   const uploadPath = body.eventId
     ? `/api/events/${body.eventId}/sessions/upload-speaker-image`
     : '/api/sessions/upload-speaker-image';

@@ -25,8 +25,8 @@ Saving happens only on click. Opening the popup reads the page locally to show i
 
 | Field | Default |
 | --- | --- |
-| API base URL | `http://localhost:3001/api` |
-| Web app URL | `http://localhost:3000` |
+| API base URL | `http://localhost:3101/api` |
+| Web app URL | `http://localhost:3100` |
 | Extension key | — |
 
 Settings live in `chrome.storage.local`. On save, the extension asks for host access to the API origin. This is optional: the API also allows `chrome-extension://` origins via CORS.

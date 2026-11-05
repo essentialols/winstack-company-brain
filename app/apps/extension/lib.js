@@ -2,8 +2,8 @@
 /* global chrome */
 
 const OIB_DEFAULTS = {
-  apiBaseUrl: 'http://localhost:3001/api',
-  webAppUrl: 'http://localhost:3000',
+  apiBaseUrl: 'http://localhost:3101/api',
+  webAppUrl: 'http://localhost:3100',
   apiKey: '',
 };
 const MAX_CHARS = 200000;

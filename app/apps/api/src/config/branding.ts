@@ -100,7 +100,7 @@ export const branding = {
    * Frontend URLs
    */
   urls: {
-    frontend: process.env.FRONTEND_URL || 'http://localhost:3000',
+    frontend: process.env.FRONTEND_URL || 'http://localhost:3100',
   },
 } as const;
 

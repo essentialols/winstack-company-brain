@@ -42,7 +42,7 @@ export class UserEmailVerificationService {
    * Get frontend URL for verification links
    */
   private getFrontendUrl(): string {
-    return this.configService.get<string>('FRONTEND_URL', 'http://localhost:3000');
+    return this.configService.get<string>('FRONTEND_URL', 'http://localhost:3100');
   }
 
   /**

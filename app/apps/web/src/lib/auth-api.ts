@@ -133,7 +133,7 @@ export class AuthApi {
   }
 
   initiateGoogleAuth(state?: string) {
-    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101';
     let url = `${apiUrl}/api/auth/google`;
 
     // Add current origin to state to ensure we redirect back to the correct domain

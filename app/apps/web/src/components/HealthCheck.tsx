@@ -18,7 +18,7 @@ export default function HealthCheck() {
       try {
         // Next.js automatically loads .env files
         // NEXT_PUBLIC_ prefix makes it available in the browser
-        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api';
+        const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101/api';
         const response = await fetch(`${apiUrl}/health`);
 
         if (!response.ok) {

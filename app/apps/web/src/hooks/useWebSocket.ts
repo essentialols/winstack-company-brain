@@ -10,7 +10,7 @@ interface UseWebSocketReturn {
   reconnect: () => void;
 }
 
-const WS_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const WS_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101';
 
 export function useWebSocket(): UseWebSocketReturn {
   const [connected, setConnected] = useState(false);

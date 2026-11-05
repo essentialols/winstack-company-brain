@@ -71,7 +71,7 @@ export class AdminDashboardController {
       { ip: this.getIp(req), userAgent: req.headers['user-agent'] },
     );
     const webOrigin =
-      process.env.WEB_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3000';
+      process.env.WEB_APP_URL || process.env.FRONTEND_URL || 'http://localhost:3100';
     const redirectUrl = `${webOrigin}/impersonate?token=${encodeURIComponent(result.accessToken)}`;
     return { ...result, redirectUrl };
   }

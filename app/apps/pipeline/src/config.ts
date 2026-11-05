@@ -18,7 +18,7 @@ function int(name: string, fallback: number): number {
 }
 
 export const config = {
-  apiUrl: env('API_URL', 'http://localhost:3001/api').replace(/\/+$/, ''),
+  apiUrl: env('API_URL', 'http://localhost:3101/api').replace(/\/+$/, ''),
   pipelineSecret: env('PIPELINE_SECRET'),
 
   anthropicApiKey: env('ANTHROPIC_API_KEY'),

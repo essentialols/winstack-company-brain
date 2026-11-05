@@ -56,9 +56,9 @@ pnpm dev
 
 |                    |                                |
 | ------------------ | ------------------------------ |
-| Web                | http://localhost:3000          |
-| API                | http://localhost:3001          |
-| API docs (Swagger) | http://localhost:3001/api/docs |
+| Web                | http://localhost:3100          |
+| API                | http://localhost:3101          |
+| API docs (Swagger) | http://localhost:3101/api/docs |
 | Mailpit            | http://localhost:8025          |
 
 Mailpit is a local inbox that catches every email the app sends — verification

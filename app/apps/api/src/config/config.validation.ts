@@ -22,11 +22,11 @@ class EnvironmentVariables {
 
   @IsNumber()
   @IsOptional()
-  PORT: number = 3001;
+  PORT: number = 3101;
 
   @IsUrl({ require_tld: false })
   @IsOptional()
-  FRONTEND_URL: string = 'http://localhost:3000';
+  FRONTEND_URL: string = 'http://localhost:3100';
 
   @IsString()
   @IsOptional()

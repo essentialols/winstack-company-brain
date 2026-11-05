@@ -2,7 +2,7 @@ import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { authStorage } from '@/lib/auth-storage';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101';
 
 /**
  * Server-side layout: only render admin children if the current user is a global admin.

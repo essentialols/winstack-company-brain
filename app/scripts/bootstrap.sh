@@ -65,8 +65,8 @@ cat <<'DONE'
 Setup complete.
 
   pnpm dev            start the API and web app
-  http://localhost:3000   web
-  http://localhost:3001   API
+  http://localhost:3100   web
+  http://localhost:3101   API
   http://localhost:8025   Mailpit (all outbound email lands here)
 
 Sign in with the seeded accounts:

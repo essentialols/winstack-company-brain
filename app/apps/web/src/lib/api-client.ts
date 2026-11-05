@@ -5,7 +5,7 @@ import { triggerAutoLogout } from '@/components/auth/AutoLogoutDialog';
 // Re-export ApiError for convenience
 export type { ApiError };
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3101';
 
 export class ApiClient {
   private baseUrl: string;
