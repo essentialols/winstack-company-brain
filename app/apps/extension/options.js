@@ -37,14 +37,20 @@ async function persist(cfg) {
   $('web-link').href = `${cfg.webAppUrl}/extension`;
 }
 
+/** With no key the extension saves into the web app's no-login demo brain. */
+function effective(cfg) {
+  return cfg.apiKey ? cfg : { ...cfg, isDemo: true, apiBaseUrl: `${cfg.webAppUrl}/api/demo` };
+}
+
 async function test(cfg) {
-  if (!cfg.apiKey) {
-    setStatus('Paste your extension key first.', false);
-    return;
-  }
+  const eff = effective(cfg);
   setStatus('Testing…');
   try {
-    const me = await oibGetMeBrains(cfg);
+    const me = await oibGetMeBrains(eff);
+    if (eff.isDemo) {
+      setStatus(`Demo mode: saves go to the demo brain at ${cfg.webAppUrl}/demo`, true);
+      return;
+    }
     const brains = oibFlattenBrains(me);
     const who = (me.user && (me.user.name || me.user.email)) || 'you';
     setStatus(`Connected as ${who} · ${brains.length} brain${brains.length === 1 ? '' : 's'}`, true);
@@ -62,7 +68,7 @@ $('form').addEventListener('submit', (e) => {
     return;
   }
   // Called before any await so Chrome still sees the user gesture.
-  const perm = oibRequestApiPermission(cfg.apiBaseUrl);
+  const perm = oibRequestApiPermission(effective(cfg).apiBaseUrl);
   perm.then(() => persist(cfg)).then(() => test(cfg));
 });
 
@@ -73,13 +79,14 @@ $('test').addEventListener('click', () => {
     setStatus(err, false);
     return;
   }
-  oibRequestApiPermission(cfg.apiBaseUrl).then(() => test(cfg));
+  oibRequestApiPermission(effective(cfg).apiBaseUrl).then(() => test(cfg));
 });
 
 (async () => {
   const cfg = await oibGetConfig();
   $('apiKey').value = cfg.apiKey;
-  $('apiBaseUrl').value = cfg.apiBaseUrl;
+  const stored = await chrome.storage.local.get(['apiBaseUrl']);
+  $('apiBaseUrl').value = oibTrimSlash(stored.apiBaseUrl || OIB_DEFAULTS.apiBaseUrl);
   $('webAppUrl').value = cfg.webAppUrl;
   $('web-link').href = `${cfg.webAppUrl}/extension`;
 })();

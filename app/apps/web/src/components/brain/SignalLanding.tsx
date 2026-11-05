@@ -88,14 +88,17 @@ export const SignalLanding = () => (
         </section>
       ))}
       <nav className={styles.cta} aria-label="Get started">
-        <Link href="/extension" className={styles.primary}>
-          Add to Chrome
+        <Link href="/demo" className={styles.primary}>
+          Try it now, no sign-up
         </Link>
-        <Link href="/login" className={styles.secondary}>
-          Sign in
+        <Link href="/sample-issue" className={styles.secondary}>
+          See a sample issue
         </Link>
         <Link href="/how-it-works" className={styles.secondary}>
           How it works
+        </Link>
+        <Link href="/login" className={styles.secondary}>
+          Sign in
         </Link>
       </nav>
     </main>

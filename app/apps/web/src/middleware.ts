@@ -66,6 +66,7 @@ function isShortLinkCandidate(pathname: string): boolean {
     'register',
     'reset-password',
     'sample-issue',
+    'demo',
     'settings',
     'users',
     'verify-email',

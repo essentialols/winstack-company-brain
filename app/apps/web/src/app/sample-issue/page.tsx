@@ -103,7 +103,32 @@ const SAMPLE_ISSUE: IssueDto = {
         note: 'Lenny’s Podcast · Anish Acharya, a16z. Work as cascading loops of agents, with people choosing the next hill.',
       },
     ],
-    podcast: null,
+    podcast: {
+      title: 'Two models, one week of saves',
+      chapters: [
+        { title: 'Ship governance, not just access', startSec: 0 },
+        { title: 'Projects as a governance layer', startSec: 0 },
+        { title: 'Tool rules per project', startSec: 0 },
+        { title: 'Decision models for countable choices', startSec: 0 },
+        { title: 'Memory is the missing layer', startSec: 0 },
+      ],
+      transcript: [
+        { speaker: 'IN', chapter: 0, text: 'Four saves this week: two How I AI episodes, a talk slide and a Lenny’s Podcast episode. What do they add up to?' },
+        { speaker: 'AN', chapter: 0, text: 'Mostly one idea. Giving people AI is easy. Making AI follow how the company actually works is the hard part.' },
+        { speaker: 'IN', chapter: 0, text: 'That’s the Stripe story?' },
+        { speaker: 'AN', chapter: 0, text: 'Yes. Stripe built its company agent, Kai, because the guardrails had to match its own rules on data, cost and sign-off.' },
+        { speaker: 'IN', chapter: 1, text: 'How do they set those guardrails without asking everyone to configure things?' },
+        { speaker: 'AN', chapter: 1, text: 'Projects. A few experts set the default model, skills and tools for everyone doing that job.' },
+        { speaker: 'IN', chapter: 2, text: 'And approvals for risky tools?' },
+        { speaker: 'AN', chapter: 2, text: 'Only in sensitive projects, like HR. Ask for approval everywhere and people learn to click yes without reading.' },
+        { speaker: 'IN', chapter: 3, text: 'The Jev episode was about a different kind of model. When should a team use it?' },
+        { speaker: 'AN', chapter: 3, text: 'When the choices are countable: scores, yes or no, picking from a set. Open-ended judgment stays with a language model.' },
+        { speaker: 'IN', chapter: 4, text: 'Last one: the slide on memory-aware agents.' },
+        { speaker: 'AN', chapter: 4, text: 'Its point is that connecting tools isn’t remembering. Agents need events, knowledge, how-tos and a record of what changed.' },
+        { speaker: 'IN', chapter: 4, text: 'Which is what a company brain is for.' },
+        { speaker: 'AN', chapter: 4, text: 'Exactly. That’s the issue. Every takeaway links back to what was saved.' },
+      ],
+    },
   },
 };
 
@@ -117,10 +142,10 @@ export default function SampleIssuePage() {
       footer={
         <>
           <span className="oib-eyebrow" style={{ fontSize: '.74rem' }}>
-            Sample issue · real issues include a two-voice podcast
+            Sample issue · no account needed to try it
           </span>
-          <Link href="/login?tab=signup" className="oib-primary">
-            Start your brain
+          <Link href="/demo" className="oib-primary">
+            Try the demo brain
           </Link>
         </>
       }

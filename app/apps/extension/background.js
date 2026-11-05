@@ -46,7 +46,7 @@ async function resolveBrainId(cfg) {
 
 async function quickSave(tab, buildInput) {
   const cfg = await oibGetConfig();
-  if (!cfg.apiKey) {
+  if (!cfg.apiKey && !cfg.isDemo) {
     await flashBadge(tab && tab.id, false, 'connect your account in Options');
     chrome.runtime.openOptionsPage();
     return;

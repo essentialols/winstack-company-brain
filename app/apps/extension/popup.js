@@ -181,7 +181,7 @@ async function init() {
   state.cfg = await oibGetConfig();
   const web = state.cfg.webAppUrl;
   $('connect-web').href = `${web}/extension`;
-  $('open-dashboard').href = `${web}/dashboard`;
+  $('open-dashboard').href = state.cfg.dashboardUrl;
   $('settings').addEventListener('click', () => chrome.runtime.openOptionsPage());
   $('connect-options').addEventListener('click', () => chrome.runtime.openOptionsPage());
   $('save').addEventListener('click', handleSave);
@@ -190,7 +190,7 @@ async function init() {
     if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) handleSave();
   });
 
-  if (!state.cfg.apiKey) {
+  if (!state.cfg.apiKey && !state.cfg.isDemo) {
     showConnect();
     return;
   }

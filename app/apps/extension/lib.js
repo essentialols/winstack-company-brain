@@ -12,10 +12,16 @@ const oibTrimSlash = (s) => (s || '').trim().replace(/\/+$/, '');
 
 async function oibGetConfig() {
   const stored = await chrome.storage.local.get(['apiBaseUrl', 'webAppUrl', 'apiKey', 'lastBrainId']);
+  const webAppUrl = oibTrimSlash(stored.webAppUrl || OIB_DEFAULTS.webAppUrl);
+  const apiKey = (stored.apiKey || '').trim();
+  // No key → demo mode: save into the web app's no-login demo brain.
+  const isDemo = !apiKey;
   return {
-    apiBaseUrl: oibTrimSlash(stored.apiBaseUrl || OIB_DEFAULTS.apiBaseUrl),
-    webAppUrl: oibTrimSlash(stored.webAppUrl || OIB_DEFAULTS.webAppUrl),
-    apiKey: (stored.apiKey || '').trim(),
+    apiBaseUrl: isDemo ? `${webAppUrl}/api/demo` : oibTrimSlash(stored.apiBaseUrl || OIB_DEFAULTS.apiBaseUrl),
+    webAppUrl,
+    apiKey,
+    isDemo,
+    dashboardUrl: isDemo ? `${webAppUrl}/demo` : `${webAppUrl}/dashboard`,
     lastBrainId: stored.lastBrainId || null,
   };
 }
@@ -64,13 +70,13 @@ class OibApiError extends Error {
 }
 
 async function oibApi(cfg, path, { method = 'GET', body } = {}) {
-  if (!cfg.apiKey) throw new OibApiError(401, 'Not connected');
+  if (!cfg.apiKey && !cfg.isDemo) throw new OibApiError(401, 'Not connected');
   let res;
   try {
     res = await fetch(cfg.apiBaseUrl + path, {
       method,
       headers: {
-        Authorization: `Bearer ${cfg.apiKey}`,
+        ...(cfg.apiKey ? { Authorization: `Bearer ${cfg.apiKey}` } : {}),
         ...(body !== undefined ? { 'Content-Type': 'application/json' } : {}),
       },
       body: body !== undefined ? JSON.stringify(body) : undefined,

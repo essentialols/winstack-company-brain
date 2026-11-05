@@ -9,6 +9,7 @@ import { cn } from '@/lib/utils';
  * header/sidebar, so the starter's header and icon sidebar stay off them.
  */
 const EDITORIAL_PREFIXES = [
+  '/demo',
   '/how-it-works',
   '/pricing',
   '/login',

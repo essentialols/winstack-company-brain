@@ -6,6 +6,7 @@ import type { IssueDto } from '@app-starter/shared';
 import { BrandLink } from './BrandMark';
 import { IssueVisual } from './IssueVisual';
 import { PodcastPlayer } from './PodcastPlayer';
+import { SpeechPodcast } from './SpeechPodcast';
 import { resolveAudioSrc } from '@/lib/brain-api';
 import { formatShortDate } from '@/lib/brain-format';
 import { cn } from '@/lib/utils';
@@ -93,7 +94,7 @@ export const IssueView = ({ issue, badge, backHref = '/dashboard', backLabel = '
           {content.lead}
         </p>
 
-        {issue.audioUrl && (
+        {issue.audioUrl ? (
           <PodcastPlayer
             src={audio.src}
             isLoadingSrc={audio.isLoading}
@@ -101,6 +102,8 @@ export const IssueView = ({ issue, badge, backHref = '/dashboard', backLabel = '
             podcast={content.podcast}
             durationSec={issue.audioDurationSec}
           />
+        ) : (
+          content.podcast && content.podcast.transcript.length > 0 && <SpeechPodcast podcast={content.podcast} />
         )}
 
         {takeaways.length > 0 && (
