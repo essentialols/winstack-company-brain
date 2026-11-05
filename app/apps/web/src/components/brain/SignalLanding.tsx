@@ -72,6 +72,7 @@ export const SignalLanding = () => (
         width={1792}
         height={1648}
         priority
+        unoptimized
         sizes="(max-width: 752px) 100vw, 720px"
       />
       {STEPS.map((step) => (
@@ -84,6 +85,7 @@ export const SignalLanding = () => (
             width={880}
             height={536}
             sizes="(max-width: 752px) 100vw, 720px"
+            unoptimized
           />
         </section>
       ))}
